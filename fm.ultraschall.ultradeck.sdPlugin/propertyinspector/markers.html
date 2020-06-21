@@ -1,0 +1,63 @@
+<div class="sdpi-item" id="GlobalSettingsButton">
+    <div class='sdpi-item-label'>Settings</div>
+    <button onclick="openGlobalSettings()" class="sdpi-item-value" value="Click Me only">Global Settings</button>
+</div>
+
+
+<div class='sdpi-item'>
+    <div class='sdpi-item-label'>Marker type</div>
+    <select class='sdpi-item-value select' id='markertype'>
+        <optgroup label='Chapter marker actions'>
+            <option value='Insert chapter marker'>Insert chapter marker</option>
+            <option value='Insert chapter marker at play/rec position'>Insert chapter marker at play/rec position</option>
+            <option value='Insert chapter marker and edit name'>Insert chapter marker and edit name</option>
+            <option value='Insert chapter marker and edit name at play/rec position'>Insert chapter marker and edit name at play/rec position</option>
+            <option value='Insert chapter marker back in time'>Insert chapter marker back in time</option>
+            <option value='Insert chapter marker with time stamp (ISO 8601)'>Insert chapter marker with time stamp (ISO 8601)</option>
+            <option value='Import chapter markers'>Import chapter markers</option>
+            <option value='Export chapter markers'>Export chapter markers</option>
+            <option value='Save chapter markers to project folder'>Save chapter markers to project folder</option>
+            <option value='Insert chapter markers at the start of every selected item'>Insert chapter markers at the start of every selected item</option>
+        </optgroup>
+        <optgroup label='Edit marker actions'>
+            <option value='Insert edit marker'>Insert edit marker</option>
+            <option value='Insert edit marker at play/rec position'>Insert edit marker at play/rec position</option>
+        </optgroup>
+        <optgroup label='Other marker functions'>
+            <option value='Insert custom marker'>Insert custom marker</option>
+            <option value='Go to next marker/project end'>Go to next marker/project end</option>
+            <option value='Go to previous marker/project start'>Go to previous marker/project start</option>
+            <option value='Delete last marker'>Delete last marker</option>
+            <option value='Open marker dashboard'>Open marker dashboard</option>
+            <option value='DELETE ALL MARKERS'>DELETE ALL MARKERS</option>
+        </optgroup>
+        <optgroup label='Planned marker actions'>
+            <option value='Import planned markers from clipboard'>Import planned markers from clipboard</option>
+            <option value='Insert next planned marker'>Insert next planned marker</option>
+            <option value='Insert next planned marker at play/rec position'>Insert next planned marker at play/rec position</option>
+        </optgroup>
+    </select>
+</div>
+<div class='sdpi-item' id='markertextcontainer'>
+    <div class='sdpi-item-label'>Marker text</div>
+    <input class='sdpi-item-value' id='markertext' name='markertext' value=''>
+</div>
+<div class='sdpi-item' id='markercolorcontainer'>
+    <div type='color' class='sdpi-item'>
+    <div class='sdpi-item-label' id='markercolortext'>Color</div>
+        <input type='color' class='sdpi-item-value' id='markercolor'>
+        <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
+    </div>
+</div>
+<div class='sdpi-item' id='cursorcontainer'>
+    <div class='sdpi-item-label'>Cursor</div>
+    <select class='sdpi-item-value select' id='cursor'>
+        <option value='Play cursor'>Play cursor</option>
+        <option value='Edit cursor'>Edit cursor</option>
+        <option value='Automatic depending on followmode'>Automatic depending on followmode</option>
+    </select>
+</div>
+<div class='sdpi-item' id='markeroffsetcontainer'>
+    <div class='sdpi-item-label'>Time offset (s)</div>
+    <input class='sdpi-item-value' id='markeroffset' name='markeroffset' value=''>
+</div>

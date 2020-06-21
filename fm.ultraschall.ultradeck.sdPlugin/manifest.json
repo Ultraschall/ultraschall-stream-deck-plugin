@@ -1,0 +1,101 @@
+{
+  "Actions": [
+    {
+      "Icon": "action/images/actionimage", 
+      "Name": "Toggle state",
+      "States": [
+        {
+          "Image": "action/images/muted"
+        }
+      ],
+      "Tooltip": "Push to toggle state)",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.toggle"
+    },
+    {
+      "Icon": "action/images/Chapter_marker", 
+      "Name": "Markers",
+      "States": [
+        {
+          "Image": "action/images/Chapter_marker"
+        }
+      ],
+      "Tooltip": "Marker related actions",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.markers"
+    },
+    {
+      "Icon": "action/images/muted", 
+      "Name": "Push To mute/talk",
+      "States": [
+        {
+          "Image": "action/images/muted"
+        }
+      ],
+      "Tooltip": "Push to mute/talk actions",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.pushto"
+    },
+    {
+      "Icon": "action/images/muted", 
+      "Name": "Levels",
+      "States": [
+        {
+          "Image": "action/images/muted"
+        }
+      ],
+      "Tooltip": "Set Levels",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.levels"
+    },
+    {
+      "Icon": "action/images/Play", 
+      "Name": "Transport",
+      "States": [
+        {
+          "Image": "action/images/Play"
+        }
+      ],
+      "Tooltip": "Transport actions",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.transport"
+    },
+    {
+      "Icon": "action/images/Game", 
+      "Name": "Misc",
+      "States": [
+        {
+          "Image": "action/images/Game"
+        }
+      ],
+      "Tooltip": "miscellaneous actions",
+      "SupportedInMultiActions": false,
+      "UUID": "fm.ultraschall.ultradeck.misc"
+    }
+  ], 
+  "SDKVersion": 2,
+  "Author": "@fernsehmuell",
+  "Category": "Ultraschall",
+  "CategoryIcon": "action/images/category",
+  "CodePath": "index.html", 
+  "PropertyInspectorPath": "propertyinspector/index.html", 
+  "Description": "Control Ultraschall",
+  "Name": "Ultraschall", 
+  "Icon": "action/images/Ultraschall_logo", 
+  "URL": "https://ultraschall.fm",
+  "Version": "1.0.0",
+  "OS": [
+    {
+        "Platform": "mac", 
+        "MinimumVersion" : "10.11"
+    },
+    {
+        "Platform": "windows", 
+        "MinimumVersion" : "10"
+    }
+  ],
+  "Software": 
+    {
+        "MinimumVersion" : "4.1"
+  }
+}

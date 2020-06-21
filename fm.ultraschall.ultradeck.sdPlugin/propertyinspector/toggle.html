@@ -1,0 +1,34 @@
+<div class='sdpi-item'>
+    <div class='sdpi-item-label' id='toggletypetext'>Toggle</div>
+    <select class='sdpi-item-value select' id='toggletype'>
+        <optgroup label='Toggle stuff'>
+            <option value='Toggle mute track'>Toggle mute track</option>
+            <option value='Toggle follow mode'>Toggle follow mode</option>
+            <option value='Toggle Studiolink OnAir'>Toggle Studiolink OnAir</option>
+        </optgroup>
+        <optgroup label='Routing'>
+            <option value='Toggle Magic Routing'>Toggle Magic Routing</option>
+            <option value='Set preshow routing'>Set preshow routing</option>
+            <option value='Set recording routing'>Set recording routing</option>
+            <option value='Set editing routing'>Set editing routing</option>
+        </optgroup>
+    </select>
+</div>
+<div class='sdpi-item' id='tracknumbercontainer'>
+    <div class='sdpi-item-label'>Track (0-99)</div>
+    <input class='sdpi-item-value' id='tracknumber' inputmode='numeric' type='number' min=1 max=99 name='track number' value=1>
+</div>
+<div class='sdpi-item' id='markercolorcontainer'>
+    <div type='color' class='sdpi-item'>
+    <div class='sdpi-item-label' id='markercolortext'>Color</div>
+        <input type='color' class='sdpi-item-value' id='markercolor'>
+        <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
+    </div>
+</div>
+<div class='sdpi-item' id='markercolorcontainer2'>
+    <div type='color' class='sdpi-item'>
+    <div class='sdpi-item-label' id='markercolortext2'>Color</div>
+        <input type='color' class='sdpi-item-value' id='markercolor2'>
+        <button class="sdpi-item-value" onclick="resetcolor2()" id='resetcolor2'>Reset color</button>
+    </div>
+</div>
