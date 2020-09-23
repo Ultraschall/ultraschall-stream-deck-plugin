@@ -4,10 +4,10 @@ const markers = {
     onWillAppear: function (jsn) {
         console.log("huhu i bims eine Marker Action",jsn);
         this.settings = jsn.payload.settings;
-        
+
         // set defaults, if nothing is set
         if (!this.settings.hasOwnProperty('markertype')) {this.settings.markertype="Insert chapter marker";}
-        if (!this.settings.hasOwnProperty('url')) {this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Marker";}
+        if (!this.settings.hasOwnProperty('url')) {this.settings.url="/_/_Ultraschall_Set_Marker";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Chapter_marker.svg";}
         if (!this.settings.hasOwnProperty('title')) {this.settings.title="Insert\nchapter\nmarker";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
@@ -15,11 +15,11 @@ const markers = {
         if (!this.settings.hasOwnProperty('markertext')) {this.settings.markertext="";}
         if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="";}
         if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="";}
-        
+
         this.settings.lastmarkertype=this.settings.markertype;
-        
+
         $SD.api.setSettings(jsn.context, this.settings);
-        
+
         //set icon
         var image=Icons[this.settings.icon];
         image=image.replace('#d8d8d8', this.settings.markercolor);
@@ -31,7 +31,9 @@ const markers = {
         this.settings = jsn.payload.settings;
         console.log("KeyDown marker ", jsn);
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url , true);
+        var request_url="http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url;
+        console.log("request_url=",request_url);
+        xhttp.open("GET", request_url , true);
         xhttp.send();
     },
 
@@ -41,12 +43,14 @@ const markers = {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 this.resetIconColor(jsn);
             }
-            if (jsn.payload.sdpi_collection.key==="GlobalSettingsButton") {
-                console.log("OPEN WINDOW");
-                window.open("settings/index.html");   
-            }
+            //if (jsn.payload.sdpi_collection.key==="GlobalSettingsButton") {
+                //console.log("OPEN WINDOW",jsn.context);
+                //window.open("settings/index.html?context=" + jsn.context);
+                //parameters for global settings page:
+                //window.open("settings/index.html?language=" + inLanguage + "&streamDeckVersion=" + inStreamDeckVersion + "&pluginVersion=" + inPluginVersion);
+            //}
         }
-    },
+    }, 
 
     resetIconColor: function(jsn){
         console.log("resetIconColor",jsn,this.markercolor)
@@ -69,7 +73,7 @@ const markers = {
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.title);
     },
-
+    
     onDidReceiveSettings: function(jsn) {
         console.log('%c%s', 'color: white; background: red; font-size: 15px;', 'Actio Markers.js onDidReceiveSettings:', jsn);
         this.settings = jsn.payload.settings;
@@ -92,57 +96,57 @@ const markers = {
 
         switch(this.settings.markertype) {
             case "Insert chapter marker" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Marker";
+                this.settings.url="_/_Ultraschall_Set_Marker";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker";
                 break;
             case "Insert chapter marker at play/rec position" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Marker_Play";
+                this.settings.url="/_/_Ultraschall_Set_Marker_Play";
                 this.settings.icon="action/images/Chapter_marker_playpos.svg"
                 this.settings.title="Insert\nchapter\nmarker\nat play\nposition";
                 break;
             case "Insert chapter marker and edit name" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_NamedMarker";
+                this.settings.url="/_/_Ultraschall_Set_NamedMarker";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nnamed\nchapter\nmarker";
                 break;
             case "Insert chapter marker and edit name at play/rec position" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Namedmarker_Play";
+                this.settings.url="/_/_Ultraschall_Set_Namedmarker_Play";
                 this.settings.icon="action/images/Chapter_marker_playpos.svg"
                 this.settings.title="Insert\nnamed\nchapter\nmarker\nat play\nposition";
                 break;
             case "Insert chapter marker back in time" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Insert_Chapter_Marker_Back_In_Time";
+                this.settings.url="/_/_Ultraschall_Insert_Chapter_Marker_Back_In_Time";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker\nback\nin time";
                 break;
             case "Insert chapter marker with time stamp (ISO 8601)" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_set_Marker_with_Timestamp";
+                this.settings.url="/_/_Ultraschall_set_Marker_with_Timestamp";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker\nwith\ntime stamp\n(ISO 8601)";
                 break;
             case "Import chapter markers" :
-                this.settings.url="http://127.0.0.1:8080/_/_ULTRASCHALL_INSERT_CHAPTERS";
+                this.settings.url="/_/_ULTRASCHALL_INSERT_CHAPTERS";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Import\nchapter\nmarkers";
                 break;
             case "Export chapter markers" :
-                this.settings.url="http://127.0.0.1:8080/_/_ULTRASCHALL_SAVE_CHAPTERS";
+                this.settings.url="/_/_ULTRASCHALL_SAVE_CHAPTERS";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Export\nchapter\nmarkers";
                 break;
             case "Save chapter markers to project folder" :
-                this.settings.url="http://127.0.0.1:8080/_/_ULTRASCHALL_SAVE_CHAPTERS_TO_PROJECT";
+                this.settings.url="/_/_ULTRASCHALL_SAVE_CHAPTERS_TO_PROJECT";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Save\nchapter\nmarkers\nto project\nfolder";
                 break;
             case "Insert chapter markers at the start of every selected item" :
-                this.settings.url="http://127.0.0.1:8080/_/_XENAKIOS_CRTMARKERSFROMITEMS1";
+                this.settings.url="/_/_XENAKIOS_CRTMARKERSFROMITEMS1";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nmarkers\nat the start of\nevery\nselected item";
                 break;
             case "Insert edit marker" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Edit";
+                this.settings.url="/_/_Ultraschall_Set_Edit";
                 this.settings.icon="action/images/Edit_marker.svg"
                 this.settings.title="Insert\nedit\nmarker";
                 if (this.settings.markercolor==="" || markerchanged) {
@@ -150,7 +154,7 @@ const markers = {
                 }
                 break;
             case "Insert edit marker at play/rec position" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Edit_Play";
+                this.settings.url="/_/_Ultraschall_Set_Edit_Play";
                 this.settings.icon="action/images/Edit_marker.svg"
                 this.settings.title="Insert\nedit marker\nat play/rec\nposition";
                 if (this.settings.markercolor==="" || markerchanged) {
@@ -158,17 +162,17 @@ const markers = {
                 }
                 break;
             case "Import planned markers from clipboard" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Import_Markers_As_Planned_From_Clipboard";
+                this.settings.url="/_/_Ultraschall_Import_Markers_As_Planned_From_Clipboard";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Import\nplanned\nmarkers\nfrom\nclipboard";
                 break;
             case "Insert next planned marker" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Next_Planned_Marker";
+                this.settings.url="/_/_Ultraschall_Set_Next_Planned_Marker";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nnext\nplanned\nmarker";
                 break;
             case "Insert next planned marker at play/rec position" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Set_Next_Planned_Marker_Play";
+                this.settings.url="/_/_Ultraschall_Set_Next_Planned_Marker_Play";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nnext\nplanned\nmarker\nat play/rec\nposition";
                 break;
@@ -181,34 +185,34 @@ const markers = {
                 this.settings.markercolortext="Marker color";
                 if (this.settings.cursor==="") {this.settings.cursor="Play cursor"};
                 console.log("CURSOR=",this.settings.cursor);
-                this.settings.url="http://127.0.0.1:8080/_/SET/EXTSTATE/ultradeck/markertext/"+encodeURIComponent(this.settings.markertext)
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertext/"+encodeURIComponent(this.settings.markertext)
                     +";SET/EXTSTATE/ultradeck/markercolor/"+encodeURIComponent(this.settings.markercolor)
                     +";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
                     +";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor)
                     +";_Ultraschall_StreamDeck";
                 break;
             case "Go to next marker/project end" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Go_To_Next_Marker_Projectend";
+                this.settings.url="/_/_Ultraschall_Go_To_Next_Marker_Projectend";
                 this.settings.icon="action/images/next_marker.svg"
                 this.settings.title="Go to next\nmarker or\nproject end";
                 break;
             case "Go to previous marker/project start" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Go_To_Previous_Marker_Projectstart";
+                this.settings.url="/_/_Ultraschall_Go_To_Previous_Marker_Projectstart";
                 this.settings.icon="action/images/prev_marker.svg"
                 this.settings.title="Go to prev.\nmarker or\nproject start";
                 break;
             case "Delete last marker" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Delete_Last_Marker";
+                this.settings.url="/_/_Ultraschall_Delete_Last_Marker";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Delete\nlast\nmarker";
                 break;
             case "Open marker dashboard" :
-                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Marker_Dashboard";
+                this.settings.url="/_/_Ultraschall_Marker_Dashboard";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Open\nmarker\ndashboard";
                 break;
             case "DELETE ALL MARKERS" :
-                this.settings.url="http://127.0.0.1:8080/_/_SWSMARKERLIST9";
+                this.settings.url="/_/_SWSMARKERLIST9";
                 this.settings.icon="action/images/Delete_all_markers.svg"
                 this.settings.title="DELETE\nALL\nMARKERS";
                 if (this.settings.markercolor==="" || markerchanged) {

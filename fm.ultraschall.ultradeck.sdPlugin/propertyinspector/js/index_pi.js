@@ -1,7 +1,28 @@
 var onchangeevt = 'onchange'; // oninput or onchange;
 let sdpiWrapper = document.querySelector('.sdpi-wrapper');
 let settings;
+var globalSettings={};
 var HTMLs={};
+let actionjsn;
+var uuid;
+var context;
+
+// add EventListener for Global Settings
+document.addEventListener("saveGlobalSetup", saveGlobalSetup);
+
+// Function called on saving global Settings
+function saveGlobalSetup(inEvent) {
+    console.log("SETUP callback von global Settings!!!!",inEvent);
+    if (globalSettings == null) {
+        globalSettings={};
+    };
+    globalSettings["ipadress"] = inEvent.detail.ip;
+    globalSettings["port"] = inEvent.detail.port;
+    console.log('setGlobalSettings....', globalSettings);
+
+    $SD.api.setGlobalSettings(uuid, globalSettings);
+    
+};
 
 function readHTMLtoGlobal(filename) {
     var file = new XMLHttpRequest();
@@ -24,16 +45,28 @@ function wait(ms){
       end = new Date().getTime();
    }
 }
-wait(50);
+wait(200); // wait until all HTML files are loaded (this must optimized!!)
 
 function resetcolor(){console.log("RESET",settings);}
 function resetcolor2(){console.log("RESET2",settings);}
-function openGlobalSettings(){console.log("HUHU Global Settings",settings);}
+
+function openGlobalSettings(){
+    console.log("HUHU Global Settings",actionjsn, globalSettings);
+    window.open("../settings/index.html?context=" + actionjsn.actionInfo.context+"&IP="+globalSettings.ipadress+"&PORT="+globalSettings.port); 
+}
+
+$SD.on('didReceiveGlobalSettings', (jsn) => {
+    globalSettings=jsn.payload.settings;
+    console.log("PI received GLOBAL Settings!!!!!",globalSettings,jsn);
+});
 
 $SD.on('connected', (jsn) => {
-    console.log("connected",jsn,HTMLs);
+    uuid=jsn.uuid;
+    context=jsn.actionInfo.context;
+    $SD.api.getGlobalSettings(uuid);
+    console.log("connected",jsn,context);
     addDynamicStyles($SD.applicationInfo.colors, 'connectSocket');
-    
+    actionjsn=jsn;
     action=jsn.actionInfo.action;
     switch (action) {
         case "fm.ultraschall.ultradeck.toggle" :
@@ -131,9 +164,9 @@ const updateUI = (pl) => {
     Object.keys(pl).map(e => {
         if (e && e != '') {
             const foundElement = document.querySelector(`#${e}`);
-            console.log(`searching for: #${e}`, 'found:', foundElement);
+            //console.log(`searching for: #${e}`, 'found:', foundElement);
             if (foundElement && foundElement.type !== 'file') {
-                console.log("FOUND ELEMENT",pl,e,pl[e]);
+                //console.log("FOUND ELEMENT",pl,e,pl[e]);
                 foundElement.value = pl[e];            
                 const maxl = foundElement.getAttribute('maxlength') || 50;
                 const labels = document.querySelectorAll(`[for='${foundElement.id}']`);
@@ -207,7 +240,6 @@ function sendValueToPlugin(value, prop) {
 }
 
 function prepareDOMElements(baseElement) {
-    console.log("prepareDOMElements");
     baseElement = baseElement || document;
     Array.from(baseElement.querySelectorAll('.sdpi-item-value')).forEach(
         (el, i) => {
@@ -440,7 +472,6 @@ function localizeUI() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("pi doc event listn");
     document.body.classList.add(navigator.userAgent.includes("Mac") ? 'mac' : 'win');
     prepareDOMElements();
     $SD.on('localizationLoaded', (language) => {

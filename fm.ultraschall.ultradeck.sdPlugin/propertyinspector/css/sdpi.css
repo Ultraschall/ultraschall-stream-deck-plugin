@@ -353,9 +353,11 @@ table > caption {
   font-weight: normal;
 }
 
+/*
 .sdpi-item-label:after {
   content: ": ";
 }
+*/
 
 .sdpi-item-label.empty:after {
   content: "";

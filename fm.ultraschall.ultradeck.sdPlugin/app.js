@@ -2,6 +2,8 @@ $SD.on('connected', (jsonObj) => connected(jsonObj));
 var defaulticoncolor="#d8d8d8";
 var defaulticoncolorON="#fdcb00";
 var Icons={};
+var uuid="";
+var globalSettings={};
 
 LoadPNGIconsToArray(['action/images/Chapter_marker@2x.png',
                      'action/images/Edit_marker@2x.png',
@@ -81,7 +83,16 @@ function LoadSVGIconsToArray(IconsURLArray){
 }
 
 function connected(jsn) {
+    uuid=jsn.uuid;
     console.log('%c%s','color: white; background: blue; font-size: 15px;','[app.js] connected:',jsn)
+    $SD.api.getGlobalSettings(jsn.uuid);
+    $SD.on('didReceiveGlobalSettings', (jsn) => {
+        console.log("APP received GLOBAL Settings!!!!!",jsn);
+        globalSettings=jsn.payload.settings;
+        if (!globalSettings.hasOwnProperty('ipadress')) {globalSettings.ipadress="127.0.0.1";}
+        if (!globalSettings.hasOwnProperty('port')) {globalSettings.port="8080";}
+        //$SD.api.setGlobalSettings(jsn.uuid);
+    });
 
     $SD.on('fm.ultraschall.ultradeck.toggle.willAppear', (jsonObj) => toggle.onWillAppear(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.toggle.willDisappear', (jsonObj) => toggle.onWillDisappear(jsonObj));

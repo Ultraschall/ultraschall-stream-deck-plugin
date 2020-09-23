@@ -7,18 +7,25 @@
         <meta name=apple-mobile-web-app-status-bar-style content=black>
         <title>fm.ultraschall.ultradeck Settings</title>
         <link rel="stylesheet" href="../propertyinspector/css/sdpi.css">
+        <script src="../propertyinspector/js/common.js"></script>
+        <script src="../propertyinspector/js/common_pi.js"></script>
+        <script src="settings_main.js"></script>
     </head>
     <body>
-        <script src="../propertyinspector/js/common.js"></script>
         <div class="sdpi-heading">Ultraschall Web Browser Interface IP-Address
         </div>
-        <div class="sdpi-item" id="ip_adresss" title="This field lets you enter an IP-Adress. The little exclamation mark changes to a checkmark, if the condition is met (e.g. you entered an IP-address.).">
+        <div class="sdpi-item" id="ip_adress" title="This field lets you enter an IP-Adress. The little exclamation mark changes to a checkmark, if the condition is met (e.g. you entered an IP-address.).">
             <div class="sdpi-item-label">IP-Address</div> 
             <input class="sdpi-item-value" id="ultraschall_ip" value="127.0.0.1" placeholder="e.g. 192.168.61.1" required pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}">
         </div>
         <div class="sdpi-item" id="port" title="Port">
             <div class="sdpi-item-label">Port</div> 
             <input class="sdpi-item-value" id="ultraschall_port" value="8080" placeholder="e.g. 8080">
+        </div>
+        <div class="sdpi-item" id="save_button">
+            <div class="sdpi-item-label"></div>
+            <button class="sdpi-item-value" onclick="save_settings()" value="save_setings">save</button>
+            
         </div>
         <div class="sdpi-wrapper">
 			<div id="placeholder"></div>
