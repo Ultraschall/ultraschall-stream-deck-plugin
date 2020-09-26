@@ -1,4 +1,3 @@
-// code copied from Elgato Philips Hue Plugin:
 var globalSettings={};
 
 // Get the url parameter
@@ -8,11 +7,9 @@ var context = url.searchParams.get("context");
 var IP = url.searchParams.get("IP");
 var PORT = url.searchParams.get("PORT");
 
-console.log("URL,UUID: ", url, context, IP,PORT);
-
 // Add event listener
 document.addEventListener("escPressed", close_window);
-document.addEventListener("save_button", close_window);
+//document.addEventListener("save_button", close_window);
 
 window.onload = function() {
     // Set actual values to input fields
@@ -29,26 +26,22 @@ window.onload = function() {
     });
 }
 
-// save and close
-//function save_settings() {
-//    console.log("SAVE SETTINGS BUTTON PRESSED");
-//    var event = new CustomEvent("save_button");
-//    document.dispatchEvent(event);
-//}
-
-// Close the window
-function close_window() {
+// save
+function save_settings() {
     var ipadress=document.getElementById("ultraschall_ip").value;
     var port=document.getElementById("ultraschall_port").value;
-
     var detail = {
         'detail': {
             'ip': ipadress,
             'port': port
           }
       };
-    event=new CustomEvent("saveGlobalSetup",detail);
+    var event=new CustomEvent("saveGlobalSetup",detail);
     window.opener.document.dispatchEvent(event);
+}
+
+// Close the window
+function close_window() {
     document.removeEventListener("escPressed", close_window);
     document.removeEventListener("save_button", close_window);
     window.close();

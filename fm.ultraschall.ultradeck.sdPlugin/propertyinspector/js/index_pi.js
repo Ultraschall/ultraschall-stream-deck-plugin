@@ -19,9 +19,7 @@ function saveGlobalSetup(inEvent) {
     globalSettings["ipadress"] = inEvent.detail.ip;
     globalSettings["port"] = inEvent.detail.port;
     console.log('setGlobalSettings....', globalSettings);
-
-    $SD.api.setGlobalSettings(uuid, globalSettings);
-    
+    $SD.api.setGlobalSettings(uuid, globalSettings);   
 };
 
 function readHTMLtoGlobal(filename) {
