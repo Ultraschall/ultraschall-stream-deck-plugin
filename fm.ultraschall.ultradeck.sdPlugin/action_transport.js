@@ -18,9 +18,9 @@ const transport = {
                                             "6":"action/images/Play@2x.png",
                                          };
         }
-        
-        $SD.api.setSettings(jsn.context, this.settings); 
-        $SD.api.setImage(jsn.context,Icons[this.settings.icon]);
+
+        $SD.api.setSettings(jsn.context, this.settings);
+        $SD.api.setImage(jsn.context,Icons[this.settings.icon_playstate[0]]);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         // create button and start background loop function

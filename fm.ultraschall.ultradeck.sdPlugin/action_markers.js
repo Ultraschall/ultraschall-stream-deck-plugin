@@ -13,8 +13,8 @@ const markers = {
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="Icon color";}
         if (!this.settings.hasOwnProperty('markertext')) {this.settings.markertext="";}
-        if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="";}
-        if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="";}
+        if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="Play cursor";}
+        if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="0";}
 
         this.settings.lastmarkertype=this.settings.markertype;
 
@@ -96,9 +96,17 @@ const markers = {
 
         switch(this.settings.markertype) {
             case "Insert chapter marker" :
-                this.settings.url="_/_Ultraschall_Set_Marker";
+                //this.settings.url="_/_Ultraschall_Set_Marker";
+                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
+                this.settings.markercolortext="Marker color";
+                if (this.settings.cursor==="") {this.settings.cursor="Play cursor"};
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter"
+                    +";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
+                    +";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor)
+                    +";_Ultraschall_StreamDeck";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker";
+                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
                 break;
             case "Insert chapter marker at play/rec position" :
                 this.settings.url="/_/_Ultraschall_Set_Marker_Play";
@@ -187,6 +195,7 @@ const markers = {
                 console.log("CURSOR=",this.settings.cursor);
                 this.settings.url="/_/SET/EXTSTATE/ultradeck/markertext/"+encodeURIComponent(this.settings.markertext)
                     +";SET/EXTSTATE/ultradeck/markercolor/"+encodeURIComponent(this.settings.markercolor)
+                    +";SET/EXTSTATE/ultradeck/markertype/custom"
                     +";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
                     +";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor)
                     +";_Ultraschall_StreamDeck";
