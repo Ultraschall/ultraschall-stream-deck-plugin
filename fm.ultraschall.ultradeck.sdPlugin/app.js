@@ -41,12 +41,14 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Record2.svg',
                      'action/images/Repeat.svg',
                      'action/images/RepeatOn.svg',
-                     'action/images/Game.svg'
+                     'action/images/Game.svg',
+                     'action/images/Timestamp_marker.svg'
 ]);
 
 var ExtraDefaultColor={};
 ExtraDefaultColor['action/images/Edit_marker.svg'] = '#c81414'; // red
 ExtraDefaultColor['action/images/Delete_all_markers.svg'] = '#ff0000'; // very red
+ExtraDefaultColor['action/images/Timestamp_marker.svg'] = '#ffffff'; // white for timestamp marker
 ExtraDefaultColor['Toggle follow mode'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Toggle Magic Routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow

@@ -21,6 +21,8 @@ const markers = {
         $SD.api.setSettings(jsn.context, this.settings);
 
         //set icon
+        if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
+        console.log("FARBE ist nun ", this.settings.markercolor);
         var image=Icons[this.settings.icon];
         image=image.replace('#d8d8d8', this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
@@ -96,42 +98,39 @@ const markers = {
 
         switch(this.settings.markertype) {
             case "Insert chapter marker" :
-                //this.settings.url="_/_Ultraschall_Set_Marker";
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
-                this.settings.markercolortext="Marker color";
-                if (this.settings.cursor==="") {this.settings.cursor="Play cursor"};
-                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter"
-                    +";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
-                    +";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor)
-                    +";_Ultraschall_StreamDeck";
+                this.settings.markercolortext="Icon color";
+                if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter" + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset) + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker";
-                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
-                break;
-            case "Insert chapter marker at play/rec position" :
-                this.settings.url="/_/_Ultraschall_Set_Marker_Play";
-                this.settings.icon="action/images/Chapter_marker_playpos.svg"
-                this.settings.title="Insert\nchapter\nmarker\nat play\nposition";
                 break;
             case "Insert chapter marker and edit name" :
-                this.settings.url="/_/_Ultraschall_Set_NamedMarker";
+                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
+                this.settings.markercolortext="Icon color";
+                if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter_enter_name" + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset) + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";
                 this.settings.icon="action/images/Chapter_marker.svg"
                 this.settings.title="Insert\nnamed\nchapter\nmarker";
                 break;
-            case "Insert chapter marker and edit name at play/rec position" :
-                this.settings.url="/_/_Ultraschall_Set_Namedmarker_Play";
-                this.settings.icon="action/images/Chapter_marker_playpos.svg"
-                this.settings.title="Insert\nnamed\nchapter\nmarker\nat play\nposition";
-                break;
-            case "Insert chapter marker back in time" :
-                this.settings.url="/_/_Ultraschall_Insert_Chapter_Marker_Back_In_Time";
-                this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nchapter\nmarker\nback\nin time";
-                break;
-            case "Insert chapter marker with time stamp (ISO 8601)" :
-                this.settings.url="/_/_Ultraschall_set_Marker_with_Timestamp";
-                this.settings.icon="action/images/Chapter_marker.svg"
+            case "Insert marker with time stamp (ISO 8601)" :
+                console.log("HUHU TIMESTAMP", this.settings);
+                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
+                this.settings.markercolortext="Marker color";
+                if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
+                this.settings.icon="action/images/Timestamp_marker.svg"
                 this.settings.title="Insert\nchapter\nmarker\nwith\ntime stamp\n(ISO 8601)";
+                if (this.settings.markercolor==="" || markerchanged) {
+                    if (ExtraDefaultColor[this.settings.icon]) {
+                        console.log("ICH BIN HIER");
+                        this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
+                    }
+                }
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/marker_with_timestamp"
+                + ";SET/EXTSTATE/ultradeck/markercolor/"+encodeURIComponent(this.settings.markercolor)
+                + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
+                + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor)
+                + ";_Ultraschall_StreamDeck";
                 break;
             case "Import chapter markers" :
                 this.settings.url="/_/_ULTRASCHALL_INSERT_CHAPTERS";
