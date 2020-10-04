@@ -122,6 +122,9 @@ const updateUI = (pl) => {
     x=document.getElementById("customactioncontainer");
     if (x) {if (settings.customaction==="") {x.style.display="none"; } else { x.style.display="";}}
 
+    x=document.getElementById("iconstylecontainer");
+    if (x) {if (settings.iconstyle==="") {x.style.display="none"; } else { x.style.display="";}}
+
     x=document.getElementById("markertextcontainer");
     if (x) {if (settings.markertext==="") {x.style.display="none"; } else { x.style.display="";}}
 

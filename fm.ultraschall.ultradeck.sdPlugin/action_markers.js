@@ -15,26 +15,21 @@ const markers = {
         if (!this.settings.hasOwnProperty('markertext')) {this.settings.markertext="";}
         if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="Automatic depending on followmode";}
         if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="0";}
-
+        if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
+        if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
+        
         this.settings.lastmarkertype=this.settings.markertype;
 
         $SD.api.setSettings(jsn.context, this.settings);
 
-        //set icon
-        if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
-        console.log("FARBE ist nun ", this.settings.markercolor);
-        var image=Icons[this.settings.icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
-        $SD.api.setTitle(jsn.context, this.settings.title);
+        //set icon                
+        this.setIconColor(jsn);
     },
 
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyDown marker ", jsn);
         var xhttp = new XMLHttpRequest();
         var request_url="http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url;
-        console.log("request_url=",request_url);
         xhttp.open("GET", request_url , true);
         xhttp.send();
     },
@@ -48,25 +43,30 @@ const markers = {
         }
     }, 
 
-    resetIconColor: function(jsn){
-        console.log("resetIconColor",jsn,this.markercolor)
-        this.settings.markercolor=defaulticoncolor;
-        if (ExtraDefaultColor[this.settings.icon]) {
-            this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
-        }
+    setIconColor: function(jsn){
         var image=Icons[this.settings.icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
+        if (this.settings.iconstyle==="inverted") {
+            image=image.replace('#d8d8d8', 'KATZE2000');
+            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
+            image=image.replace('KATZE2000', '#2d2d2d');
+        } else if (this.settings.iconstyle==="normal"){
+            image=image.replace('#d8d8d8', this.settings.markercolor);
+        }
         $SD.api.setImage(jsn.context,image);
         $SD.api.setSettings(jsn.context, this.settings);
     },
 
+    resetIconColor: function(jsn){
+        this.settings.markercolor=defaulticoncolor;
+        if (ExtraDefaultColor[this.settings.icon]) {
+            this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
+        }
+        this.setIconColor(jsn);
+    },
+
     titleParametersDidChange: function(jsn){ //redraw image and title
-        if (jsn.payload.settings.hasOwnProperty('markercolor')) {this.settings = jsn.payload.settings;}
         $SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']); //dirty hack, clear icon and then set new icon
-        var image=Icons[this.settings.icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
-        $SD.api.setTitle(jsn.context, this.settings.title);
+        this.setIconColor(jsn);
     },
     
     onDidReceiveSettings: function(jsn) {
@@ -85,6 +85,7 @@ const markers = {
             this.settings.markeroffset="";
             this.settings.cursor="";
             this.settings.lastmarkertype=this.settings.markertype;
+            this.settings.iconstyle="normal"
         }
 
         console.log("markerchanged",markerchanged);
