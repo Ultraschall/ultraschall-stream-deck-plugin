@@ -61,11 +61,11 @@
       "UUID": "fm.ultraschall.ultradeck.transport"
     },
     {
-      "Icon": "action/images/Game", 
+      "Icon": "action/images/Custom_action", 
       "Name": "Misc",
       "States": [
         {
-          "Image": "action/images/Game"
+          "Image": "action/images/Custom_action"
         }
       ],
       "Tooltip": "miscellaneous actions",

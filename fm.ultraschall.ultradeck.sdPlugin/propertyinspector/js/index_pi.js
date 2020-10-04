@@ -119,6 +119,9 @@ const updateUI = (pl) => {
     var x=document.getElementById("tracknumbercontainer");
     if (x) {if (settings.tracknumber==="") {x.style.display="none"; } else { x.style.display="";}}
     
+    x=document.getElementById("customactioncontainer");
+    if (x) {if (settings.customaction==="") {x.style.display="none"; } else { x.style.display="";}}
+
     x=document.getElementById("markertextcontainer");
     if (x) {if (settings.markertext==="") {x.style.display="none"; } else { x.style.display="";}}
 

@@ -5,12 +5,13 @@ const misc = {
         console.log("huhu i bims eine Misc Action",jsn);
         this.settings = jsn.payload.settings;
         
-        if (!this.settings.hasOwnProperty('misctype')) {this.settings.misctype="Play Ultramind";}
-        if (!this.settings.hasOwnProperty('url')) {this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Mastermind";}
-        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Game.svg";}
-        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Play\nUltra-\nmind";}
+        if (!this.settings.hasOwnProperty('misctype')) {this.settings.misctype="Custom Action";}
+        if (!this.settings.hasOwnProperty('customaction')) {this.settings.customaction="_Ultraschall_StartScreen";}
+        if (!this.settings.hasOwnProperty('url')) {this.settings.url="http://127.0.0.1:8080/_/"+this.settings.customaction;}
+        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Custom_action.svg";}
+        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Custom\nAction";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
-        
+
         // set icon color
         var image=Icons[this.settings.icon];
         image=image.replace('#d8d8d8', this.settings.markercolor);
@@ -47,34 +48,40 @@ const misc = {
 
         // set url for each action
         var misctype=this.settings.misctype;
-
-        var icon="";
+        
+        //this.settings.icon="";
         
         switch(misctype) {
             case "Play Ultramind" :
-                var url="http://127.0.0.1:8080/_/_Ultraschall_Mastermind";
-                icon="action/images/Game.svg"
-                title="Play\nUltra-\nmind";
+                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Mastermind";
+                this.settings.icon="action/images/Game.svg"
+                this.settings.mytitle="Play\nUltra-\nmind";
+                this.settings.customaction="";
                 break;
             case "Play Moonlander" :
-                var url="http://127.0.0.1:8080/_/_Ultraschall_Moonlander";
-                icon="action/images/Game.svg"
-                title="Play\nMoon-\nlander";
+                this.settings.url="http://127.0.0.1:8080/_/_Ultraschall_Moonlander";
+                this.settings.icon="action/images/Game.svg"
+                this.settings.mytitle="Play\nMoon-\nlander";
+                this.settings.customaction="";
+                break;
+            case "Custom Action" :
+                if (!this.settings.hasOwnProperty('customaction')||this.settings.customaction==="") {this.settings.customaction="_Ultraschall_StartScreen";}
+                this.settings.url="http://127.0.0.1:8080/_/"+this.settings.customaction;
+                this.settings.icon="action/images/Custom_action.svg"
+                this.settings.mytitle="Custom\nAction";
+                console.log("custom action 2000 ",this.settings);
                 break;
         }
-        this.settings.url=url;
-        this.settings.icon=icon;
-        this.settings.mytitle=title;
         
         // change color inside image SVG Data:
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
-        var image=Icons[icon];
+        var image=Icons[this.settings.icon];
         image=image.replace('#d8d8d8', this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
-        $SD.api.setTitle(jsn.context, title);
+        $SD.api.setImage(jsn.context, image);
+        $SD.api.setTitle(jsn.context, this.settings.mytitle);
         
         // set initial state
-        this.onKeyUp(jsn);
+        //this.onKeyUp(jsn);
     }
 };

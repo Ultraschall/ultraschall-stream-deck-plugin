@@ -42,7 +42,8 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Repeat.svg',
                      'action/images/RepeatOn.svg',
                      'action/images/Game.svg',
-                     'action/images/Timestamp_marker.svg'
+                     'action/images/Timestamp_marker.svg',
+                     'action/images/Custom_action.svg'
 ]);
 
 var ExtraDefaultColor={};

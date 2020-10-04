@@ -5,6 +5,9 @@
 <div class='sdpi-item'>
     <div class='sdpi-item-label'>Select Action</div>
     <select class='sdpi-item-value select' id='misctype'>
+        <optgroup label='Custom Action'>
+            <option value='Custom Action'>Custom Action</option>
+        </optgroup>> 
         <optgroup label='Ultraschall Games'>
             <option value='Play Ultramind'>Play Ultramind</option>
             <option value='Play Moonlander'>Play Moonlander</option>
@@ -17,4 +20,8 @@
         <input type='color' class='sdpi-item-value' id='markercolor' value='#d8d8d8'>
         <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
     </div>
+</div>
+<div class='sdpi-item' id='customactioncontainer'>
+    <div class='sdpi-item-label'>Reaper Command ID</div>
+    <input class='sdpi-item-value' id='customaction' name='customaction' value=''>
 </div>
