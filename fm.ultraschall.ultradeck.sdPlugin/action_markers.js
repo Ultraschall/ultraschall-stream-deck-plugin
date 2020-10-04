@@ -13,7 +13,7 @@ const markers = {
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="Icon color";}
         if (!this.settings.hasOwnProperty('markertext')) {this.settings.markertext="";}
-        if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="Play cursor";}
+        if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="Automatic depending on followmode";}
         if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="0";}
 
         this.settings.lastmarkertype=this.settings.markertype;
@@ -45,12 +45,6 @@ const markers = {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 this.resetIconColor(jsn);
             }
-            //if (jsn.payload.sdpi_collection.key==="GlobalSettingsButton") {
-                //console.log("OPEN WINDOW",jsn.context);
-                //window.open("settings/index.html?context=" + jsn.context);
-                //parameters for global settings page:
-                //window.open("settings/index.html?language=" + inLanguage + "&streamDeckVersion=" + inStreamDeckVersion + "&pluginVersion=" + inPluginVersion);
-            //}
         }
     }, 
 
@@ -67,7 +61,6 @@ const markers = {
     },
 
     titleParametersDidChange: function(jsn){ //redraw image and title
-        //console.log("TitleChanged",this.settings.markercolor, jsn)
         if (jsn.payload.settings.hasOwnProperty('markercolor')) {this.settings = jsn.payload.settings;}
         $SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']); //dirty hack, clear icon and then set new icon
         var image=Icons[this.settings.icon];
@@ -153,20 +146,17 @@ const markers = {
                 this.settings.title="Insert\nmarkers\nat the start of\nevery\nselected item";
                 break;
             case "Insert edit marker" :
-                this.settings.url="/_/_Ultraschall_Set_Edit";
+                if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
+                this.settings.markercolortext="Icon color";
+                if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
                 this.settings.icon="action/images/Edit_marker.svg"
                 this.settings.title="Insert\nedit\nmarker";
                 if (this.settings.markercolor==="" || markerchanged) {
                     if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
                 }
-                break;
-            case "Insert edit marker at play/rec position" :
-                this.settings.url="/_/_Ultraschall_Set_Edit_Play";
-                this.settings.icon="action/images/Edit_marker.svg"
-                this.settings.title="Insert\nedit marker\nat play/rec\nposition";
-                if (this.settings.markercolor==="" || markerchanged) {
-                    if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
-                }
+                this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/edit_marker"
+                + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset)
+                + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";
                 break;
             case "Import planned markers from clipboard" :
                 this.settings.url="/_/_Ultraschall_Import_Markers_As_Planned_From_Clipboard";

@@ -114,8 +114,7 @@ function connected(jsn) {
     $SD.on('fm.ultraschall.ultradeck.pushto.keyUp', (jsonObj) => pushto.onKeyUp(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.pushto.didReceiveSettings', (jsonObj) => pushto.onDidReceiveSettings(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.pushto.sendToPlugin', (jsonObj) => pushto.onSendToPlugin(jsonObj));
-    //$SD.on('fm.ultraschall.ultradeck.pushto.titleParametersDidChange', (jsonObj) => pushto.titleParametersDidChange(jsonObj));
-
+ 
     $SD.on('fm.ultraschall.ultradeck.levels.willAppear', (jsonObj) => levels.onWillAppear(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.levels.keyDown', (jsonObj) => levels.onKeyDown(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.levels.didReceiveSettings', (jsonObj) => levels.onDidReceiveSettings(jsonObj));

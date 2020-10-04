@@ -76,6 +76,8 @@ elseif markertype=="marker_with_timestamp" then
         return Date.."T"..Time
     end
     reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Time: "..CreateDateTime(), 0, convert_color_hex2rgb(markercolor))
+elseif markertype=="edit_marker" then
+    reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Edit", 0, reaper.ColorToNative(255, 0, 0) | 0x1000000)
 end
 runcommand("_Ultraschall_Center_Arrangeview_To_Cursor") -- scroll to cursor if not visible
 
