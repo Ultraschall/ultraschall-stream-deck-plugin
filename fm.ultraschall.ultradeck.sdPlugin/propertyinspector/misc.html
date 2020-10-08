@@ -2,6 +2,7 @@
     <div class='sdpi-item-label'>Settings</div>
     <button onclick="openGlobalSettings()" class="sdpi-item-value" value="Click Me only">Global Settings</button>
 </div>
+
 <div class='sdpi-item'>
     <div class='sdpi-item-label'>Select Action</div>
     <select class='sdpi-item-value select' id='misctype'>
@@ -14,6 +15,7 @@
         </optgroup>
     </select>
 </div>
+
 <div class='sdpi-item' id='markercolorcontainer'>
     <div type='color' class='sdpi-item'>
     <div class='sdpi-item-label' id='markercolortext'>Color</div>
@@ -21,7 +23,16 @@
         <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
     </div>
 </div>
+
 <div class='sdpi-item' id='customactioncontainer'>
     <div class='sdpi-item-label'>Reaper Command ID</div>
     <input class='sdpi-item-value' id='customaction' name='customaction' value=''>
+</div>
+
+<div class='sdpi-item' id='iconstylecontainer'>
+    <div class='sdpi-item-label'>Icon style</div>
+    <select class='sdpi-item-value select' id='iconstyle'>
+        <option value='normal'>normal</option>
+        <option value='inverted'>inverted</option>
+    </select>
 </div>

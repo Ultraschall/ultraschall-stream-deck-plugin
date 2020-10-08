@@ -2,10 +2,12 @@
     <div class='sdpi-item-label'>Settings</div>
     <button onclick="openGlobalSettings()" class="sdpi-item-value" value="Click Me only">Global Settings</button>
 </div>
+
 <div class='sdpi-item'>
     <div class='sdpi-item-label'>Track (0-99)</div>
     <input class='sdpi-item-value' id='tracknumber' inputmode='numeric' type='number' min=1 max=99 name='track number' value=1>
 </div>
+
 <div class='sdpi-item'>
     <div class='sdpi-item-label'>Select Action</div>
     <select class='sdpi-item-value select' id='pushtotype'>
@@ -15,10 +17,19 @@
         </optgroup>
     </select>
 </div>
+
 <div class='sdpi-item' id='markercolorcontainer'>
     <div type='color' class='sdpi-item'>
     <div class='sdpi-item-label'>Color</div>
         <input type='color' class='sdpi-item-value' id='markercolor' value='#d8d8d8'>
         <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
     </div>
+</div>
+
+<div class='sdpi-item' id='iconstylecontainer'>
+    <div class='sdpi-item-label'>Icon style</div>
+    <select class='sdpi-item-value select' id='iconstyle'>
+        <option value='normal'>normal</option>
+        <option value='inverted'>inverted</option>
+    </select>
 </div>

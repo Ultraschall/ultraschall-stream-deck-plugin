@@ -17,13 +17,26 @@ const toggle = {
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="not muted";}
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
+        if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
 
         // set icon color
-        var image=Icons[this.settings.icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
         
-        $SD.api.setSettings(jsn.context, this.settings); 
-        $SD.api.setImage(jsn.context,Icons[this.settings.icon]);
+        var image=Icons[this.settings.icon];
+        //image=image.replace('#d8d8d8', this.settings.markercolor);
+        
+        if (this.settings.iconstyle==="inverted") {
+            image=image.replace('#d8d8d8', 'KATZE2000');
+            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
+            image=image.replace('KATZE2000', '#2d2d2d');
+        } else if (this.settings.iconstyle==="normal"){
+            image=image.replace('#d8d8d8', this.settings.markercolor);
+        }
+
+        $SD.api.setImage(jsn.context,image);
+        $SD.api.setSettings(jsn.context, this.settings);
+
+        //$SD.api.setSettings(jsn.context, this.settings); 
+        //$SD.api.setImage(jsn.context,Icons[this.settings.icon]);
         $SD.api.setTitle(jsn.context, this.settings.title);
 
         // create Toggle object
@@ -269,14 +282,23 @@ function ToggleButtonClass(jsonObj) {
 
                     if (resultState==="0") {
                         var image=Icons['action/images/unmuted.svg'];
-                        image=image.replace('#d8d8d8', settings.markercolor);
+                        //image=image.replace('#d8d8d8', settings.markercolor);
                     }
                     else {
                         var image=Icons['action/images/muted.svg'];
-                        image=image.replace('#d8d8d8', settings.markercolor2);
+                        //image=image.replace('#d8d8d8', settings.markercolor2);
                     };
 
+                    if (settings.iconstyle==="inverted") {
+                        image=image.replace('#d8d8d8', 'KATZE2000');
+                        image=image.replace('fill:none', 'fill:'+settings.markercolor);
+                        image=image.replace('KATZE2000', '#2d2d2d');
+                    } else if (settings.iconstyle==="normal"){
+                        image=image.replace('#d8d8d8', settings.markercolor);
+                    }
                     $SD.api.setImage(context,image);
+                    $SD.api.setSettings(context, settings);
+                    //$SD.api.setImage(context,image);
                 }
             }
         };
@@ -295,12 +317,21 @@ function ToggleButtonClass(jsonObj) {
                     let resultState = resultArray[2];
                     resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
                     if (resultState==="1") {
-                        var image=icon1.replace(/#d8d8d8/g, settings.markercolor);
+                        var image=icon1//.replace(/#d8d8d8/g, settings.markercolor);
                     }
                     else {
-                        var image=icon2.replace(/#d8d8d8/g, settings.markercolor2);
+                        var image=icon2//.replace(/#d8d8d8/g, settings.markercolor2);
                     };
+                    //$SD.api.setImage(context,image);
+                    if (settings.iconstyle==="inverted") {
+                        image=image.replace('#d8d8d8', 'KATZE2000');
+                        image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
+                        image=image.replace('KATZE2000', '#2d2d2d');
+                    } else if (settings.iconstyle==="normal"){
+                        image=image.replace('#d8d8d8', this.settings.markercolor);
+                    }
                     $SD.api.setImage(context,image);
+                    $SD.api.setSettings(context, settings);
                 }
             }
         };

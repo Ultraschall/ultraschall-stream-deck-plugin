@@ -11,12 +11,21 @@ const pushto = {
         if (!this.settings.hasOwnProperty('url_UP')) {this.settings.url_UP="http://127.0.0.1:8080/_/SET/TRACK/1/MUTE/0";}
         if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://127.0.0.1:8080/_/SET/TRACK/1/MUTE/1";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
+        if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Push\nto\nmute\nTrack 1";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
-        
+                
         // set icon color
         var image=Icons[this.settings.icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
+        //image=image.replace('#d8d8d8', this.settings.markercolor);
+
+        if (this.settings.iconstyle==="inverted") {
+            image=image.replace('#d8d8d8', 'KATZE2000');
+            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
+            image=image.replace('KATZE2000', '#2d2d2d');
+        } else if (this.settings.iconstyle==="normal"){
+            image=image.replace('#d8d8d8', this.settings.markercolor);
+        }
 
         $SD.api.setSettings(jsn.context, this.settings); 
         $SD.api.setImage(jsn.context,image);
@@ -87,7 +96,16 @@ const pushto = {
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
         var image=Icons[icon];
-        image=image.replace('#d8d8d8', this.settings.markercolor);
+
+        if (this.settings.iconstyle==="inverted") {
+            image=image.replace('#d8d8d8', 'KATZE2000');
+            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
+            image=image.replace('KATZE2000', '#2d2d2d');
+        } else if (this.settings.iconstyle==="normal"){
+            image=image.replace('#d8d8d8', this.settings.markercolor);
+        }
+
+        //image=image.replace('#d8d8d8', this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, title);
         
