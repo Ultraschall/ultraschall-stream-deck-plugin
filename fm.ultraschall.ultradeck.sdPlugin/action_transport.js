@@ -7,7 +7,7 @@ const transport = {
         this.settings = jsn.payload.settings;
         
         if (!this.settings.hasOwnProperty('transporttype')) {this.settings.transporttype="Play";}
-        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://127.0.0.1:8080/_/1007";}
+        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/1007";}
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Play";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/play@2x.png";}
         if (!this.settings.hasOwnProperty('icon_playstate')) {
@@ -54,7 +54,7 @@ const transport = {
         //console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_transport.js]onDidReceiveSettings:', jsn);
         this.settings = jsn.payload.settings;
         $SD.api.setSettings(jsn.context, this.settings);
-        var url_DOWN="http://127.0.0.1:8080/_/";
+        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
         var icon="";
         var transporttype=this.settings.transporttype;
         var title="";
@@ -195,7 +195,7 @@ function TransportButtonClass(jsonObj) {
         console.log("getting transport state");
 
         var xhttp = new XMLHttpRequest();
-        var url="http://127.0.0.1:8080/_/TRANSPORT";
+        var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/TRANSPORT";
         xhttp.open("GET", url , true);
 
         xhttp.onload = function () {

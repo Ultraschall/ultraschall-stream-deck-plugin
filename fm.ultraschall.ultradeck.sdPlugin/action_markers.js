@@ -19,10 +19,7 @@ const markers = {
         if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
         
         this.settings.lastmarkertype=this.settings.markertype;
-
-        $SD.api.setSettings(jsn.context, this.settings);
-
-        //set icon                
+        $SD.api.setSettings(jsn.context, this.settings);              
         this.setIconColor(jsn);
     },
 
@@ -46,14 +43,15 @@ const markers = {
     setIconColor: function(jsn){
         var image=Icons[this.settings.icon];
         if (this.settings.iconstyle==="inverted") {
-            image=image.replace('#d8d8d8', 'KATZE2000');
-            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
-            image=image.replace('KATZE2000', '#2d2d2d');
+            image=image.replace(/#d8d8d8/g, 'KATZE2000');
+            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
+            image=image.replace(/KATZE2000/g, '#2d2d2d');
         } else if (this.settings.iconstyle==="normal"){
-            image=image.replace('#d8d8d8', this.settings.markercolor);
+            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
         }
         $SD.api.setImage(jsn.context,image);
-        $SD.api.setSettings(jsn.context, this.settings);
+        $SD.api.setTitle(jsn.context, this.settings.title);
+        //$SD.api.setSettings(jsn.context, this.settings);
     },
 
     resetIconColor: function(jsn){

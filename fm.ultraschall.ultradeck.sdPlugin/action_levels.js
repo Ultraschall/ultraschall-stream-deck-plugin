@@ -9,7 +9,7 @@ const levels = {
         if (!this.settings.hasOwnProperty('tracknumber')) {this.settings.tracknumber="1";}
         if (!this.settings.hasOwnProperty('sendnumber')) {this.settings.sendnumber="";}
         if (!this.settings.hasOwnProperty('levelstype')) {this.settings.levelstype="Increase track level";}
-        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://127.0.0.1:8080/_/SET/TRACK/1/VOL/+3";}
+        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/VOL/+3";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Volume_up@2x.png";}
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Increase\nLevel\nTrack 1";}
 
@@ -42,7 +42,7 @@ const levels = {
 
         // set url for each action
         var levelstype=this.settings.levelstype;
-        var url_DOWN="http://127.0.0.1:8080/_/";
+        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
         var tracknumber=this.settings.tracknumber;
         var sendnumber=this.settings.sendnumber;
         if (sendnumber==="") {sendnumber="1";}

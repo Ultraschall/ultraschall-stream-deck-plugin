@@ -5,7 +5,7 @@ const toggle = {
     onWillAppear: function (jsn) {
         console.log("Huhu i bims ein toggle",jsn);
         this.settings = jsn.payload.settings;
-        
+
         // set default values
         if (!this.settings.hasOwnProperty('toggletype')) { this.settings.toggletype="Toggle mute track"; }
         if (!this.settings.hasOwnProperty('lasttoggletype')) { this.settings.lasttoggletype="Toggle mute track"; }
@@ -18,25 +18,22 @@ const toggle = {
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
+        if (!this.settings.hasOwnProperty('url')) {this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";}
 
         // set icon color
         
         var image=Icons[this.settings.icon];
-        //image=image.replace('#d8d8d8', this.settings.markercolor);
         
         if (this.settings.iconstyle==="inverted") {
-            image=image.replace('#d8d8d8', 'KATZE2000');
-            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
-            image=image.replace('KATZE2000', '#2d2d2d');
+            image=image.replace(/#d8d8d8/g, 'KATZE2000');
+            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
+            image=image.replace(/KATZE2000/g, '#2d2d2d');
         } else if (this.settings.iconstyle==="normal"){
-            image=image.replace('#d8d8d8', this.settings.markercolor);
+            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
         }
 
         $SD.api.setImage(jsn.context,image);
         $SD.api.setSettings(jsn.context, this.settings);
-
-        //$SD.api.setSettings(jsn.context, this.settings); 
-        //$SD.api.setImage(jsn.context,Icons[this.settings.icon]);
         $SD.api.setTitle(jsn.context, this.settings.title);
 
         // create Toggle object
@@ -69,25 +66,7 @@ const toggle = {
         console.log("KeyDown toggle ");
         
         var xhttp = new XMLHttpRequest();
-        var url="";
-        switch(this.settings.toggletype) {
-            case "Toggle mute track" :
-                url="http://127.0.0.1:8080/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1"; break;
-            case "Toggle follow mode" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_Toggle_Follow"; break;
-            case "Toggle Magic Routing" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_Toggle_Magicrouting"; break;
-            case "Set preshow routing" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_set_Matrix_Preshow"; break;
-            case "Set recording routing" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_set_Matrix_Recording"; break;
-            case "Set editing routing" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_set_Matrix_Editing"; break;
-            case "Toggle Studiolink OnAir" :
-                url="http://127.0.0.1:8080/_/_Ultraschall_OnAir"; break;
-        }
-
-        xhttp.open("GET", url , true);
+        xhttp.open("GET", this.settings.url , true);
         xhttp.send();
 
         let found = this.cache[jsn.context];
@@ -107,8 +86,8 @@ const toggle = {
 
         switch(this.settings.toggletype) {
             case "Toggle mute track" :
-                this.settings.title=this.settings.tracknumber;
                 if (togglechanged){
+                    this.settings.tracknumber="1";
                     this.settings.markercolortext="not muted";
                     this.settings.markercolortext2="muted";
                     this.settings.markercolor =defaulticoncolor;
@@ -116,6 +95,8 @@ const toggle = {
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/muted.svg';
                 }
+                this.settings.title=this.settings.tracknumber;
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
                 break;
             case "Toggle follow mode" :
                 this.settings.title="Follow\nmode\nToggle\n ";
@@ -129,6 +110,7 @@ const toggle = {
                     this.settings.icon='action/images/Follow_mode.svg';
                 }
                 this.settings.tracknumber="";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Follow";
                 break;
             case "Toggle Magic Routing" :
                 this.settings.title="Magic\nRouting\nToggle\n ";
@@ -141,6 +123,7 @@ const toggle = {
                     this.settings.icon='action/images/MagicRouting.svg';
                 }
                 this.settings.tracknumber="";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Magicrouting";
                 break;
             case "Set preshow routing" :
                 this.settings.title="Set\npreshow\nrouting\n ";
@@ -153,6 +136,7 @@ const toggle = {
                     this.settings.icon='action/images/Preshow.svg';
                 }
                 this.settings.tracknumber="";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Preshow";
                 break;
             case "Set recording routing" :
                 this.settings.title="Set\nrecording\nrouting\n ";
@@ -165,6 +149,7 @@ const toggle = {
                     this.settings.icon='action/images/Recording.svg';
                 }
                 this.settings.tracknumber="";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Recording";
                 break;
             case "Set editing routing" :
                 this.settings.title="Set\nrecording\nrouting\n ";
@@ -177,6 +162,7 @@ const toggle = {
                     this.settings.icon='action/images/Editing.svg';
                 }
                 this.settings.tracknumber="";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Editing";
                 break;
                 case "Toggle Studiolink OnAir" :
                     this.settings.title="Toggle\nStudiolink\nOnAir\n ";
@@ -189,6 +175,7 @@ const toggle = {
                         this.settings.icon='action/images/OnAir.svg';
                     }
                     this.settings.tracknumber="";
+                    this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_OnAir";
                     break;
         }
         
@@ -228,15 +215,15 @@ function ToggleButtonClass(jsonObj) {
     var settings=jsonObj.payload.settings;
 
     function checkstates(){
-        if (toggletype==="Toggle mute track") {getMuteState();}
-        if (toggletype==="Toggle follow mode") {getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_Toggle_Follow",Icons['action/images/Follow_mode.svg'],Icons['action/images/Follow_mode.svg']);}
-        if (toggletype==="Toggle Magic Routing") {getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_Toggle_Magicrouting",Icons['action/images/MagicRouting.svg'],Icons['action/images/MagicRouting.svg']);}
-        if (toggletype==="Set preshow routing") {getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_set_Matrix_Preshow",Icons['action/images/Preshow.svg'],Icons['action/images/Preshow.svg']);}
-        if (toggletype==="Set recording routing") {getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_set_Matrix_Recording",Icons['action/images/Recording.svg'],Icons['action/images/Recording.svg']);}
-        if (toggletype==="Set editing routing") {getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
-        if (toggletype==="Toggle Studiolink OnAir") {
-            console.log("ON Aiiiiiiiir");
-            getActionState("http://127.0.0.1:8080/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
+        if (globalSettings.hasOwnProperty('ipadress') && globalSettings.hasOwnProperty('port')) {
+            if (toggletype==="Toggle mute track") {getMuteState();}
+            if (toggletype==="Toggle follow mode") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Toggle_Follow",Icons['action/images/Follow_mode.svg'],Icons['action/images/Follow_mode.svg']);}
+            if (toggletype==="Toggle Magic Routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Toggle_Magicrouting",Icons['action/images/MagicRouting.svg'],Icons['action/images/MagicRouting.svg']);}
+            if (toggletype==="Set preshow routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Preshow",Icons['action/images/Preshow.svg'],Icons['action/images/Preshow.svg']);}
+            if (toggletype==="Set recording routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Recording",Icons['action/images/Recording.svg'],Icons['action/images/Recording.svg']);}
+            if (toggletype==="Set editing routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
+            if (toggletype==="Toggle Studiolink OnAir") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
+        }
     }
 
     function loop(){
@@ -269,7 +256,7 @@ function ToggleButtonClass(jsonObj) {
     function getMuteState(){
         //console.log("getMuteState");
         var xhttp = new XMLHttpRequest();
-        var url="http://127.0.0.1:8080/_/GET/TRACK/"+track+"/B_MUTE";
+        var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/TRACK/"+track+"/B_MUTE";
         xhttp.open("GET", url , true);
 
         xhttp.onload = function () {
@@ -282,23 +269,22 @@ function ToggleButtonClass(jsonObj) {
 
                     if (resultState==="0") {
                         var image=Icons['action/images/unmuted.svg'];
-                        //image=image.replace('#d8d8d8', settings.markercolor);
+                        var markercolor=settings.markercolor;
                     }
                     else {
                         var image=Icons['action/images/muted.svg'];
-                        //image=image.replace('#d8d8d8', settings.markercolor2);
+                        var markercolor=settings.markercolor2;
                     };
 
                     if (settings.iconstyle==="inverted") {
-                        image=image.replace('#d8d8d8', 'KATZE2000');
-                        image=image.replace('fill:none', 'fill:'+settings.markercolor);
-                        image=image.replace('KATZE2000', '#2d2d2d');
+                        image=image.replace(/#d8d8d8/g, 'KATZE2000');
+                        image=image.replace(/fill:none/g, 'fill:'+markercolor);
+                        image=image.replace(/KATZE2000/g, '#2d2d2d');
                     } else if (settings.iconstyle==="normal"){
-                        image=image.replace('#d8d8d8', settings.markercolor);
+                        image=image.replace(/#d8d8d8/g, markercolor);
                     }
                     $SD.api.setImage(context,image);
                     $SD.api.setSettings(context, settings);
-                    //$SD.api.setImage(context,image);
                 }
             }
         };
@@ -316,19 +302,22 @@ function ToggleButtonClass(jsonObj) {
                     let resultArray = resultText.split('\t');
                     let resultState = resultArray[2];
                     resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
+                    
                     if (resultState==="1") {
-                        var image=icon1//.replace(/#d8d8d8/g, settings.markercolor);
+                        var image=icon1;
+                        var markercolor=settings.markercolor;
                     }
                     else {
-                        var image=icon2//.replace(/#d8d8d8/g, settings.markercolor2);
+                        var image=icon2;
+                        var markercolor=settings.markercolor2;
                     };
-                    //$SD.api.setImage(context,image);
+
                     if (settings.iconstyle==="inverted") {
-                        image=image.replace('#d8d8d8', 'KATZE2000');
-                        image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
-                        image=image.replace('KATZE2000', '#2d2d2d');
+                        image=image.replace(/#d8d8d8/g, 'KATZE2000');
+                        image=image.replace(/fill:none/g, 'fill:'+markercolor);
+                        image=image.replace(/KATZE2000/g, '#2d2d2d');
                     } else if (settings.iconstyle==="normal"){
-                        image=image.replace('#d8d8d8', this.settings.markercolor);
+                        image=image.replace(/#d8d8d8/g, markercolor);
                     }
                     $SD.api.setImage(context,image);
                     $SD.api.setSettings(context, settings);

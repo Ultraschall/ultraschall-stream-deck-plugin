@@ -8,8 +8,8 @@ const pushto = {
         
         if (!this.settings.hasOwnProperty('tracknumber')) {this.settings.tracknumber="1";}
         if (!this.settings.hasOwnProperty('pushtotype')) {this.settings.pushtotype="Push to mute";}
-        if (!this.settings.hasOwnProperty('url_UP')) {this.settings.url_UP="http://127.0.0.1:8080/_/SET/TRACK/1/MUTE/0";}
-        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://127.0.0.1:8080/_/SET/TRACK/1/MUTE/1";}
+        if (!this.settings.hasOwnProperty('url_UP')) {this.settings.url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/MUTE/0";}
+        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/MUTE/1";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Push\nto\nmute\nTrack 1";}
@@ -20,11 +20,11 @@ const pushto = {
         //image=image.replace('#d8d8d8', this.settings.markercolor);
 
         if (this.settings.iconstyle==="inverted") {
-            image=image.replace('#d8d8d8', 'KATZE2000');
-            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
-            image=image.replace('KATZE2000', '#2d2d2d');
+            image=image.replace(/#d8d8d8/g, 'KATZE2000');
+            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
+            image=image.replace(/KATZE2000/g, '#2d2d2d');
         } else if (this.settings.iconstyle==="normal"){
-            image=image.replace('#d8d8d8', this.settings.markercolor);
+            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
         }
 
         $SD.api.setSettings(jsn.context, this.settings); 
@@ -70,8 +70,8 @@ const pushto = {
 
         // set url for each action
         var pushtotype=this.settings.pushtotype;
-        var url_UP="http://127.0.0.1:8080/_/";
-        var url_DOWN="http://127.0.0.1:8080/_/";
+        var url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
+        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
         var tracknumber=this.settings.tracknumber;
         var icon="";
         
@@ -98,14 +98,13 @@ const pushto = {
         var image=Icons[icon];
 
         if (this.settings.iconstyle==="inverted") {
-            image=image.replace('#d8d8d8', 'KATZE2000');
-            image=image.replace('fill:none', 'fill:'+this.settings.markercolor);
-            image=image.replace('KATZE2000', '#2d2d2d');
+            image=image.replace(/#d8d8d8/g, 'KATZE2000');
+            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
+            image=image.replace(/KATZE2000/g, '#2d2d2d');
         } else if (this.settings.iconstyle==="normal"){
-            image=image.replace('#d8d8d8', this.settings.markercolor);
+            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
         }
 
-        //image=image.replace('#d8d8d8', this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, title);
         
