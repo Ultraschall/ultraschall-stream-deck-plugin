@@ -65,12 +65,29 @@ const toggle = {
         this.settings = jsn.payload.settings;
         console.log("KeyDown toggle ");
         
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url , true);
-        xhttp.send();
+        if (this.settings.toggletype=="Toggle Studiolink Standalone Mute"){
+            if (this.settings.state==true) {
+                ws=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
+                ws.addEventListener('open', function(event){
+                    ws.send('{"key": "mute", "value": "false"}');
+                    ws.close();
+                });
+            }
+            if (this.settings.state==false) {
+                ws2=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
+                ws2.addEventListener('open', function(event){
+                    ws2.send('{"key": "mute", "value": "true"}');
+                    ws2.close();
+                });
+            }
+        } else {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", this.settings.url , true);
+            xhttp.send();
 
-        let found = this.cache[jsn.context];
-        if (found) { found.refresh(this.settings);}
+            let found = this.cache[jsn.context];
+            if (found) { found.refresh(this.settings);}
+        }
     },
 
     onDidReceiveSettings: function(jsn) {
@@ -177,6 +194,19 @@ const toggle = {
                     this.settings.tracknumber="";
                     this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_OnAir";
                     break;
+                case "Toggle Studiolink Standalone Mute" :
+                this.settings.title="Toggle\nStudiolink\nStandalone\nMute";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolor;
+                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.toggletypetext="Toggle";
+                    this.settings.icon='action/images/muted.svg';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
+                break;
         }
         
         $SD.api.setSettings(jsn.context, this.settings);
@@ -213,6 +243,7 @@ function ToggleButtonClass(jsonObj) {
     var counter = 0;
     var count = 0;
     var settings=jsonObj.payload.settings;
+    var ws3="";
 
     function checkstates(){
         if (globalSettings.hasOwnProperty('ipadress') && globalSettings.hasOwnProperty('port')) {
@@ -223,17 +254,22 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Set recording routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Recording",Icons['action/images/Recording.svg'],Icons['action/images/Recording.svg']);}
             if (toggletype==="Set editing routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
             if (toggletype==="Toggle Studiolink OnAir") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
+            //if (toggletype==="Toggle Studiolink Standalone Mute") {getMuteStateSL();}
         }
     }
 
     function loop(){
-        if (counter === 0) {
-            checkstates();
-            counter = setInterval(checkstates, 50);
-            }
-            else {
-                window.clearInterval(counter);
-                counter = 0;
+        if (toggletype==="Toggle Studiolink Standalone Mute") {
+            getMuteStateSL();
+        } else {
+            if (counter === 0) {
+                checkstates();
+                counter = setInterval(checkstates, 50);
+                }
+                else {
+                    window.clearInterval(counter);
+                    counter = 0;
+                }
             }
     }
 
@@ -251,6 +287,38 @@ function ToggleButtonClass(jsonObj) {
             window.clearInterval(counter);
             counter = 0;
         }
+        if (!ws3=="") {
+            ws3.close();
+            ws3="";
+        }
+    }
+    function getMuteStateSL(){
+        ws3=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
+
+        ws3.addEventListener('message', function (event) { 
+            result=event.data;
+            if (result.search('"mute":"false"') >-1 ) {
+                var image=Icons['action/images/unmuted.svg'];
+                var markercolor=settings.markercolor;
+                settings.state=false;
+            } else if (result.search('"mute":"true"')>-1) {
+                var image=Icons['action/images/muted.svg'];
+                var markercolor=settings.markercolor2;
+                settings.state=true;
+            }
+
+            if (settings.iconstyle==="inverted") {
+                image=image.replace(/#d8d8d8/g, 'KATZE2000');
+                image=image.replace(/fill:none/g, 'fill:'+markercolor);
+                image=image.replace(/KATZE2000/g, '#2d2d2d');
+            } else if (settings.iconstyle==="normal"){
+                image=image.replace(/#d8d8d8/g, markercolor);
+            }
+            
+            $SD.api.setImage(context,image);
+            $SD.api.setSettings(context, settings);
+            //ws3.close()
+        });
     }
 
     function getMuteState(){

@@ -30,11 +30,9 @@ const misc = {
 
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyDown Misc ", jsn);
-        
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", this.settings.url , true);
-        xhttp.send();
+        xhttp.send();  
     },
 
     onSendToPlugin: function(jsn) {
@@ -82,7 +80,13 @@ const misc = {
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+this.settings.customaction;
                 this.settings.icon="action/images/Custom_action.svg"
                 this.settings.mytitle="Custom\nAction";
-                console.log("custom action 2000 ",this.settings);
+                break;
+            case "SL Toggle Mute" :
+                this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
+                this.settings.icon="action/images/Custom_action.svg"
+                this.settings.mytitle="SL\nTogle\nMute";
+                this.settings.customaction="";
+                console.log("SL Toggle Mute",this.settings);
                 break;
         }
         

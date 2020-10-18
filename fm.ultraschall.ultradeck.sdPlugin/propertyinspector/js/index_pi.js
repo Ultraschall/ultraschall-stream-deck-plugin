@@ -18,6 +18,8 @@ function saveGlobalSetup(inEvent) {
     };
     globalSettings["ipadress"] = inEvent.detail.ip;
     globalSettings["port"] = inEvent.detail.port;
+    globalSettings["SLipadress"] = inEvent.detail.SLip;
+    globalSettings["SLport"] = inEvent.detail.SLport;
     console.log('setGlobalSettings....', globalSettings);
     $SD.api.setGlobalSettings(uuid, globalSettings);   
 };
@@ -50,7 +52,11 @@ function resetcolor2(){console.log("RESET2",settings);}
 
 function openGlobalSettings(){
     console.log("HUHU Global Settings",actionjsn, globalSettings);
-    window.open("../settings/index.html?context=" + actionjsn.actionInfo.context+"&IP="+globalSettings.ipadress+"&PORT="+globalSettings.port); 
+    window.open("../settings/index.html?context=" + actionjsn.actionInfo.context
+    +"&IP=" + globalSettings.ipadress
+    +"&PORT="+globalSettings.port
+    +"&SLIP="+globalSettings.SLipadress
+    +"&SLPORT="+globalSettings.SLport);
 }
 
 $SD.on('didReceiveGlobalSettings', (jsn) => {

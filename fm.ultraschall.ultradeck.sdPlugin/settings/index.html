@@ -22,10 +22,20 @@
             <div class="sdpi-item-label">Port</div> 
             <input class="sdpi-item-value" id="ultraschall_port" value="8080" placeholder="e.g. 8080">
         </div>
+        <div class="sdpi-heading">StudioLink Standalone IP-Address
+        </div>
+        <div class="sdpi-item" id="SLip_adress" title="This field lets you enter an IP-Adress. The little exclamation mark changes to a checkmark, if the condition is met (e.g. you entered an IP-address.).">
+            <div class="sdpi-item-label">IP-Address</div> 
+            <input class="sdpi-item-value" id="StudioLink_ip" value="127.0.0.1" placeholder="e.g. 127.0.0.1" required pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}">
+        </div>
+        <div class="sdpi-item" id="SLport" title="Port">
+            <div class="sdpi-item-label">Port</div> 
+            <input class="sdpi-item-value" id="StudioLink_port" value="62969" placeholder="e.g. 62969">
+            <button class="sdpi-item-value" onclick="read_SL_config()" value="read_SL_config">test</button>
+        </div>
         <div class="sdpi-item" id="save_button">
             <div class="sdpi-item-label"></div>
             <button class="sdpi-item-value" onclick="save_settings()" value="save_setings">save</button>
-            
         </div>
         <div class="sdpi-wrapper">
 			<div id="placeholder"></div>

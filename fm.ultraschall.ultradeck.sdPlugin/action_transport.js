@@ -192,37 +192,38 @@ function TransportButtonClass(jsonObj) {
     }
 
     function getTransportState(){
-        console.log("getting transport state");
+        console.log("getting transport state",globalSettings);
+        if (globalSettings.hasOwnProperty('ipadress')) {  
+            var xhttp = new XMLHttpRequest();
+            var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/TRANSPORT";
+            xhttp.open("GET", url , true);
 
-        var xhttp = new XMLHttpRequest();
-        var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/TRANSPORT";
-        xhttp.open("GET", url , true);
-
-        xhttp.onload = function () {
-            if (xhttp.readyState === xhttp.DONE) {
-                if (xhttp.status === 200) {
-                    let resultText=xhttp.responseText;
-                    resultText = resultText.replace(/(\r\n|\n|\r)/gm, "");
-                    let resultArray = resultText.split('\t');
-                    let playstate = resultArray[1];
-                    let position_seconds = resultArray[2];
-                    let isRepeatOn = resultArray[3];
-                    let position_string = resultArray[4];
-                    let position_string_beats = resultArray[5];
-                    
-                    if (playstate_last!==playstate || isRepeatOn_last!==isRepeatOn) { // update icon if playstate or repeat has changed
-                        if (isRepeatOn==="1" &&  Icons[settings.icon_playstate["R"]]!==undefined) {
-                            $SD.api.setImage(context,Icons[settings.icon_playstate["R"]]);
+            xhttp.onload = function () {
+                if (xhttp.readyState === xhttp.DONE) {
+                    if (xhttp.status === 200) {
+                        let resultText=xhttp.responseText;
+                        resultText = resultText.replace(/(\r\n|\n|\r)/gm, "");
+                        let resultArray = resultText.split('\t');
+                        let playstate = resultArray[1];
+                        let position_seconds = resultArray[2];
+                        let isRepeatOn = resultArray[3];
+                        let position_string = resultArray[4];
+                        let position_string_beats = resultArray[5];
+                        
+                        if (playstate_last!==playstate || isRepeatOn_last!==isRepeatOn) { // update icon if playstate or repeat has changed
+                            if (isRepeatOn==="1" &&  Icons[settings.icon_playstate["R"]]!==undefined) {
+                                $SD.api.setImage(context,Icons[settings.icon_playstate["R"]]);
+                            }
+                            else{
+                                $SD.api.setImage(context,Icons[settings.icon_playstate[playstate]]);
+                            }
                         }
-                        else{
-                            $SD.api.setImage(context,Icons[settings.icon_playstate[playstate]]);
-                        }
+                        playstate_last=playstate;
                     }
-                    playstate_last=playstate;
                 }
-            }
-        };
-        xhttp.send();
+            };
+            xhttp.send();
+        }
     }
 
     return {

@@ -5,6 +5,9 @@
 dofile(reaper.GetResourcePath().."/UserPlugins/ultraschall_api.lua")
 
 -- get ExtStates submittetd from StreamDeck Plugin and act accordingly
+mutetype=reaper.GetExtState("ultradeck", "mutetype") or false
+tracknumber=reaper.GetExtState("ultradeck", "tracknumber") or "1"
+  tracknumber=tonumber(tracknumber)
 markertype=reaper.GetExtState("ultradeck", "markertype")
 markertext=reaper.GetExtState("ultradeck", "markertext") or ""
 markercolor=reaper.GetExtState("ultradeck", "markercolor") or 0
@@ -46,42 +49,56 @@ function get_cursor_position_at_selected_cursor_type(cursortype)
     return pos
 end
 
--- SET MARKER:
-current_position=get_cursor_position_at_selected_cursor_type(cursor)
-markercount=ultraschall.CountNormalMarkers_NumGap()
-if current_position+markeroffset<0 then current_position=-markeroffset end
-
---print("type= "..markertype.."\ntext= "..markertext.."\nCOLOR= "..markercolor.."\noffset= "..markeroffset.."\ncursor= "..cursor.."\n\n")
---print(tostring(color).."\n")
-
-if markertype=="custom" then        
-    retval = ultraschall.AddCustomMarker(markertext, current_position+markeroffset, "", markercount, convert_color_hex2rgb(markercolor))
-elseif markertype=="chapter" then
-    reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "", markercount, 0)
-elseif markertype=="chapter_enter_name" then
-    retval, markername = reaper.GetUserInputs("Insert chapter marker", 1, "Name of this chapter marker:", "") -- User input box
-    if retval == true then -- User pressed ok
-        reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, markername, markercount, 0)
+if mutetype then
+    current_position=get_cursor_position_at_selected_cursor_type(cursor)
+    --print("huhu "..mutetype.."t="..tracknumber.."p="..current_position)
+    if mutetype=="mute" then
+        ultraschall.ToggleMute(tracknumber, current_position, 0)
+    elseif mutetype=="unmute" then
+        ultraschall.ToggleMute(tracknumber, current_position, 1)
+    elseif mutetype=="toggle_mute" then
+        envIDX, envVal, envPosition = ultraschall.GetPreviousMuteState(tracknumber, current_position)
+        if envVal==0 then 
+            ultraschall.ToggleMute(tracknumber, current_position, 1)
+        else
+            ultraschall.ToggleMute(tracknumber, current_position, 0)
+        end
     end
-elseif markertype=="marker_with_timestamp" then
-    function CreateDateTime(time)
-        local D=os.date("*t",time)
-        if D.day<10 then D.day="0"..D.day else D.day=tostring(D.day) end
-        if D.month<10 then D.month="0"..D.month else D.month=tostring(D.month) end
-        if D.hour<10 then D.hour="0"..D.hour else D.hour=tostring(D.hour) end
-        if D.min<10 then D.min="0"..D.min else D.min=tostring(D.min) end
-        if D.sec<10 then D.sec="0"..D.sec else D.sec=tostring(D.sec) end
-        local Date=D.year.."-"..D.month.."-"..D.day
-        local Time=D.hour..":"..D.min..":"..D.sec
-        return Date.."T"..Time
+elseif markertype then
+    -- SET MARKER:
+    current_position=get_cursor_position_at_selected_cursor_type(cursor)
+    markercount=ultraschall.CountNormalMarkers_NumGap()
+    if current_position+markeroffset<0 then current_position=-markeroffset end
+
+    if markertype=="custom" then        
+        retval = ultraschall.AddCustomMarker(markertext, current_position+markeroffset, "", markercount, convert_color_hex2rgb(markercolor))
+    elseif markertype=="chapter" then
+        reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "", markercount, 0)
+    elseif markertype=="chapter_enter_name" then
+        retval, markername = reaper.GetUserInputs("Insert chapter marker", 1, "Name of this chapter marker:", "") -- User input box
+        if retval == true then -- User pressed ok
+            reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, markername, markercount, 0)
+        end
+    elseif markertype=="marker_with_timestamp" then
+        function CreateDateTime(time)
+            local D=os.date("*t",time)
+            if D.day<10 then D.day="0"..D.day else D.day=tostring(D.day) end
+            if D.month<10 then D.month="0"..D.month else D.month=tostring(D.month) end
+            if D.hour<10 then D.hour="0"..D.hour else D.hour=tostring(D.hour) end
+            if D.min<10 then D.min="0"..D.min else D.min=tostring(D.min) end
+            if D.sec<10 then D.sec="0"..D.sec else D.sec=tostring(D.sec) end
+            local Date=D.year.."-"..D.month.."-"..D.day
+            local Time=D.hour..":"..D.min..":"..D.sec
+            return Date.."T"..Time
+        end
+        reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Time: "..CreateDateTime(), 0, convert_color_hex2rgb(markercolor))
+    elseif markertype=="edit_marker" then
+        reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Edit", 0, reaper.ColorToNative(255, 0, 0) | 0x1000000)
     end
-    reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Time: "..CreateDateTime(), 0, convert_color_hex2rgb(markercolor))
-elseif markertype=="edit_marker" then
-    reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Edit", 0, reaper.ColorToNative(255, 0, 0) | 0x1000000)
+    runcommand("_Ultraschall_Center_Arrangeview_To_Cursor") -- scroll to cursor if not visible
 end
-runcommand("_Ultraschall_Center_Arrangeview_To_Cursor") -- scroll to cursor if not visible
-
 --cleanup
+reaper.DeleteExtState("ultradeck", "mutetype",true)
 reaper.DeleteExtState("ultradeck", "markertype",true)
 reaper.DeleteExtState("ultradeck", "markertext",true)
 reaper.DeleteExtState("ultradeck", "markercolor",true)

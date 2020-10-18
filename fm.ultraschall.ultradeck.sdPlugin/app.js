@@ -56,6 +56,7 @@ ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Set recording routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Set editing routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Toggle Studiolink OnAir'] = "#fdcb00"; // yellow
+ExtraDefaultColor['Toggle Studiolink Standalone Mute'] = "#fdcb00"; // yellow
 
 function LoadPNGIconsToArray(IconsURLArray){
     const aUrl = !Array.isArray(IconsURLArray) ? [IconsURLArray] : IconsURLArray;
@@ -94,6 +95,8 @@ function connected(jsn) {
         globalSettings=jsn.payload.settings;
         if (!globalSettings.hasOwnProperty('ipadress')) {globalSettings.ipadress="127.0.0.1";}
         if (!globalSettings.hasOwnProperty('port')) {globalSettings.port="8080";}
+        if (!globalSettings.hasOwnProperty('SLipadress')) {globalSettings.ipadress="127.0.0.1";}
+        if (!globalSettings.hasOwnProperty('SLport')) {globalSettings.port="62969";}
         $SD.api.setGlobalSettings(uuid, globalSettings);
     });
 
