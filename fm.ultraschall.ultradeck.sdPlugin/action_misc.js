@@ -13,16 +13,7 @@ const misc = {
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Custom\nAction";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
 
-        // set icon color
-        var image=Icons[this.settings.icon];
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-        }
-
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setSettings(jsn.context, this.settings); 
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
@@ -40,14 +31,7 @@ const misc = {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 this.settings.markercolor=defaulticoncolor;
                 $SD.api.setSettings(jsn.context, this.settings);
-                var image=Icons[this.settings.icon];
-                if (this.settings.iconstyle==="inverted") {
-                    image=image.replace(/#d8d8d8/g, 'KATZE2000');
-                    image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-                    image=image.replace(/KATZE2000/g, '#2d2d2d');
-                } else if (this.settings.iconstyle==="normal"){
-                    image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-                }
+                var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
                 $SD.api.setImage(jsn.context,image);
             }
         }
@@ -91,15 +75,8 @@ const misc = {
         }
         
         // change color inside image SVG Data:
-        $SD.api.setSettings(jsn.context, this.settings); //save settings
-        var image=Icons[this.settings.icon];
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-        }
+        $SD.api.setSettings(jsn.context, this.settings);
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setImage(jsn.context, image);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
     }

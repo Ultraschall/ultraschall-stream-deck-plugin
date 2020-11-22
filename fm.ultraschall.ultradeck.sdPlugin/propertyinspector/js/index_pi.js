@@ -12,7 +12,6 @@ document.addEventListener("saveGlobalSetup", saveGlobalSetup);
 
 // Function called on saving global Settings
 function saveGlobalSetup(inEvent) {
-    console.log("SETUP callback von global Settings!!!!",inEvent);
     if (globalSettings == null) {
         globalSettings={};
     };
@@ -20,7 +19,6 @@ function saveGlobalSetup(inEvent) {
     globalSettings["port"] = inEvent.detail.port;
     globalSettings["SLipadress"] = inEvent.detail.SLip;
     globalSettings["SLport"] = inEvent.detail.SLport;
-    console.log('setGlobalSettings....', globalSettings);
     $SD.api.setGlobalSettings(uuid, globalSettings);   
 };
 
@@ -47,10 +45,11 @@ function wait(ms){
 }
 wait(200); // wait until all HTML files are loaded (this must optimized!!)
 
-function resetcolor(){console.log("RESET",settings);}
-function resetcolor2(){console.log("RESET2",settings);}
+function resetcolor(){}
+function resetcolor2(){}
 
-function openGlobalSettings(){
+function openGlobalSettings()
+{
     console.log("HUHU Global Settings",actionjsn, globalSettings);
     window.open("../settings/index.html?context=" + actionjsn.actionInfo.context
     +"&IP=" + globalSettings.ipadress
@@ -61,14 +60,12 @@ function openGlobalSettings(){
 
 $SD.on('didReceiveGlobalSettings', (jsn) => {
     globalSettings=jsn.payload.settings;
-    console.log("PI received GLOBAL Settings!!!!!",globalSettings,jsn);
 });
 
 $SD.on('connected', (jsn) => {
     uuid=jsn.uuid;
     context=jsn.actionInfo.context;
     $SD.api.getGlobalSettings(uuid);
-    console.log("connected",jsn,context);
     addDynamicStyles($SD.applicationInfo.colors, 'connectSocket');
     actionjsn=jsn;
     action=jsn.actionInfo.action;
@@ -94,7 +91,7 @@ $SD.on('connected', (jsn) => {
 });
 
 $SD.on('sendToPropertyInspector', jsn => {
-    console.log("PI on Sendtopi: ",jsn);
+    //console.log("PI on Sendtopi: ",jsn);
     const pl = jsn.payload;
     /**
      *  This is an example, how you could show an error to the user
@@ -116,13 +113,12 @@ $SD.on('sendToPropertyInspector', jsn => {
 });
 
 const updateUI = (pl) => {
-    console.log("updateUI");
-    
+    console.log("update UI",pl)
     // hide or show Values if settings exist:
     var x=document.getElementById("sendnumbercontainer");
     if (x) {if (settings.sendnumber==="") {x.style.display="none"; } else { x.style.display="";}}
 
-    var x=document.getElementById("tracknumbercontainer");
+    x=document.getElementById("tracknumbercontainer");
     if (x) {if (settings.tracknumber==="") {x.style.display="none"; } else { x.style.display="";}}
     
     x=document.getElementById("customactioncontainer");
@@ -165,7 +161,6 @@ const updateUI = (pl) => {
     }
     
     x=document.getElementById("toggletypetext");
-    console.log("toggletypetext= " ,x);
     if (x) {
         x.innerHTML=settings.toggletypetext;
     }
@@ -191,8 +186,8 @@ const updateUI = (pl) => {
 }
 
 $SD.on('piDataChanged', (returnValue) => {
-    console.log('%c%s', 'color: white; background: blue}; font-size: 15px;', 'piDataChanged');
-    console.log(returnValue);
+    //console.log('%c%s', 'color: white; background: blue}; font-size: 15px;', 'piDataChanged');
+    //console.log(returnValue);
     
     if (returnValue.key === 'clickme') {
         postMessage = (w) => {
@@ -219,7 +214,6 @@ $SD.on('piDataChanged', (returnValue) => {
 });
 
 function saveSettings(sdpi_collection) {
-console.log("saveSettings!",sdpi_collection);
     if (typeof sdpi_collection !== 'object') return;
 
     if (sdpi_collection.hasOwnProperty('key') && sdpi_collection.key != '') {
@@ -233,7 +227,6 @@ console.log("saveSettings!",sdpi_collection);
  }
 
 function sendValueToPlugin(value, prop) {
-    console.log("sendValueToPlugin", value, prop);
     if ($SD.connection && $SD.connection.readyState === 1) {
         const json = {
             action: $SD.actionInfo['action'],

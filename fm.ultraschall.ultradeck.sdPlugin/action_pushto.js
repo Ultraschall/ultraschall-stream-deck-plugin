@@ -26,27 +26,14 @@ const pushto = {
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
             +"_Ultraschall_StreamDeck";
         }
-        
-        
-        
-        
+   
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Push\nto\nmute\nTrack 1";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
                 
         // set icon color
-        var image=Icons[this.settings.icon];
-        //image=image.replace('#d8d8d8', this.settings.markercolor);
-
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-        }
-
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setSettings(jsn.context, this.settings); 
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
@@ -134,16 +121,7 @@ const pushto = {
         this.settings.mytitle=title;
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
-        var image=Icons[icon];
-
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-        }
-
+        var image=SetImageStyle(Icons[icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, title);
         

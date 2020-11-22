@@ -7,7 +7,6 @@ const markers = {
 
         // set defaults, if nothing is set
         if (!this.settings.hasOwnProperty('markertype')) {this.settings.markertype="Insert chapter marker";}
-        if (!this.settings.hasOwnProperty('url')) {this.settings.url="/_/_Ultraschall_Set_Marker";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Chapter_marker.svg";}
         if (!this.settings.hasOwnProperty('title')) {this.settings.title="Insert\nchapter\nmarker";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
@@ -16,6 +15,7 @@ const markers = {
         if (!this.settings.hasOwnProperty('cursor')) {this.settings.cursor="Automatic depending on followmode";}
         if (!this.settings.hasOwnProperty('markeroffset')) {this.settings.markeroffset="0";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
+        if (!this.settings.hasOwnProperty('url')) {this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter" + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset) + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";}
         if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
         
         this.settings.lastmarkertype=this.settings.markertype;
@@ -27,7 +27,27 @@ const markers = {
         this.settings = jsn.payload.settings;
         var xhttp = new XMLHttpRequest();
         var request_url="http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url;
+        console.log("Request= ",request_url);
         xhttp.open("GET", request_url , true);
+        
+        xhttp.onerror=function()
+        {
+            this.settings=jsn.payload.settings;
+            var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+            // add RedX:
+            image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, this.settings.title);
+        };
+
+        xhttp.onload=function()
+        {
+            this.settings=jsn.payload.settings;
+            var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, this.settings.title);
+        };
+        
         xhttp.send();
     },
 
@@ -41,14 +61,7 @@ const markers = {
     }, 
 
     setIconColor: function(jsn){
-        var image=Icons[this.settings.icon];
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
-        }
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.title);
         //$SD.api.setSettings(jsn.context, this.settings);

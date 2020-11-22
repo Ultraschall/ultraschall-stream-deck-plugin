@@ -3,7 +3,9 @@ var defaulticoncolor="#d8d8d8";
 var defaulticoncolorON="#fdcb00";
 var Icons={};
 var uuid="";
+var redX='<path d="M61.627,14.676l-6.489,6.489l6.489,6.489c0.487,0.486 0.487,1.279 0,1.776l-2.357,2.356c-0.486,0.487 -1.278,0.487 -1.775,0l-6.49,-6.489l-6.49,6.489c-0.486,0.487 -1.278,0.487 -1.775,0l-2.357,-2.356c-0.486,-0.486 -0.486,-1.279 -0,-1.776l6.489,-6.489l-6.489,-6.489c-0.486,-0.486 -0.486,-1.279 -0,-1.776l2.357,-2.357c0.486,-0.486 1.279,-0.486 1.775,0l6.49,6.49l6.49,-6.49c0.486,-0.486 1.279,-0.486 1.775,0l2.357,2.357c0.497,0.486 0.497,1.279 0,1.776Z" style="fill:#f00;fill-rule:nonzero;"/>';
 var globalSettings={};
+var SLwebsocketerror=false;
 
 LoadPNGIconsToArray(['action/images/Chapter_marker@2x.png',
                      'action/images/Edit_marker@2x.png',
@@ -56,7 +58,6 @@ ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Set recording routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Set editing routing'] = "#fdcb00"; // yellow
 ExtraDefaultColor['Toggle Studiolink OnAir'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Toggle Studiolink Standalone Mute'] = "#fdcb00"; // yellow
 
 function LoadPNGIconsToArray(IconsURLArray){
     const aUrl = !Array.isArray(IconsURLArray) ? [IconsURLArray] : IconsURLArray;
@@ -86,12 +87,28 @@ function LoadSVGIconsToArray(IconsURLArray){
     };
 }
 
+function SetImageStyle(image, style, color)
+{
+    //console.log("image= ",image)
+    image=image.replace(/svg width="100%" height="100%"/g,'svg width="200%" height="200%"'); //hack for iphone app to get less pixelation
+    if (style==="inverted")
+    {
+        image=image.replace(/#d8d8d8/g, 'KATZE2000');
+        image=image.replace(/fill:none/g, 'fill:'+color);
+        image=image.replace(/KATZE2000/g, '#2d2d2d');
+    } else if (style==="normal")
+    {
+        image=image.replace(/#d8d8d8/g, color);
+    }
+    return (image);
+}
+
 function connected(jsn) {
     uuid=jsn.uuid;
-    console.log('%c%s','color: white; background: blue; font-size: 15px;','[app.js] connected:',jsn)
+    //console.log('%c%s','color: white; background: blue; font-size: 15px;','[app.js] connected:',jsn)
     $SD.api.getGlobalSettings(jsn.uuid);
     $SD.on('didReceiveGlobalSettings', (jsn) => {
-        console.log("APP received GLOBAL Settings!!!!!",jsn);
+        //console.log("APP received GLOBAL Settings!!!!!",jsn);
         globalSettings=jsn.payload.settings;
         if (!globalSettings.hasOwnProperty('ipadress')) {globalSettings.ipadress="127.0.0.1";}
         if (!globalSettings.hasOwnProperty('port')) {globalSettings.port="8080";}

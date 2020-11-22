@@ -3,9 +3,9 @@ const toggle = {
     cache: {},
 
     onWillAppear: function (jsn) {
-        console.log("Huhu i bims ein toggle",jsn);
+        //console.log("Huhu i bims ein toggle",jsn);
         this.settings = jsn.payload.settings;
-
+        SLwebsocketerror=false;
         // set default values
         if (!this.settings.hasOwnProperty('toggletype')) { this.settings.toggletype="Toggle mute track"; }
         if (!this.settings.hasOwnProperty('lasttoggletype')) { this.settings.lasttoggletype="Toggle mute track"; }
@@ -18,34 +18,26 @@ const toggle = {
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
-        if (!this.settings.hasOwnProperty('url')) {this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";}
-
-        // set icon color
-        
-        var image=Icons[this.settings.icon];
-        
-        if (this.settings.iconstyle==="inverted") {
-            image=image.replace(/#d8d8d8/g, 'KATZE2000');
-            image=image.replace(/fill:none/g, 'fill:'+this.settings.markercolor);
-            image=image.replace(/KATZE2000/g, '#2d2d2d');
-        } else if (this.settings.iconstyle==="normal"){
-            image=image.replace(/#d8d8d8/g, this.settings.markercolor);
+        if (!this.settings.hasOwnProperty('url'))
+        {
+            this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port
+            +"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
         }
 
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setSettings(jsn.context, this.settings);
         $SD.api.setTitle(jsn.context, this.settings.title);
 
         // create Toggle object
         const ToggleButton=new ToggleButtonClass(jsn);
-        ToggleButton.loop();
+        ToggleButton.loop(jsn);
 
         // cache the current button
         this.cache[jsn.context] = ToggleButton;
     },
 
     onWillDisappear: function (jsn) {
-        console.log("onWillDisappear");
         let found = this.cache[jsn.context];
         if (found) {
             // remove the button object from the cache
@@ -56,42 +48,55 @@ const toggle = {
     
     titleParametersDidChange: function(jsn){
         // force redraw of icon to show correct title
-        console.log("titleParametersDidChange",jsn)
         $SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']);
-        $SD.api.setImage(jsn.context,Icons[this.settings.icon]);
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+        $SD.api.setImage(jsn.context,image);
     },
 
     onKeyDown: function (jsn) {
-        this.settings = jsn.payload.settings;
-        console.log("KeyDown toggle ");
+        var context=jsn.context;
+        var settings = jsn.payload.settings;
         
-        if (this.settings.toggletype=="Toggle Studiolink Standalone Mute"){
-            if (this.settings.state==true) {
+        if (settings.toggletype=="Toggle Studiolink Standalone Mute") {
+            if (SLwebsocketerror==false) {
+                console.log("key down + SL connection");
                 ws=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
-                ws.addEventListener('open', function(event){
-                    ws.send('{"key": "mute", "value": "false"}');
+                ws.onopen=function()
+                {
+                    if (settings.state==true && ws.readyState===1) {var sendcmd='{"key": "mute", "value": "false"}';}
+                    if (settings.state==false && ws.readyState===1) {var sendcmd='{"key": "mute", "value": "true"}';}
+                    ws.send(sendcmd);
                     ws.close();
-                });
-            }
-            if (this.settings.state==false) {
-                ws2=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
-                ws2.addEventListener('open', function(event){
-                    ws2.send('{"key": "mute", "value": "true"}');
-                    ws2.close();
-                });
+                }
+                
+                ws.onerror=function()
+                {
+                    console.log("SL ws error!!!!!");
+                    var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+                    // add RedX:
+                    image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+                    $SD.api.setImage(context, image);
+                    $SD.api.setTitle(context, settings.title);
+                    ws.close();
+                };
+                
+                ws.onclose= function()
+                {
+                    console.log("on key down closed")
+                }
             }
         } else {
             var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", this.settings.url , true);
+            xhttp.open("GET", settings.url , true);
             xhttp.send();
 
             let found = this.cache[jsn.context];
-            if (found) { found.refresh(this.settings);}
+            if (found) { found.refresh(settings);}
         }
     },
 
     onDidReceiveSettings: function(jsn) {
-        console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_toggle.js]onDidReceiveSettings:', jsn);
+        //console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_toggle.js]onDidReceiveSettings:', jsn);
         this.settings = jsn.payload.settings;
         
         if (this.settings.toggletype===this.settings.lasttoggletype) { // no toggletype change
@@ -111,13 +116,15 @@ const toggle = {
                     this.settings.markercolor2=defaulticoncolor;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/muted.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.title=this.settings.tracknumber;
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
+
+                
                 break;
             case "Toggle follow mode" :
                 this.settings.title="Follow\nmode\nToggle\n ";
-                console.log("FOLLOW!!!!!!!!!!",this.settings.title);
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
@@ -125,6 +132,7 @@ const toggle = {
                     this.settings.markercolor2 = defaulticoncolor;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/Follow_mode.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Follow";
@@ -138,6 +146,7 @@ const toggle = {
                     this.settings.markercolor2 = defaulticoncolor;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/MagicRouting.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Magicrouting";
@@ -151,6 +160,7 @@ const toggle = {
                     this.settings.markercolor2 = defaulticoncolor;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Preshow.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Preshow";
@@ -164,6 +174,7 @@ const toggle = {
                     this.settings.markercolor2 = defaulticoncolor;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Recording.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Recording";
@@ -177,36 +188,39 @@ const toggle = {
                     this.settings.markercolor2 = defaulticoncolor;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Editing.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
                 this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Editing";
                 break;
-                case "Toggle Studiolink OnAir" :
-                    this.settings.title="Toggle\nStudiolink\nOnAir\n ";
-                    if (togglechanged){
-                        this.settings.markercolortext="On";
-                        this.settings.markercolortext2="Off";
-                        this.settings.markercolor  = ExtraDefaultColor['Toggle Studiolink OnAir'];
-                        this.settings.markercolor2 = defaulticoncolor;
-                        this.settings.toggletypetext="Set";
-                        this.settings.icon='action/images/OnAir.svg';
-                    }
-                    this.settings.tracknumber="";
-                    this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_OnAir";
-                    break;
-                case "Toggle Studiolink Standalone Mute" :
-                this.settings.title="Toggle\nStudiolink\nStandalone\nMute";
+            case "Toggle Studiolink OnAir" :
+                this.settings.title="Toggle\nStudiolink\nOnAir\n";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = defaulticoncolor;
+                    this.settings.markercolor  = ExtraDefaultColor['Toggle Studiolink OnAir'];
                     this.settings.markercolor2 = defaulticoncolor;
-                    this.settings.toggletypetext="Toggle";
-                    this.settings.icon='action/images/muted.svg';
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/OnAir.svg';
+                    this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
+                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_OnAir";
                 break;
+            case "Toggle Studiolink Standalone Mute" :
+            this.settings.title="Toggle\nStudiolink\nStandalone\nMute";
+            if (togglechanged){
+                this.settings.markercolortext="On";
+                this.settings.markercolortext2="Off";
+                this.settings.markercolor  = defaulticoncolor;
+                this.settings.markercolor2 = defaulticoncolor;
+                this.settings.toggletypetext="Toggle";
+                this.settings.icon='action/images/muted.svg';
+                this.settings.iconstyle='normal';
+            }
+            this.settings.tracknumber="";
+            this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
+            break;
         }
         
         $SD.api.setSettings(jsn.context, this.settings);
@@ -217,7 +231,6 @@ const toggle = {
     },
 
     onSendToPlugin: function(jsn) {
-        // TODO standard farben fuer toggles ablegen fuer reset
         if (jsn.payload.hasOwnProperty('sdpi_collection')) {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 var color1 = ExtraDefaultColor[this.settings.toggletype];
@@ -226,7 +239,7 @@ const toggle = {
             }
             if (jsn.payload.sdpi_collection.key==="resetcolor2") {
                 var color2 = ExtraDefaultColor[this.settings.toggletype+"2"];
-                if (color1==undefined) {color2 = defaulticoncolor;}
+                if (color2==undefined) {color2 = defaulticoncolor;}
                 this.settings.markercolor2=color2;
             }
             $SD.api.setSettings(jsn.context, this.settings);
@@ -240,6 +253,7 @@ function ToggleButtonClass(jsonObj) {
     var toggletype = jsonObj.payload.settings.toggletype;
     var context = jsonObj.context;
     var track = jsonObj.payload.settings.tracknumber;
+    var jsn=jsonObj;
     var counter = 0;
     var count = 0;
     var settings=jsonObj.payload.settings;
@@ -254,23 +268,24 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Set recording routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Recording",Icons['action/images/Recording.svg'],Icons['action/images/Recording.svg']);}
             if (toggletype==="Set editing routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
             if (toggletype==="Toggle Studiolink OnAir") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
-            //if (toggletype==="Toggle Studiolink Standalone Mute") {getMuteStateSL();}
+            if (toggletype==="Toggle Studiolink Standalone Mute") {getMuteStateSL();}
         }
     }
 
-    function loop(){
-        if (toggletype==="Toggle Studiolink Standalone Mute") {
-            getMuteStateSL();
-        } else {
-            if (counter === 0) {
+    function loop()
+    {
+        var timeinterval=50;
+        if (toggletype==="Toggle Studiolink Standalone Mute") {timeinterval=1000;}
+            if (counter === 0)
+            {
                 checkstates();
-                counter = setInterval(checkstates, 50);
-                }
-                else {
-                    window.clearInterval(counter);
-                    counter = 0;
-                }
+                counter = setInterval(checkstates, timeinterval);
+            } else
+            {
+                window.clearInterval(counter);
+                counter = 0;
             }
+            
     }
 
     function refresh(jsn_refresh){
@@ -292,71 +307,128 @@ function ToggleButtonClass(jsonObj) {
             ws3="";
         }
     }
-    function getMuteStateSL(){
-        ws3=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
 
-        ws3.addEventListener('message', function (event) { 
-            result=event.data;
-            if (result.search('"mute":"false"') >-1 ) {
-                var image=Icons['action/images/unmuted.svg'];
-                var markercolor=settings.markercolor;
-                settings.state=false;
-            } else if (result.search('"mute":"true"')>-1) {
-                var image=Icons['action/images/muted.svg'];
-                var markercolor=settings.markercolor2;
-                settings.state=true;
-            }
+    function getMuteStateSL()
+    {
+        console.log("readystate usw. ",ws3);
+        if (ws3=="") {
+            createsocketandgetstate();
+        }
 
-            if (settings.iconstyle==="inverted") {
-                image=image.replace(/#d8d8d8/g, 'KATZE2000');
-                image=image.replace(/fill:none/g, 'fill:'+markercolor);
-                image=image.replace(/KATZE2000/g, '#2d2d2d');
-            } else if (settings.iconstyle==="normal"){
-                image=image.replace(/#d8d8d8/g, markercolor);
-            }
-            
-            $SD.api.setImage(context,image);
-            $SD.api.setSettings(context, settings);
-            //ws3.close()
+        if (ws3.readyState==3) {
+            console.log("ws is ws state 3");
+            ws3="";
+        }
+
+        $SD.on('didReceiveGlobalSettings', (jsn) =>
+        {
+            ws3.close();
+            createsocketandgetstate()
         });
+        
+        function createsocketandgetstate()
+        {
+            if (globalSettings.hasOwnProperty('SLipadress') && globalSettings.hasOwnProperty('SLport') )
+            {
+                //console.log("create new websocket");
+                ws3=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
+                   
+                ws3.addEventListener('message', function (event) { 
+                    result=event.data;
+                    SLwebsocketerror=false;
+                    //console.log("SL Data: ", result);
+
+                    if (result.search('"mute":"false"') >-1 )
+                    {
+                        var image=Icons['action/images/unmuted.svg'];
+                        var markercolor=settings.markercolor;
+                        settings.state=false;
+                    } else if (result.search('"mute":"true"')>-1)
+                    {
+                        var image=Icons['action/images/muted.svg'];
+                        var markercolor=settings.markercolor2;
+                        settings.state=true;
+                    } else
+                    {
+                        console.log("nix gefunden");
+                        var image=Icons['action/images/unmuted.svg'];
+                        var markercolor=settings.markercolor;
+                        settings.state=false;
+                    }
+                    image=SetImageStyle(image, settings.iconstyle, markercolor);
+                    $SD.api.setImage(context,image);
+                    $SD.api.setSettings(context, settings);
+                });
+
+                ws3.onerror=function()
+                {
+                    console.log("SL erroro3!!!!!");
+                    SLwebsocketerror=true;
+                    var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+                    // add RedX:
+                    image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+                    $SD.api.setImage(context, image);
+                    $SD.api.setTitle(context, settings.title);
+                };
+
+                ws3.onclose=function(){console.log("ws onclose");}
+            }
+        };
     }
 
-    function getMuteState(){
-        //console.log("getMuteState");
+    function getMuteState() {
         var xhttp = new XMLHttpRequest();
         var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/TRACK/"+track+"/B_MUTE";
+        //console.log("hhmmmm ",url);
+    
         xhttp.open("GET", url , true);
 
         xhttp.onload = function () {
             if (xhttp.readyState === xhttp.DONE) {
                 if (xhttp.status === 200) {
                     let resultText=xhttp.responseText;
-                    let resultArray = resultText.split('\t');
-                    let resultState = resultArray[1];
-                    resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
-
-                    if (resultState==="0") {
-                        var image=Icons['action/images/unmuted.svg'];
-                        var markercolor=settings.markercolor;
+                    //console.log("hhmmmm 2",resultText);
+                    oldsettings=settings;
+                    if (!resultText=="") 
+                    {
+                        let resultArray = resultText.split('\t');
+                        let resultState = resultArray[1];
+                        resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
+                        
+                        if (resultState==="0") {
+                            var image=Icons['action/images/unmuted.svg'];
+                            var markercolor=settings.markercolor;
+                        }
+                        else {
+                            var image=Icons['action/images/muted.svg'];
+                            var markercolor=settings.markercolor2;
+                        };
+                        var image=SetImageStyle(image, settings.iconstyle, markercolor);
+                        $SD.api.setImage(context,image);
                     }
-                    else {
+                    else 
+                    {
                         var image=Icons['action/images/muted.svg'];
-                        var markercolor=settings.markercolor2;
-                    };
-
-                    if (settings.iconstyle==="inverted") {
-                        image=image.replace(/#d8d8d8/g, 'KATZE2000');
-                        image=image.replace(/fill:none/g, 'fill:'+markercolor);
-                        image=image.replace(/KATZE2000/g, '#2d2d2d');
-                    } else if (settings.iconstyle==="normal"){
-                        image=image.replace(/#d8d8d8/g, markercolor);
+                        var image=SetImageStyle(image, settings.iconstyle, markercolor);
+                        // add RedX:
+                        image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+                        $SD.api.setImage(context,image);
                     }
-                    $SD.api.setImage(context,image);
-                    $SD.api.setSettings(context, settings);
                 }
             }
         };
+
+        xhttp.onerror=function()
+        {
+            var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+            // add RedX:
+            image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, settings.title);
+        };
+
         xhttp.send();
+        //xhttp.abort();
     }
 
     function getActionState(url,icon1,icon2){
@@ -379,18 +451,19 @@ function ToggleButtonClass(jsonObj) {
                         var image=icon2;
                         var markercolor=settings.markercolor2;
                     };
-
-                    if (settings.iconstyle==="inverted") {
-                        image=image.replace(/#d8d8d8/g, 'KATZE2000');
-                        image=image.replace(/fill:none/g, 'fill:'+markercolor);
-                        image=image.replace(/KATZE2000/g, '#2d2d2d');
-                    } else if (settings.iconstyle==="normal"){
-                        image=image.replace(/#d8d8d8/g, markercolor);
-                    }
+                    var image=SetImageStyle(image, settings.iconstyle, markercolor);
                     $SD.api.setImage(context,image);
                     $SD.api.setSettings(context, settings);
                 }
             }
+        };
+        xhttp.onerror=function()
+        {
+            var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+            // add RedX:
+            image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, settings.title);
         };
         xhttp.send();
     }

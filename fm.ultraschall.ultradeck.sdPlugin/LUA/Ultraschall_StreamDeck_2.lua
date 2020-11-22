@@ -6,16 +6,31 @@ dofile(reaper.GetResourcePath().."/UserPlugins/ultraschall_api.lua")
 
 -- get ExtStates submittetd from StreamDeck Plugin and act accordingly
 mutetype=reaper.GetExtState("ultradeck", "mutetype") or false
-tracknumber=reaper.GetExtState("ultradeck", "tracknumber") or "1"
-  tracknumber=tonumber(tracknumber)
+tracknumber=reaper.GetExtState("ultradeck", "tracknumber")
+    if (tracknumber=="") then tracknumber=1 end
+    tracknumber=tonumber(tracknumber)
 markertype=reaper.GetExtState("ultradeck", "markertype")
-markertext=reaper.GetExtState("ultradeck", "markertext") or ""
-markercolor=reaper.GetExtState("ultradeck", "markercolor") or 0
+markertext=reaper.GetExtState("ultradeck", "markertext")
+markercolor=reaper.GetExtState("ultradeck", "markercolor")
+    if (markercolor=="") then markercolor=0 end
 markeroffset=reaper.GetExtState("ultradeck", "markeroffset") or "0,0"
     markeroffset=string.gsub(markeroffset , "," , "." )
     markeroffset=tonumber( markeroffset ) or 0
 cursor=reaper.GetExtState("ultradeck", "cursor")
     if cursor==nil or cursor=="" then cursor= "Automatic depending on followmode" end
+
+function debug()
+    print("Mutetype= "..mutetype)
+    print("tracknumber= "..tracknumber)
+    print("markertype= "..markertype)
+    print("markertext= "..markertext)
+    print("markercolor= "..markercolor)
+    print("markeroffset= "..markeroffset)
+    print("cursor= "..cursor)  
+end
+
+--debug()
+
 
 function convert_color_hex2rgb(inputcolor)
     if string.len(inputcolor)==7 then
@@ -49,9 +64,8 @@ function get_cursor_position_at_selected_cursor_type(cursortype)
     return pos
 end
 
-if mutetype then
+if (mutetype~="") then
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
-    --print("huhu "..mutetype.."t="..tracknumber.."p="..current_position)
     if mutetype=="mute" then
         ultraschall.ToggleMute(tracknumber, current_position, 0)
     elseif mutetype=="unmute" then
@@ -64,7 +78,7 @@ if mutetype then
             ultraschall.ToggleMute(tracknumber, current_position, 0)
         end
     end
-elseif markertype then
+elseif (markertype~="") then
     -- SET MARKER:
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
     markercount=ultraschall.CountNormalMarkers_NumGap()
@@ -97,6 +111,7 @@ elseif markertype then
     end
     runcommand("_Ultraschall_Center_Arrangeview_To_Cursor") -- scroll to cursor if not visible
 end
+
 --cleanup
 reaper.DeleteExtState("ultradeck", "mutetype",true)
 reaper.DeleteExtState("ultradeck", "markertype",true)

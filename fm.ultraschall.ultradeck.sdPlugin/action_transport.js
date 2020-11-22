@@ -32,7 +32,7 @@ const transport = {
     },
 
     onWillDisappear: function (jsn) {
-        console.log("onWillDisappear", jsn);
+        //console.log("onWillDisappear", jsn);
         let found = this.cache[jsn.context];
         if (found) {
             // remove the button from the cache
@@ -43,8 +43,6 @@ const transport = {
 
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyDown Transport ", jsn);
-        
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", this.settings.url_DOWN , true);
         xhttp.send();
@@ -58,8 +56,7 @@ const transport = {
         var icon="";
         var transporttype=this.settings.transporttype;
         var title="";
-        
-        console.log("TRANSPORTTYPE",transporttype);
+
         this.settings.icon_playstate=[];
         switch(transporttype) {
             case "Play" :
@@ -130,7 +127,6 @@ const transport = {
                 // playstate is 0 for stopped, 1 for playing, 2 for paused, 5 for recording, and 6 for record paused.
                 // "R" is for Repeat On
         }
-        console.log("icons: ",this.settings.icon_playstate);
         //this.settings.url_UP=url_UP;
         this.settings.url_DOWN=url_DOWN;
         this.settings.icon=icon;
@@ -142,7 +138,7 @@ const transport = {
         
         // find background loop object and call refresh
         let found = this.cache[jsn.context];
-        console.log("FOUND BACKGROUND:",found);
+        //console.log("FOUND BACKGROUND:",found);
         if (found) {
             // send new track to background loop
             found.refresh(this.settings);
@@ -175,7 +171,6 @@ function TransportButtonClass(jsonObj) {
     }
 
     function refresh(jsn_refresh){
-        console.log("refresh");
         playstate_last="";
         settings=jsn_refresh;
         destroy();
@@ -184,7 +179,6 @@ function TransportButtonClass(jsonObj) {
     }
 
     function destroy() {
-        console.log("Destroy!!!!",counter,context);
         if (counter !== 0) {
             window.clearInterval(counter);
             counter = 0;
@@ -192,7 +186,6 @@ function TransportButtonClass(jsonObj) {
     }
 
     function getTransportState(){
-        console.log("getting transport state",globalSettings);
         if (globalSettings.hasOwnProperty('ipadress')) {  
             var xhttp = new XMLHttpRequest();
             var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/TRANSPORT";

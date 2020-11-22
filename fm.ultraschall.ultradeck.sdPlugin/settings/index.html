@@ -20,7 +20,7 @@
         </div>
         <div class="sdpi-item" id="port" title="Port">
             <div class="sdpi-item-label">Port</div> 
-            <input class="sdpi-item-value" id="ultraschall_port" value="8080" placeholder="e.g. 8080">
+            <input class="sdpi-item-value" type="number" id="ultraschall_port" max=65535 min=1 value="8080" placeholder="e.g. 8080">
         </div>
         <div class="sdpi-heading">StudioLink Standalone IP-Address
         </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="sdpi-item" id="SLport" title="Port">
             <div class="sdpi-item-label">Port</div> 
-            <input class="sdpi-item-value" id="StudioLink_port" value="62969" placeholder="e.g. 62969">
+            <input class="sdpi-item-value" type="number" id="StudioLink_port" max=65535 min=1 value="62969" placeholder="e.g. 62969">
             <button class="sdpi-item-value" onclick="read_SL_config()" value="read_SL_config">test</button>
         </div>
         <div class="sdpi-item" id="save_button">
