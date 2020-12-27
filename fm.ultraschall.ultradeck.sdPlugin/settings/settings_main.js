@@ -48,10 +48,6 @@ function save_settings() {
     window.opener.document.dispatchEvent(event);
 }
 
-function read_SL_config() {
-    // calculate StudioLink PORT if possible or search port?
-}
-
 // Close the window
 function close_window() {
     document.removeEventListener("escPressed", close_window);

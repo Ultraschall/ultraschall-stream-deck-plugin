@@ -13,17 +13,19 @@ const pushto = {
         //if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/MUTE/1";}
         
         if (!this.settings.hasOwnProperty('url_UP')) {
-            this.settings.url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port
-            +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-            +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+            this.settings.url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+
+            +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+            +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+            +"SET/EXTSTATE/ultradeck/down/0;"
             +"_Ultraschall_StreamDeck";
         }
         if (!this.settings.hasOwnProperty('url_DOWN')) {
-            this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port
-            +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-            +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+            this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+
+            +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+            +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+            +"SET/EXTSTATE/ultradeck/down/1;"
             +"_Ultraschall_StreamDeck";
         }
    
@@ -85,15 +87,17 @@ const pushto = {
         switch(pushtotype) {
             case "Push to mute" :
                 url_DOWN=url_DOWN
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/1;"
                 +"_Ultraschall_StreamDeck";
 
                 url_UP=url_UP
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/0;"
                 +"_Ultraschall_StreamDeck";
 
                 icon="action/images/muted.svg"
@@ -101,15 +105,17 @@ const pushto = {
                 break;
             case "Push to talk" :
                 url_DOWN=url_DOWN
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/1;"
                 +"_Ultraschall_StreamDeck";
 
                 url_UP=url_UP
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/0;"
                 +"_Ultraschall_StreamDeck";
                 icon="action/images/unmuted.svg"
                 title="Push\nto\ntalk\nTrack "+tracknumber;

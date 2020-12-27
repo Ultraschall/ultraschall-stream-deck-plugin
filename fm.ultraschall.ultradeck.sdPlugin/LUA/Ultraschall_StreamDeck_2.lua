@@ -1,5 +1,5 @@
 -- add this line to reaper-kb.ini:
--- SCR 4 0 Ultraschall_StreamDeck "Custom: Ultraschall: Streamdeck" ultraschall_streamdeck.lua
+-- SCR 4 0 Ultraschall_StreamDeck "Extras: Ultraschall: Streamdeck" ultraschall_streamdeck.lua
 
 -- load Ultraschall API
 dofile(reaper.GetResourcePath().."/UserPlugins/ultraschall_api.lua")
@@ -7,7 +7,7 @@ dofile(reaper.GetResourcePath().."/UserPlugins/ultraschall_api.lua")
 -- get ExtStates submittetd from StreamDeck Plugin and act accordingly
 mutetype=reaper.GetExtState("ultradeck", "mutetype") or false
 tracknumber=reaper.GetExtState("ultradeck", "tracknumber")
-    if (tracknumber=="") then tracknumber=1 end
+    if (tracknumber=="") then tracknumber="1" end
     tracknumber=tonumber(tracknumber)
 markertype=reaper.GetExtState("ultradeck", "markertype")
 markertext=reaper.GetExtState("ultradeck", "markertext")
@@ -18,19 +18,26 @@ markeroffset=reaper.GetExtState("ultradeck", "markeroffset") or "0,0"
     markeroffset=tonumber( markeroffset ) or 0
 cursor=reaper.GetExtState("ultradeck", "cursor")
     if cursor==nil or cursor=="" then cursor= "Automatic depending on followmode" end
+down=reaper.GetExtState("ultradeck", "down")
+    if down==nil or down=="" then down="1" end
 
-function debug()
-    print("Mutetype= "..mutetype)
-    print("tracknumber= "..tracknumber)
-    print("markertype= "..markertype)
-    print("markertext= "..markertext)
-    print("markercolor= "..markercolor)
-    print("markeroffset= "..markeroffset)
-    print("cursor= "..cursor)  
+
+function debug(dbg)
+    if dbg then
+        print("------------------")
+        print("Mutetype= "..mutetype)
+        print("tracknumber= "..tracknumber)
+        print("markertype= "..markertype)
+        print("markertext= "..markertext)
+        print("markercolor= "..markercolor)
+        print("markeroffset= "..markeroffset)
+        print("cursor= "..cursor)
+        print("down= "..down)
+        print("------------------")
+    end
 end
 
---debug()
-
+debug(false)
 
 function convert_color_hex2rgb(inputcolor)
     if string.len(inputcolor)==7 then
@@ -64,8 +71,15 @@ function get_cursor_position_at_selected_cursor_type(cursortype)
     return pos
 end
 
-if (mutetype~="") then
+
+if (mutetype~="") and ((reaper.GetPlayState() &1) == 1) then -- only if playing/recording
+    ultraschall.ActivateMute(tracknumber, true)
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
+
+    if down=="1" then
+        retval, TrackStateChunk = ultraschall.SetTrackAutomodeState(tracknumber, 3) -- set to touch mode 2
+    end
+    
     if mutetype=="mute" then
         ultraschall.ToggleMute(tracknumber, current_position, 0)
     elseif mutetype=="unmute" then
@@ -78,6 +92,11 @@ if (mutetype~="") then
             ultraschall.ToggleMute(tracknumber, current_position, 0)
         end
     end
+
+    if down=="0" then
+        retval, TrackStateChunk = ultraschall.SetTrackAutomodeState(tracknumber, 0) -- set to normal trim/read mode
+    end
+
 elseif (markertype~="") then
     -- SET MARKER:
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
@@ -119,3 +138,4 @@ reaper.DeleteExtState("ultradeck", "markertext",true)
 reaper.DeleteExtState("ultradeck", "markercolor",true)
 reaper.DeleteExtState("ultradeck", "markeroffset",true)
 reaper.DeleteExtState("ultradeck", "cursor",true)
+reaper.DeleteExtState("ultradeck", "down",true)
