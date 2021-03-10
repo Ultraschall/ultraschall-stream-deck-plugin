@@ -8,7 +8,7 @@ const markers = {
         // set defaults, if nothing is set
         if (!this.settings.hasOwnProperty('markertype')) {this.settings.markertype="Insert chapter marker";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Chapter_marker.svg";}
-        if (!this.settings.hasOwnProperty('title')) {this.settings.title="Insert\nchapter\nmarker";}
+        if (!this.settings.hasOwnProperty('title')) {this.settings.title="chapter";}
         if (!this.settings.hasOwnProperty('markercolor')) {this.settings.markercolor=defaulticoncolor;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="Icon color";}
         if (!this.settings.hasOwnProperty('markertext')) {this.settings.markertext="";}
@@ -21,6 +21,9 @@ const markers = {
         this.settings.lastmarkertype=this.settings.markertype;
         $SD.api.setSettings(jsn.context, this.settings);              
         this.setIconColor(jsn);
+
+        // refresh
+        this.onDidReceiveSettings(jsn);
     },
 
     onKeyDown: function (jsn) {
@@ -108,7 +111,7 @@ const markers = {
                 if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
                 this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter" + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset) + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nchapter\nmarker";
+                this.settings.title="chapter";
                 break;
             case "Insert chapter marker and edit name" :
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
@@ -116,7 +119,7 @@ const markers = {
                 if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
                 this.settings.url="/_/SET/EXTSTATE/ultradeck/markertype/chapter_enter_name" + ";SET/EXTSTATE/ultradeck/markeroffset/"+encodeURIComponent(this.settings.markeroffset) + ";SET/EXTSTATE/ultradeck/cursor/"+encodeURIComponent(this.settings.cursor) + ";_Ultraschall_StreamDeck";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nnamed\nchapter\nmarker";
+                this.settings.title="named";
                 break;
             case "Insert marker with time stamp (ISO 8601)" :
                 console.log("HUHU TIMESTAMP", this.settings);
@@ -124,10 +127,9 @@ const markers = {
                 this.settings.markercolortext="Marker color";
                 if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
                 this.settings.icon="action/images/Timestamp_marker.svg"
-                this.settings.title="Insert\nchapter\nmarker\nwith\ntime stamp\n(ISO 8601)";
+                this.settings.title="time";
                 if (this.settings.markercolor==="" || markerchanged) {
                     if (ExtraDefaultColor[this.settings.icon]) {
-                        console.log("ICH BIN HIER");
                         this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
                     }
                 }
@@ -140,29 +142,24 @@ const markers = {
             case "Import chapter markers" :
                 this.settings.url="/_/_ULTRASCHALL_INSERT_CHAPTERS";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Import\nchapter\nmarkers";
+                this.settings.title="import";
                 break;
             case "Export chapter markers" :
                 this.settings.url="/_/_ULTRASCHALL_SAVE_CHAPTERS";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Export\nchapter\nmarkers";
+                this.settings.title="export";
                 break;
             case "Save chapter markers to project folder" :
                 this.settings.url="/_/_ULTRASCHALL_SAVE_CHAPTERS_TO_PROJECT";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Save\nchapter\nmarkers\nto project\nfolder";
-                break;
-            case "Insert chapter markers at the start of every selected item" :
-                this.settings.url="/_/_XENAKIOS_CRTMARKERSFROMITEMS1";
-                this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nmarkers\nat the start of\nevery\nselected item";
+                this.settings.title="save";
                 break;
             case "Insert edit marker" :
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
                 this.settings.markercolortext="Icon color";
                 if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
                 this.settings.icon="action/images/Edit_marker.svg"
-                this.settings.title="Insert\nedit\nmarker";
+                this.settings.title="edit!";
                 if (this.settings.markercolor==="" || markerchanged) {
                     if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
                 }
@@ -173,21 +170,21 @@ const markers = {
             case "Import planned markers from clipboard" :
                 this.settings.url="/_/_Ultraschall_Import_Markers_As_Planned_From_Clipboard";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Import\nplanned\nmarkers\nfrom\nclipboard";
+                this.settings.title="import";
                 break;
             case "Insert next planned marker" :
                 this.settings.url="/_/_Ultraschall_Set_Next_Planned_Marker";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nnext\nplanned\nmarker";
+                this.settings.title="next pl.";
                 break;
             case "Insert next planned marker at play/rec position" :
                 this.settings.url="/_/_Ultraschall_Set_Next_Planned_Marker_Play";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\nnext\nplanned\nmarker\nat play/rec\nposition";
+                this.settings.title="next plp.";
                 break;
             case "Insert custom marker" :
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Insert\ncustom \nmarker";
+                this.settings.title="custom";
                 if (this.settings.markertext==="") {this.settings.markertext="enter custom text here...";}
                 if (this.settings.markercolor==="") {this.settings.markercolor="#c000c0";}
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
@@ -204,30 +201,22 @@ const markers = {
             case "Go to next marker/project end" :
                 this.settings.url="/_/_Ultraschall_Go_To_Next_Marker_Projectend";
                 this.settings.icon="action/images/next_marker.svg"
-                this.settings.title="Go to next\nmarker or\nproject end";
+                this.settings.title="next";
                 break;
             case "Go to previous marker/project start" :
                 this.settings.url="/_/_Ultraschall_Go_To_Previous_Marker_Projectstart";
                 this.settings.icon="action/images/prev_marker.svg"
-                this.settings.title="Go to prev.\nmarker or\nproject start";
+                this.settings.title="prev.";
                 break;
             case "Delete last marker" :
                 this.settings.url="/_/_Ultraschall_Delete_Last_Marker";
                 this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Delete\nlast\nmarker";
+                this.settings.title="del. last";
                 break;
             case "Open marker dashboard" :
                 this.settings.url="/_/_Ultraschall_Marker_Dashboard";
-                this.settings.icon="action/images/Chapter_marker.svg"
-                this.settings.title="Open\nmarker\ndashboard";
-                break;
-            case "DELETE ALL MARKERS" :
-                this.settings.url="/_/_SWSMARKERLIST9";
-                this.settings.icon="action/images/Delete_all_markers.svg"
-                this.settings.title="DELETE\nALL\nMARKERS";
-                if (this.settings.markercolor==="" || markerchanged) {
-                    if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
-                }
+                this.settings.icon="action/images/Marker_Dashboard.svg"
+                this.settings.title="markers";
                 break;
         }
         

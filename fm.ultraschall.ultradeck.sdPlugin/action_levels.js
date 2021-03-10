@@ -9,13 +9,16 @@ const levels = {
         if (!this.settings.hasOwnProperty('tracknumber')) {this.settings.tracknumber="1";}
         if (!this.settings.hasOwnProperty('sendnumber')) {this.settings.sendnumber="";}
         if (!this.settings.hasOwnProperty('levelstype')) {this.settings.levelstype="Increase track level";}
-        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/VOL/+3";}
-        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Volume_up@2x.png";}
-        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Increase\nLevel\nTrack 1";}
+        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="/_/SET/TRACK/1/VOL/+3";}
+        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/Volume_up.svg";}
+        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="vol + 1";}
 
         $SD.api.setSettings(jsn.context, this.settings); 
         $SD.api.setImage(jsn.context,Icons[this.settings.icon]);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
+
+        // refresh
+        this.onDidReceiveSettings(jsn);
     },
 
     onKeyDown: function (jsn) {
@@ -23,7 +26,7 @@ const levels = {
         console.log("KeyDown Levels", jsn);
         
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url_DOWN , true);
+        xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_DOWN , true);
         xhttp.send();
     },
 
@@ -42,7 +45,7 @@ const levels = {
 
         // set url for each action
         var levelstype=this.settings.levelstype;
-        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
+        var url_DOWN="";
         var tracknumber=this.settings.tracknumber;
         var sendnumber=this.settings.sendnumber;
         if (sendnumber==="") {sendnumber="1";}
@@ -51,29 +54,29 @@ const levels = {
         
         switch(levelstype) {
             case "Increase track level" :
-                url_DOWN=url_DOWN+"SET/TRACK/"+tracknumber+"/VOL/+1";
-                icon="action/images/Volume_up@2x.png";
+                url_DOWN="/_/SET/TRACK/"+tracknumber+"/VOL/+1";
+                icon="action/images/Volume_up.svg";
                 console.log("ICON=",icon);
-                title="Increase\ntrack "+tracknumber+"\nlevel";
+                title="vol + "+tracknumber;
                 sendnumber="";
                 break;
             case "Decrease track level" :
-                url_DOWN=url_DOWN+"SET/TRACK/"+tracknumber+"/VOL/-1";
-                icon="action/images/Volume_down@2x.png";
-                title="Decrease\ntrack "+tracknumber+"\nlevel";
-                sendnumber="";
-                break;
-            case "Set track level to 0dB" :
-                url_DOWN=url_DOWN+"SET/TRACK/"+tracknumber+"/VOL/1";
-                icon="action/images/Volume_down@2x.png";
-                title="Set\nlevel\nto 0dB\ntrack "+tracknumber;
+                url_DOWN="/_/SET/TRACK/"+tracknumber+"/VOL/-1";
+                icon="action/images/Volume_down.svg";
+                title="vol - "+tracknumber;
                 sendnumber="";
                 break;
             case "Increase send level" :
-                url_DOWN=url_DOWN+"SET/TRACK/"+tracknumber+"/SEND/"+sendnumber+"/VOL/+1";
-                icon="action/images/Volume_up@2x.png";
+                url_DOWN="/_/SET/TRACK/"+tracknumber+"/SEND/"+sendnumber+"/VOL/+1";
+                icon="action/images/Volume_up.svg";
                 console.log("ICON=",icon);
-                title="Increase\nsend "+sendnumber+"\ntrack "+tracknumber+"\nlevel";
+                title="+ send "+sendnumber+"\ntrack "+tracknumber+"\nlevel";
+                break;
+            case "Decrease send level" :
+                url_DOWN="/_/SET/TRACK/"+tracknumber+"/SEND/"+sendnumber+"/VOL/-1";
+                icon="action/images/Volume_down.svg";
+                console.log("ICON=",icon);
+                title="+ send "+sendnumber+"\ntrack "+tracknumber+"\nlevel";
                 break;
         }
 

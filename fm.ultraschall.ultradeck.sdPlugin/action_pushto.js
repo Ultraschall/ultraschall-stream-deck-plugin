@@ -9,21 +9,20 @@ const pushto = {
         if (!this.settings.hasOwnProperty('tracknumber')) {this.settings.tracknumber="1";}
         if (!this.settings.hasOwnProperty('pushtotype')) {this.settings.pushtotype="Push to mute";}
 
-        //if (!this.settings.hasOwnProperty('url_UP')) {this.settings.url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/MUTE/0";}
-        //if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/1/MUTE/1";}
-        
         if (!this.settings.hasOwnProperty('url_UP')) {
-            this.settings.url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port
-            +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-            +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+            this.settings.url_UP="/_/"+
+            +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+            +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+            +"SET/EXTSTATE/ultradeck/down/0;"
             +"_Ultraschall_StreamDeck";
         }
         if (!this.settings.hasOwnProperty('url_DOWN')) {
-            this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port
-            +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-            +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+            this.settings.url_DOWN="/_/"+
+            +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+            +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+            +"SET/EXTSTATE/ultradeck/down/1;"
             +"_Ultraschall_StreamDeck";
         }
    
@@ -37,6 +36,10 @@ const pushto = {
         $SD.api.setSettings(jsn.context, this.settings); 
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
+
+        // refresh
+        self.onDidReceiveSettings(jsn);
+
         // set initial state
         this.onKeyUp(jsn);
     },
@@ -46,7 +49,7 @@ const pushto = {
         console.log("KeyDown PushTo ", jsn);
         
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url_DOWN , true);
+        xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_DOWN , true);
         xhttp.send();
     },
 
@@ -77,39 +80,43 @@ const pushto = {
 
         // set url for each action
         var pushtotype=this.settings.pushtotype;
-        var url_UP="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
-        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
+        var url_UP="";
+        var url_DOWN="";
         var tracknumber=this.settings.tracknumber;
         var icon="";
         
         switch(pushtotype) {
             case "Push to mute" :
-                url_DOWN=url_DOWN
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                url_DOWN="/_/"
+                +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/1;"
                 +"_Ultraschall_StreamDeck";
 
-                url_UP=url_UP
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                url_UP="/_/"
+                +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/0;"
                 +"_Ultraschall_StreamDeck";
 
                 icon="action/images/muted.svg"
                 title="Push\nto\nmute\nTrack "+tracknumber;
                 break;
             case "Push to talk" :
-                url_DOWN=url_DOWN
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/unmute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                url_DOWN="/_/"
+                +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/1;"
                 +"_Ultraschall_StreamDeck";
 
-                url_UP=url_UP
-                +"/_/SET/EXTSTATE/ultradeck/mutetype/mute;"
-                +"SET/EXTSTATE/ultradeck/cursor/Automatic depending on followmode;"
+                url_UP="/_/"
+                +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+                +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
+                +"SET/EXTSTATE/ultradeck/down/0;"
                 +"_Ultraschall_StreamDeck";
                 icon="action/images/unmuted.svg"
                 title="Push\nto\ntalk\nTrack "+tracknumber;

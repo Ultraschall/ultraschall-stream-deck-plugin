@@ -12,16 +12,17 @@ const toggle = {
         if (!this.settings.hasOwnProperty('toggletypetext')) { this.settings.toggletypetext="Toggle"; }
         if (!this.settings.hasOwnProperty('title')) {this.settings.title="1";}
         if (!this.settings.hasOwnProperty('tracknumber')) { this.settings.tracknumber="1"; }
-        if (!this.settings.hasOwnProperty('markercolor' )) {this.settings.markercolor =defaulticoncolor;}
-        if (!this.settings.hasOwnProperty('markercolor2')) {this.settings.markercolor2=defaulticoncolor;}
+        if (!this.settings.hasOwnProperty('markercolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
+        if (!this.settings.hasOwnProperty('markercolor2')) {this.settings.markercolor2=defaulticoncolorON;}
+        if (!this.settings.hasOwnProperty('resetcolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
+        if (!this.settings.hasOwnProperty('resetcolor2')) {this.settings.markercolor2=defaulticoncolorON;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="not muted";}
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
         if (!this.settings.hasOwnProperty('iconstyle')) {this.settings.iconstyle="normal";}
         if (!this.settings.hasOwnProperty('url'))
         {
-            this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port
-            +"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
+            this.settings.url="/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
         }
 
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
@@ -35,6 +36,9 @@ const toggle = {
 
         // cache the current button
         this.cache[jsn.context] = ToggleButton;
+
+        // refresh
+        this.onDidReceiveSettings(jsn);
     },
 
     onWillDisappear: function (jsn) {
@@ -87,7 +91,7 @@ const toggle = {
             }
         } else {
             var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", settings.url , true);
+            xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+settings.url , true);
             xhttp.send();
 
             let found = this.cache[jsn.context];
@@ -112,115 +116,179 @@ const toggle = {
                     this.settings.tracknumber="1";
                     this.settings.markercolortext="not muted";
                     this.settings.markercolortext2="muted";
-                    this.settings.markercolor =defaulticoncolor;
-                    this.settings.markercolor2=defaulticoncolor;
+                    this.settings.markercolor =defaulticoncolorOFF;
+                    this.settings.markercolor2=defaulticoncolorON;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/muted.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.title=this.settings.tracknumber;
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
+                this.settings.url="/_/SET/TRACK/"+this.settings.tracknumber+"/MUTE/-1";
 
                 
                 break;
             case "Toggle follow mode" :
-                this.settings.title="Follow\nmode\nToggle\n ";
+                this.settings.title="follow";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Toggle follow mode'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/Follow_mode.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Follow";
+                this.settings.url="/_/_Ultraschall_Toggle_Follow";
                 break;
             case "Toggle Magic Routing" :
-                this.settings.title="Magic\nRouting\nToggle\n ";
+                this.settings.title="magic r.";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Toggle Magic Routing'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Toggle";
                     this.settings.icon='action/images/MagicRouting.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_Toggle_Magicrouting";
+                this.settings.url="/_/_Ultraschall_Toggle_Magicrouting";
                 break;
             case "Set preshow routing" :
-                this.settings.title="Set\npreshow\nrouting\n ";
+                this.settings.title="preshow";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Set preshow routing'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Preshow.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Preshow";
+                this.settings.url="/_/_Ultraschall_set_Matrix_Preshow";
                 break;
             case "Set recording routing" :
-                this.settings.title="Set\nrecording\nrouting\n ";
+                this.settings.title="recording";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Set recording routing'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Recording.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Recording";
+                this.settings.url="/_/_Ultraschall_set_Matrix_Recording";
                 break;
             case "Set editing routing" :
-                this.settings.title="Set\nrecording\nrouting\n ";
+                this.settings.title="editing";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Set editing routing'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/Editing.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_set_Matrix_Editing";
+                this.settings.url="/_/_Ultraschall_set_Matrix_Editing";
                 break;
             case "Toggle Studiolink OnAir" :
-                this.settings.title="Toggle\nStudiolink\nOnAir\n";
+                this.settings.title="OnAir";
                 if (togglechanged){
                     this.settings.markercolortext="On";
                     this.settings.markercolortext2="Off";
-                    this.settings.markercolor  = ExtraDefaultColor['Toggle Studiolink OnAir'];
-                    this.settings.markercolor2 = defaulticoncolor;
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
                     this.settings.toggletypetext="Set";
                     this.settings.icon='action/images/OnAir.svg';
                     this.settings.iconstyle='normal';
                 }
                 this.settings.tracknumber="";
-                this.settings.url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/_Ultraschall_OnAir";
+                this.settings.url="/_/_Ultraschall_OnAir";
                 break;
             case "Toggle Studiolink Standalone Mute" :
-            this.settings.title="Toggle\nStudiolink\nStandalone\nMute";
-            if (togglechanged){
-                this.settings.markercolortext="On";
-                this.settings.markercolortext2="Off";
-                this.settings.markercolor  = defaulticoncolor;
-                this.settings.markercolor2 = defaulticoncolor;
-                this.settings.toggletypetext="Toggle";
-                this.settings.icon='action/images/muted.svg';
-                this.settings.iconstyle='normal';
-            }
-            this.settings.tracknumber="";
-            this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
-            break;
+                this.settings.title="SL mute";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Toggle";
+                    this.settings.icon='action/images/muted.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
+                break;
+            case "Set record view" :
+                this.settings.title="record";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/RecordView.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Set_View_Record";
+                break;
+            case "Set edit view" :
+                this.settings.title="edit";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Editing.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Set_View_Edit";
+                break;
+            case "Set storyboard view" :
+                this.settings.title="storyb.";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/StoryboardView.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Set_View_Story";
+                break;
         }
         
         $SD.api.setSettings(jsn.context, this.settings);
@@ -234,12 +302,12 @@ const toggle = {
         if (jsn.payload.hasOwnProperty('sdpi_collection')) {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 var color1 = ExtraDefaultColor[this.settings.toggletype];
-                if (color1==undefined) {color1 = defaulticoncolor;}
+                if (color1==undefined) {color1 = this.settings.resetcolor;}
                 this.settings.markercolor=color1;
             }
             if (jsn.payload.sdpi_collection.key==="resetcolor2") {
                 var color2 = ExtraDefaultColor[this.settings.toggletype+"2"];
-                if (color2==undefined) {color2 = defaulticoncolor;}
+                if (color2==undefined) {color2 = this.settings.resetcolor2;}
                 this.settings.markercolor2=color2;
             }
             $SD.api.setSettings(jsn.context, this.settings);
@@ -269,6 +337,9 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Set editing routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
             if (toggletype==="Toggle Studiolink OnAir") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
             if (toggletype==="Toggle Studiolink Standalone Mute") {getMuteStateSL();}
+            if (toggletype==="Set record view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Record",Icons['action/images/RecordView.svg'],Icons['action/images/RecordView.svg']);}
+            if (toggletype==="Set edit view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Edit",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
+            if (toggletype==="Set storyboard view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Story",Icons['action/images/StoryboardView.svg'],Icons['action/images/StoryboardView.svg']);}
         }
     }
 

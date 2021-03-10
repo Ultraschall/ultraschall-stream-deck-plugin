@@ -7,15 +7,15 @@ const transport = {
         this.settings = jsn.payload.settings;
         
         if (!this.settings.hasOwnProperty('transporttype')) {this.settings.transporttype="Play";}
-        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/1007";}
-        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="Play";}
-        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/play@2x.png";}
+        if (!this.settings.hasOwnProperty('url_DOWN')) {this.settings.url_DOWN="1007";}
+        if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="play";}
+        if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/play.svg";}
         if (!this.settings.hasOwnProperty('icon_playstate')) {
-            this.settings.icon_playstate={  "0":"action/images/Play@2x.png",
-                                            "1":"action/images/Play2@2x.png",
-                                            "2":"action/images/Play2@2x.png",
-                                            "5":"action/images/Play@2x.png",
-                                            "6":"action/images/Play@2x.png",
+            this.settings.icon_playstate={  "0":"action/images/Play.svg",
+                                            "1":"action/images/Play2.svg",
+                                            "2":"action/images/Play2.svg",
+                                            "5":"action/images/Play.svg",
+                                            "6":"action/images/Play.svg",
                                          };
         }
 
@@ -29,6 +29,9 @@ const transport = {
 
         // cache the current button
         this.cache[jsn.context] = TransportButton;
+
+        // refresh
+        this.onDidReceiveSettings(jsn);
     },
 
     onWillDisappear: function (jsn) {
@@ -44,7 +47,8 @@ const transport = {
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url_DOWN , true);
+        console.log("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+this.settings.url_DOWN);
+        xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+this.settings.url_DOWN , true);
         xhttp.send();
     },
 
@@ -52,7 +56,7 @@ const transport = {
         //console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_transport.js]onDidReceiveSettings:', jsn);
         this.settings = jsn.payload.settings;
         $SD.api.setSettings(jsn.context, this.settings);
-        var url_DOWN="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/";
+        var url_DOWN="";
         var icon="";
         var transporttype=this.settings.transporttype;
         var title="";
@@ -60,69 +64,69 @@ const transport = {
         this.settings.icon_playstate=[];
         switch(transporttype) {
             case "Play" :
-                url_DOWN=url_DOWN+"1007";
-                this.settings.icon_playstate=  {"0":"action/images/Play@2x.png", "1":"action/images/Play2@2x.png", "2":"action/images/Play2@2x.png", "5":"action/images/Play@2x.png", "6":"action/images/Play@2x.png" };
-                title="Play";
+                url_DOWN="1007";
+                this.settings.icon_playstate=  {"0":"action/images/Play.svg", "1":"action/images/Play2.svg", "2":"action/images/Play2.svg", "5":"action/images/Play.svg", "6":"action/images/Play.svg" };
+                title="play";
                 break;
             case "Pause" :
-                url_DOWN=url_DOWN+"1008";
-                this.settings.icon_playstate=  {"0":"action/images/Pause@2x.png", "1":"action/images/Pause@2x.png", "2":"action/images/Pause2@2x.png", "5":"action/images/Pause@2x.png", "6":"action/images/Pause@2x.png" };
-                title="Pause";
+                url_DOWN="1008";
+                this.settings.icon_playstate=  {"0":"action/images/Pause.svg", "1":"action/images/Pause.svg", "2":"action/images/Pause2.svg", "5":"action/images/Pause.svg", "6":"action/images/Pause.svg" };
+                title="pause";
                 break;
             case "Stop" :
-                url_DOWN=url_DOWN+"1016";
-                this.settings.icon_playstate=  {"0":"action/images/Stop@2x.png", "1":"action/images/Stop@2x.png", "2":"action/images/Stop@2x.png", "5":"action/images/Stop@2x.png", "6":"action/images/Stop@2x.png" };
-                title="Stop";
+                url_DOWN="1016";
+                this.settings.icon_playstate=  {"0":"action/images/Stop.svg", "1":"action/images/Stop.svg", "2":"action/images/Stop.svg", "5":"action/images/Stop.svg", "6":"action/images/Stop.svg" };
+                title="stop";
                 break;
             case "Go to start of project" :
-                url_DOWN=url_DOWN+"_Ultraschall_Go_To_Start_Of_Project";
-                this.settings.icon_playstate=  {"0":"action/images/Go_to_start_of_project@2x.png", "1":"action/images/Go_to_start_of_project@2x.png", "2":"action/images/Go_to_start_of_project@2x.png", "5":"action/images/Go_to_start_of_project@2x.png", "6":"action/images/Go_to_start_of_project@2x.png" };
-                title="Go to start\nof project";
+                url_DOWN="_Ultraschall_Go_To_Start_Of_Project";
+                this.settings.icon_playstate=  {"0":"action/images/Go_to_start_of_project.svg", "1":"action/images/Go_to_start_of_project.svg", "2":"action/images/Go_to_start_of_project.svg", "5":"action/images/Go_to_start_of_project.svg", "6":"action/images/Go_to_start_of_project.svg" };
+                title="start";
                 break;
             case "Go to end of project" :
-                url_DOWN=url_DOWN+"_Ultraschall_Go_To_End_Of_Project";
-                this.settings.icon_playstate=  {"0":"action/images/Go_to_end_of_project@2x.png", "1":"action/images/Go_to_end_of_project@2x.png", "2":"action/images/Go_to_end_of_project@2x.png", "5":"action/images/Go_to_end_of_project@2x.png", "6":"action/images/Go_to_end_of_project@2x.png" };
-                title="Go to end\nof project";
+                url_DOWN="_Ultraschall_Go_To_End_Of_Project";
+                this.settings.icon_playstate=  {"0":"action/images/Go_to_end_of_project.svg", "1":"action/images/Go_to_end_of_project.svg", "2":"action/images/Go_to_end_of_project.svg", "5":"action/images/Go_to_end_of_project.svg", "6":"action/images/Go_to_end_of_project.svg" };
+                title="end";
                 break;
             case "Record" :
-                url_DOWN=url_DOWN+"1013";
+                url_DOWN="1013";
                 this.settings.icon_playstate=  {"0":"action/images/Record.svg", "1":"action/images/Record.svg", 
                 "2":"action/images/Record.svg", "5":"action/images/Record2.svg", 
                 "6":"action/images/Record2.svg" };
-                title="Record";
+                title="record";
                 break;
             case "Jump left to next item edge" :
-                url_DOWN=url_DOWN+"_Ultraschall_Jump_Left_To_Next_Itemedge";
-                this.settings.icon_playstate=  {"0":"action/images/Go_to_start_of_project@2x.png", "1":"action/images/Go_to_start_of_project@2x.png", "2":"action/images/Go_to_start_of_project@2x.png", "5":"action/images/Go_to_start_of_project@2x.png", "6":"action/images/Go_to_start_of_project@2x.png" };
-                title="Jump left to next item edge";
+                url_DOWN="_Ultraschall_Jump_Left_To_Next_Itemedge";
+                this.settings.icon_playstate=  {"0":"action/images/Go_to_start_of_project.svg", "1":"action/images/Go_to_start_of_project.svg", "2":"action/images/Go_to_start_of_project.svg", "5":"action/images/Go_to_start_of_project.svg", "6":"action/images/Go_to_start_of_project.svg" };
+                title="left";
                 break;
             case "Jump right to next item edge" :
-                url_DOWN=url_DOWN+"_Ultraschall_Jump_Right_To_Next_Itemedge";
-                this.settings.icon_playstate=  {"0":"action/images/Go_to_end_of_project@2x.png", "1":"action/images/Go_to_end_of_project@2x.png", "2":"action/images/Go_to_end_of_project@2x.png", "5":"action/images/Go_to_end_of_project@2x.png", "6":"action/images/Go_to_end_of_project@2x.png" };
-                title="Jump right to next item edge";
+                url_DOWN="_Ultraschall_Jump_Right_To_Next_Itemedge";
+                this.settings.icon_playstate=  {"0":"action/images/Go_to_end_of_project.svg", "1":"action/images/Go_to_end_of_project.svg", "2":"action/images/Go_to_end_of_project.svg", "5":"action/images/Go_to_end_of_project.svg", "6":"action/images/Go_to_end_of_project.svg" };
+                title="right";
                 break;
             case "Shuttle Backward" :
-                url_DOWN=url_DOWN+"_Ultraschall_Shuttle_Backward";
-                this.settings.icon_playstate=  {"0":"action/images/Shuttle_Backward@2x.png", 
-                "1":"action/images/Shuttle_Backward@2x.png", "2":"action/images/Shuttle_Backward@2x.png",
-                "5":"action/images/Shuttle_Backward@2x.png", "6":"action/images/Shuttle_Backward@2x.png" };
-                title="Shuttle\nBackward";
+                url_DOWN="_Ultraschall_Shuttle_Backward";
+                this.settings.icon_playstate=  {"0":"action/images/Shuttle_Backward.svg", 
+                "1":"action/images/Shuttle_Backward.svg", "2":"action/images/Shuttle_Backward.svg",
+                "5":"action/images/Shuttle_Backward.svg", "6":"action/images/Shuttle_Backward.svg" };
+                title="backward";
                 break;
             case "Shuttle Pause" :
-                url_DOWN=url_DOWN+"_Ultraschall_Shuttle_Pause";
-                this.settings.icon_playstate=  {"0":"action/images/Pause@2x.png", "1":"action/images/Pause@2x.png", "2":"action/images/Pause@2x.png", "5":"action/images/Pause@2x.png", "6":"action/images/Pause@2x.png" };
-                title="Shuttle\nPause";
+                url_DOWN="_Ultraschall_Shuttle_Pause";
+                this.settings.icon_playstate=  {"0":"action/images/Pause.svg", "1":"action/images/Pause.svg", "2":"action/images/Pause.svg", "5":"action/images/Pause.svg", "6":"action/images/Pause.svg" };
+                title="pause";
                 break;
             case "Shuttle Forward" :
-                url_DOWN=url_DOWN+"_Ultraschall_Shuttle_Forward";
-                this.settings.icon_playstate=  {"0":"action/images/Play@2x.png", "1":"action/images/Play@2x.png", "2":"action/images/Play@2x.png", "5":"action/images/Play@2x.png", "6":"action/images/Play@2x.png" };
-                title="Shuttle\nForward";
+                url_DOWN="_Ultraschall_Shuttle_Forward";
+                this.settings.icon_playstate=  {"0":"action/images/Play.svg", "1":"action/images/Play.svg", "2":"action/images/Play.svg", "5":"action/images/Play.svg", "6":"action/images/Play.svg" };
+                title="forward";
                 break;
             case "Toggle Repeat" :
-                url_DOWN=url_DOWN+"1068";
+                url_DOWN="1068";
                 this.settings.icon_playstate=  {"0":"action/images/Repeat.svg", "1":"action/images/Repeat.svg", "2":"action/images/Repeat.svg",
                  "5":"action/images/Repeat.svg", "6":"action/images/Repeat.svg", "R":"action/images/RepeatOn.svg" };
-                title="Toggle\nRepeat";
+                title="repeat";
                 break;
                 // playstate is 0 for stopped, 1 for playing, 2 for paused, 5 for recording, and 6 for record paused.
                 // "R" is for Repeat On

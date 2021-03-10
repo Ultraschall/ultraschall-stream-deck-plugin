@@ -1,6 +1,7 @@
 $SD.on('connected', (jsonObj) => connected(jsonObj));
-var defaulticoncolor="#d8d8d8";
-var defaulticoncolorON="#fdcb00";
+var defaulticoncolor="#d8d8d8"; 
+var defaulticoncolorON="#fdcb00"; //#fdcb00=yellow
+var defaulticoncolorOFF="#d8d8d8"; //#d8d8d8=light grey
 var Icons={};
 var uuid="";
 var redX='<path d="M61.627,14.676l-6.489,6.489l6.489,6.489c0.487,0.486 0.487,1.279 0,1.776l-2.357,2.356c-0.486,0.487 -1.278,0.487 -1.775,0l-6.49,-6.489l-6.49,6.489c-0.486,0.487 -1.278,0.487 -1.775,0l-2.357,-2.356c-0.486,-0.486 -0.486,-1.279 -0,-1.776l6.489,-6.489l-6.489,-6.489c-0.486,-0.486 -0.486,-1.279 -0,-1.776l2.357,-2.357c0.486,-0.486 1.279,-0.486 1.775,0l6.49,6.49l6.49,-6.49c0.486,-0.486 1.279,-0.486 1.775,0l2.357,2.357c0.497,0.486 0.497,1.279 0,1.776Z" style="fill:#f00;fill-rule:nonzero;"/>';
@@ -10,18 +11,6 @@ var SLwebsocketerror=false;
 LoadPNGIconsToArray(['action/images/Chapter_marker@2x.png',
                      'action/images/Edit_marker@2x.png',
                      'action/images/Ultraschall_logo@2x.png',
-                     'action/images/Volume_down@2x.png',
-                     'action/images/Volume_up@2x.png',
-                     'action/images/Pause@2x.png',
-                     'action/images/Pause2@2x.png',
-                     'action/images/Play@2x.png',
-                     'action/images/Play2@2x.png',
-                     'action/images/Record@2x.png',
-                     'action/images/Record2@2x.png',
-                     'action/images/Stop@2x.png',
-                     'action/images/Go_to_start_of_project@2x.png',
-                     'action/images/Go_to_end_of_project@2x.png',
-                     'action/images/Shuttle_Backward@2x.png',
                      'action/images/empty@2x.png'
                   ]);
 
@@ -32,7 +21,6 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Edit_marker.svg',
                      'action/images/next_marker.svg',
                      'action/images/prev_marker.svg',
-                     'action/images/Delete_all_markers.svg',
                      'action/images/Follow_mode.svg',
                      'action/images/MagicRouting.svg',
                      'action/images/Preshow.svg',
@@ -45,19 +33,34 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/RepeatOn.svg',
                      'action/images/Game.svg',
                      'action/images/Timestamp_marker.svg',
-                     'action/images/Custom_action.svg'
+                     'action/images/Custom_action.svg',
+                     'action/images/RecordView.svg',
+                     'action/images/StoryboardView.svg',
+                     'action/images/Marker_Dashboard.svg',
+                     'action/images/Volume_up.svg',
+                     'action/images/Volume_down.svg',
+                     'action/images/Pause.svg',
+                     'action/images/Pause2.svg',
+                     'action/images/Play.svg',
+                     'action/images/Play2.svg',
+                     'action/images/Record.svg',
+                     'action/images/Record2.svg',
+                     'action/images/Stop.svg',
+                     'action/images/Go_to_start_of_project.svg',
+                     'action/images/Go_to_end_of_project.svg',
+                     'action/images/Shuttle_Backward.svg',
 ]);
 
 var ExtraDefaultColor={};
 ExtraDefaultColor['action/images/Edit_marker.svg'] = '#c81414'; // red
 ExtraDefaultColor['action/images/Delete_all_markers.svg'] = '#ff0000'; // very red
 ExtraDefaultColor['action/images/Timestamp_marker.svg'] = '#ffffff'; // white for timestamp marker
-ExtraDefaultColor['Toggle follow mode'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Toggle Magic Routing'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Set recording routing'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Set editing routing'] = "#fdcb00"; // yellow
-ExtraDefaultColor['Toggle Studiolink OnAir'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Toggle follow mode'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Toggle Magic Routing'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Set recording routing'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Set editing routing'] = "#fdcb00"; // yellow
+//ExtraDefaultColor['Toggle Studiolink OnAir'] = "#fdcb00"; // yellow
 
 function LoadPNGIconsToArray(IconsURLArray){
     const aUrl = !Array.isArray(IconsURLArray) ? [IconsURLArray] : IconsURLArray;
@@ -108,7 +111,7 @@ function connected(jsn) {
     //console.log('%c%s','color: white; background: blue; font-size: 15px;','[app.js] connected:',jsn)
     $SD.api.getGlobalSettings(jsn.uuid);
     $SD.on('didReceiveGlobalSettings', (jsn) => {
-        //console.log("APP received GLOBAL Settings!!!!!",jsn);
+        console.log("APP received GLOBAL Settings!!!!!",jsn);
         globalSettings=jsn.payload.settings;
         if (!globalSettings.hasOwnProperty('ipadress')) {globalSettings.ipadress="127.0.0.1";}
         if (!globalSettings.hasOwnProperty('port')) {globalSettings.port="8080";}

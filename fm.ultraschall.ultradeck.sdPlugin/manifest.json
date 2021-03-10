@@ -1,7 +1,7 @@
 {
   "Actions": [
     {
-      "Icon": "action/images/actionimage", 
+      "Icon": "action/images/ToggleState_ActionIcon", 
       "Name": "Toggle state",
       "States": [
         {
@@ -13,7 +13,7 @@
       "UUID": "fm.ultraschall.ultradeck.toggle"
     },
     {
-      "Icon": "action/images/Chapter_marker", 
+      "Icon": "action/images/Marker_ActionIcon", 
       "Name": "Markers",
       "States": [
         {
@@ -25,7 +25,7 @@
       "UUID": "fm.ultraschall.ultradeck.markers"
     },
     {
-      "Icon": "action/images/muted", 
+      "Icon": "action/images/PushTo_ActionIcon", 
       "Name": "Push To mute/talk",
       "States": [
         {
@@ -37,7 +37,7 @@
       "UUID": "fm.ultraschall.ultradeck.pushto"
     },
     {
-      "Icon": "action/images/muted", 
+      "Icon": "action/images/Levels_ActionIcon", 
       "Name": "Levels",
       "States": [
         {
@@ -49,7 +49,7 @@
       "UUID": "fm.ultraschall.ultradeck.levels"
     },
     {
-      "Icon": "action/images/Play", 
+      "Icon": "action/images/Transport_ActionIcon", 
       "Name": "Transport",
       "States": [
         {
@@ -61,7 +61,7 @@
       "UUID": "fm.ultraschall.ultradeck.transport"
     },
     {
-      "Icon": "action/images/Custom_action", 
+      "Icon": "action/images/Misc_ActionIcon", 
       "Name": "Misc",
       "States": [
         {
@@ -74,7 +74,7 @@
     }
   ], 
   "SDKVersion": 2,
-  "Author": "@fernsehmuell",
+  "Author": "Ultraschall",
   "Category": "Ultraschall",
   "CategoryIcon": "action/images/category",
   "CodePath": "index.html", 
