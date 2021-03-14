@@ -76,7 +76,7 @@
   "SDKVersion": 2,
   "Author": "Ultraschall",
   "Category": "Ultraschall",
-  "CategoryIcon": "action/images/category",
+  "CategoryIcon": "action/images/category_PluginIcon",
   "CodePath": "index.html", 
   "PropertyInspectorPath": "propertyinspector/index.html", 
   "Description": "Control Ultraschall",

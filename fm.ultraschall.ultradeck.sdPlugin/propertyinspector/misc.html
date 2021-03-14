@@ -13,8 +13,8 @@
             <option value='Soundboard'>Soundboard</option>
         </optgroup>
         <optgroup label='Ultraschall Games'>
-            <option value='Play Ultramind'>Play Ultramind</option>
             <option value='Play Moonlander'>Play Moonlander</option>
+            <option value='Play Ultramind'>Play Ultramind</option>
         </optgroup>
     </select>
 </div>
@@ -27,16 +27,25 @@
     </div>
 </div>
 
+<div class='sdpi-item' id='soundboardcontainer1'>
+    <div class='sdpi-item-label'>Soundboard action</div>
+    <select class='sdpi-item-value select' id='soundboardaction'>
+        <option value='playstop'>play/stop</option>
+        <option value='playpause'>play/pause</option>
+        <option value='play'>play</option>
+        <option value='fadeinpause'>fade in/pause</option>
+        <option value='playfadeout'>play/fade out</option>
+    </select>
+</div>
+
+<div class='sdpi-item' id='soundboardcontainer2'>
+        <div class='sdpi-item-label'>Soundboard slot(1-24)</div>
+        <input class='sdpi-item-value' id='soundboardplayernumber' inputmode='numeric' type='number' min=1 max=24 name='soundboardplayernumber' value=1>
+</div>
+
 <div class='sdpi-item' id='customactioncontainer'>
     <div class='sdpi-item-label'>Reaper Command ID</div>
     <input class='sdpi-item-value' id='customaction' name='customaction' value=''>
-</div>
-
-<div class='sdpi-item' id='soundboardcontainer'>
-    <div class='sdpi-item-label'>Player number</div>
-    <input class='sdpi-item-value' id='soundboardplayernumber' name='soundboardplayernumber' value=''>
-    <div class='sdpi-item-label'>Action</div>
-    <input class='sdpi-item-value' id='soundboardaction' name='soundboardaction' value=''>
 </div>
 
 <div class='sdpi-item' id='iconstylecontainer'>

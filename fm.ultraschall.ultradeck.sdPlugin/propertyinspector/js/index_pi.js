@@ -136,6 +136,12 @@ const updateUI = (pl) => {
     x=document.getElementById("cursorcontainer");
     if (x) {if (settings.cursor==="") {x.style.display="none"; } else { x.style.display="";}}
     
+    x=document.getElementById("soundboardcontainer1");
+    if (x) {if (settings.soundboardplayernumber==="" && settings.soundboardaction==="") {x.style.display="none"; } else { x.style.display="";}}
+
+    x=document.getElementById("soundboardcontainer2");
+    if (x) {if (settings.soundboardplayernumber==="" && settings.soundboardaction==="") {x.style.display="none"; } else { x.style.display="";}}
+
     x=document.getElementById("markercolorcontainer");
     if (x) {
         if (settings.markercolor==="") {

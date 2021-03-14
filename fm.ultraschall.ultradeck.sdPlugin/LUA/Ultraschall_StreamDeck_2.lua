@@ -5,9 +5,10 @@
 dofile(reaper.GetResourcePath().."/UserPlugins/ultraschall_api.lua")
 
 -- get ExtStates submittetd from StreamDeck Plugin and act accordingly
-mutetype=reaper.GetExtState("ultradeck", "mutetype") or false
+mutetype=reaper.GetExtState("ultradeck", "mutetype")
+    if (mutetype==nil) then mutetype="" end
 tracknumber=reaper.GetExtState("ultradeck", "tracknumber")
-    if (tracknumber=="") then tracknumber="1" end
+    if (tracknumber=="" or tracknumber==nil) then tracknumber="1" end
     tracknumber=tonumber(tracknumber)
 markertype=reaper.GetExtState("ultradeck", "markertype")
 markertext=reaper.GetExtState("ultradeck", "markertext")
@@ -20,7 +21,12 @@ cursor=reaper.GetExtState("ultradeck", "cursor")
     if cursor==nil or cursor=="" then cursor= "Automatic depending on followmode" end
 down=reaper.GetExtState("ultradeck", "down")
     if down==nil or down=="" then down="1" end
-
+soundboardaction=reaper.GetExtState("ultradeck", "soundboardaction")
+soundboardplayernumber=reaper.GetExtState("ultradeck", "soundboardplayernumber")
+    if soundboardaction==nil then soundboardaction="" end
+    if soundboardplayer==nil then soundboardplayer="" end
+    soundboardplayernumber=tonumber(soundboardplayernumber)
+    if soundboardplayernumber==0 then soundboardplayernumber=1 end
 
 function debug(dbg)
     if dbg then
@@ -33,6 +39,8 @@ function debug(dbg)
         print("markeroffset= "..markeroffset)
         print("cursor= "..cursor)
         print("down= "..down)
+        print("soundboardaction= "..soundboardaction)
+        print("soundboardplayernumber= "..soundboardplayernumber)
         print("------------------")
     end
 end
@@ -71,7 +79,9 @@ function get_cursor_position_at_selected_cursor_type(cursortype)
     return pos
 end
 
+-- main:
 
+-- mute
 if (mutetype~="") and ((reaper.GetPlayState() &1) == 1) then -- only if playing/recording
     ultraschall.ActivateMute(tracknumber, true)
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
@@ -97,6 +107,7 @@ if (mutetype~="") and ((reaper.GetPlayState() &1) == 1) then -- only if playing/
         retval, TrackStateChunk = ultraschall.SetTrackAutomodeState(tracknumber, 0) -- set to normal trim/read mode
     end
 
+--marker
 elseif (markertype~="") then
     -- SET MARKER:
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
@@ -129,6 +140,23 @@ elseif (markertype~="") then
         reaper.AddProjectMarker2(0, false, current_position+markeroffset, 0, "_Edit", 0, reaper.ColorToNative(255, 0, 0) | 0x1000000)
     end
     runcommand("_Ultraschall_Center_Arrangeview_To_Cursor") -- scroll to cursor if not visible
+
+-- soundboard
+elseif (soundboardaction~="") then
+    if (soundboardaction=="playstop") then
+        note = -1
+    elseif soundboardaction=="playpause"then
+        note = 23
+    elseif (soundboardaction=="playfadeout") then
+        note = 47
+    elseif (soundboardaction=="play") then
+        note = 71
+    elseif (soundboardaction=="fadeinpause") then
+        note = 95
+    end
+    
+    note = note + soundboardplayernumber
+    reaper.StuffMIDIMessage(0, 144, note, 1)
 end
 
 --cleanup
@@ -139,3 +167,5 @@ reaper.DeleteExtState("ultradeck", "markercolor",true)
 reaper.DeleteExtState("ultradeck", "markeroffset",true)
 reaper.DeleteExtState("ultradeck", "cursor",true)
 reaper.DeleteExtState("ultradeck", "down",true)
+reaper.DeleteExtState("ultradeck", "soundboardaction",true)
+reaper.DeleteExtState("ultradeck", "soundboardplayernumber",true)

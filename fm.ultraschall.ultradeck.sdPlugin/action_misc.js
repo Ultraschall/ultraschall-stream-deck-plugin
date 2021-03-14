@@ -27,6 +27,7 @@ const misc = {
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
         var xhttp = new XMLHttpRequest();
+        console.log("hier",this.settings.url);
         xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url , true);
         xhttp.send();  
     },
@@ -55,36 +56,53 @@ const misc = {
             case "Play Ultramind" :
                 this.settings.url="/_/_Ultraschall_Mastermind";
                 this.settings.icon="action/images/Game.svg"
-                this.settings.mytitle="Play\nUltra-\nmind";
+                this.settings.mytitle="Ultram.";
                 this.settings.customaction="";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
                 break;
             case "Play Moonlander" :
                 this.settings.url="/_/_Ultraschall_Moonlander";
                 this.settings.icon="action/images/Game.svg"
-                this.settings.mytitle="Play\nMoon-\nlander";
+                this.settings.mytitle="Moonl.";
                 this.settings.customaction="";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
                 break;
             case "Custom Action" :
-                if (!this.settings.hasOwnProperty('customaction')||this.settings.customaction==="") {this.settings.customaction="_Ultraschall_StartScreen";}
+                if (!this.settings.hasOwnProperty('customaction') || this.settings.customaction==="") {
+                    this.settings.customaction="_Ultraschall_StartScreen";
+                }
                 this.settings.url="/_/"+this.settings.customaction;
                 this.settings.icon="action/images/Custom_action.svg"
-                this.settings.mytitle="Custom\nAction";
+                this.settings.mytitle="custom";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
                 break;
             case "SL Toggle Mute" :
                 this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
                 this.settings.icon="action/images/Custom_action.svg"
-                this.settings.mytitle="SL\nTogle\nMute";
+                this.settings.mytitle="SL un/mute";
                 this.settings.customaction="";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
                 console.log("SL Toggle Mute",this.settings);
                 break;
             case "Soundboard" :
-                if (!this.settings.hasOwnProperty('soundboardaction')||this.settings.customaction==="") 
+                if (!this.settings.hasOwnProperty('soundboardaction') || this.settings.soundboardaction==="") 
                 {
-                    this.settings.soundboardaction="Play/Pause";
+                    this.settings.soundboardaction="playstop";
+                    this.settings.soundboardplayernumber="1";
                 }
-                this.settings.url="/_/"+this.settings.customaction;
-                this.settings.icon="action/images/Custom_action.svg"
-                this.settings.mytitle="Custom\nAction";
+                this.settings.url="/_/"
+                    + "SET/EXTSTATE/ultradeck/soundboardaction/"+encodeURIComponent(this.settings.soundboardaction)
+                    + ";SET/EXTSTATE/ultradeck/soundboardplayernumber/"+encodeURIComponent(this.settings.soundboardplayernumber)
+                    + ";_Ultraschall_StreamDeck";
+                this.settings.icon="action/images/Soundboard.svg";
+                
+                this.settings.mytitle=SoundboardTexts[this.settings.soundboardaction]+"\n"+this.settings.soundboardplayernumber;
+                
+                this.settings.customaction="";
                 break;    
         }
         

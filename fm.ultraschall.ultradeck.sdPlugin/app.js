@@ -8,9 +8,7 @@ var redX='<path d="M61.627,14.676l-6.489,6.489l6.489,6.489c0.487,0.486 0.487,1.2
 var globalSettings={};
 var SLwebsocketerror=false;
 
-LoadPNGIconsToArray(['action/images/Chapter_marker@2x.png',
-                     'action/images/Edit_marker@2x.png',
-                     'action/images/Ultraschall_logo@2x.png',
+LoadPNGIconsToArray(['action/images/Ultraschall_logo@2x.png',
                      'action/images/empty@2x.png'
                   ]);
 
@@ -49,18 +47,21 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Go_to_start_of_project.svg',
                      'action/images/Go_to_end_of_project.svg',
                      'action/images/Shuttle_Backward.svg',
+                     'action/images/Soundboard.svg'
 ]);
+
+var SoundboardTexts={};
+SoundboardTexts['playstop'] = "play/\nstop";
+SoundboardTexts['playpause'] = "play/\npause";
+SoundboardTexts['play'] = "play";
+SoundboardTexts['fadeinpause'] = "fadein/\npause";
+SoundboardTexts['playfadeout'] = "play/\nfadeout";
+
 
 var ExtraDefaultColor={};
 ExtraDefaultColor['action/images/Edit_marker.svg'] = '#c81414'; // red
 ExtraDefaultColor['action/images/Delete_all_markers.svg'] = '#ff0000'; // very red
 ExtraDefaultColor['action/images/Timestamp_marker.svg'] = '#ffffff'; // white for timestamp marker
-//ExtraDefaultColor['Toggle follow mode'] = "#fdcb00"; // yellow
-//ExtraDefaultColor['Toggle Magic Routing'] = "#fdcb00"; // yellow
-//ExtraDefaultColor['Set preshow routing'] = "#fdcb00"; // yellow
-//ExtraDefaultColor['Set recording routing'] = "#fdcb00"; // yellow
-//ExtraDefaultColor['Set editing routing'] = "#fdcb00"; // yellow
-//ExtraDefaultColor['Toggle Studiolink OnAir'] = "#fdcb00"; // yellow
 
 function LoadPNGIconsToArray(IconsURLArray){
     const aUrl = !Array.isArray(IconsURLArray) ? [IconsURLArray] : IconsURLArray;
