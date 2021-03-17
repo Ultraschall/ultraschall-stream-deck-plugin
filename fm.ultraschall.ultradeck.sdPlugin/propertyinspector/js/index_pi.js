@@ -50,7 +50,7 @@ function resetcolor2(){}
 
 function openGlobalSettings()
 {
-    console.log("HUHU Global Settings",actionjsn, globalSettings);
+    console.log("PI open Global Settings",actionjsn, globalSettings);
     window.open("../settings/index.html?context=" + actionjsn.actionInfo.context
     +"&IP=" + globalSettings.ipadress
     +"&PORT="+globalSettings.port
@@ -63,6 +63,7 @@ $SD.on('didReceiveGlobalSettings', (jsn) => {
 });
 
 $SD.on('connected', (jsn) => {
+    console.log("PI on connected: ",jsn);
     uuid=jsn.uuid;
     context=jsn.actionInfo.context;
     $SD.api.getGlobalSettings(uuid);
@@ -91,7 +92,7 @@ $SD.on('connected', (jsn) => {
 });
 
 $SD.on('sendToPropertyInspector', jsn => {
-    //console.log("PI on Sendtopi: ",jsn);
+    console.log("PI on Sendtopi: ",jsn);
     const pl = jsn.payload;
     /**
      *  This is an example, how you could show an error to the user
@@ -192,9 +193,7 @@ const updateUI = (pl) => {
 }
 
 $SD.on('piDataChanged', (returnValue) => {
-    //console.log('%c%s', 'color: white; background: blue}; font-size: 15px;', 'piDataChanged');
-    //console.log(returnValue);
-    
+    console.log("piDataChanged", returnValue);
     if (returnValue.key === 'clickme') {
         postMessage = (w) => {
             w.postMessage(
@@ -220,6 +219,7 @@ $SD.on('piDataChanged', (returnValue) => {
 });
 
 function saveSettings(sdpi_collection) {
+    console.log("PI savesettings ",sdpi_collection);
     if (typeof sdpi_collection !== 'object') return;
 
     if (sdpi_collection.hasOwnProperty('key') && sdpi_collection.key != '') {
@@ -233,6 +233,7 @@ function saveSettings(sdpi_collection) {
  }
 
 function sendValueToPlugin(value, prop) {
+    console.log("PI on sendvaluetoplugin: ",value, prop);
     if ($SD.connection && $SD.connection.readyState === 1) {
         const json = {
             action: $SD.actionInfo['action'],
@@ -249,6 +250,7 @@ function sendValueToPlugin(value, prop) {
 }
 
 function prepareDOMElements(baseElement) {
+    console.log("PI prepare DOM elements ",baseElement);
     baseElement = baseElement || document;
     Array.from(baseElement.querySelectorAll('.sdpi-item-value')).forEach(
         (el, i) => {
@@ -337,6 +339,7 @@ function prepareDOMElements(baseElement) {
 
 function handleSdpiItemChange(e, idx) {
     console.log('PI handleSdpiItemChange',e,idx);
+    console.log('PI handleSdpiItemChange tagname=',e.tagName);
     /** Following items are containers, so we won't handle clicks on them */
 
     if (['OL', 'UL', 'TABLE'].includes(e.tagName)) {

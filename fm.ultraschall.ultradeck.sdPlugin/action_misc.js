@@ -36,6 +36,7 @@ const misc = {
         if (jsn.payload.hasOwnProperty('sdpi_collection')) {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 this.settings.markercolor=defaulticoncolor;
+                if (ExtraDefaultColor[this.settings.icon]) {this.settings.markercolor=ExtraDefaultColor[this.settings.icon];}
                 $SD.api.setSettings(jsn.context, this.settings);
                 var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
                 $SD.api.setImage(jsn.context,image);
@@ -89,19 +90,18 @@ const misc = {
                 console.log("SL Toggle Mute",this.settings);
                 break;
             case "Soundboard" :
+                this.settings.icon="action/images/Soundboard.svg";
                 if (!this.settings.hasOwnProperty('soundboardaction') || this.settings.soundboardaction==="") 
                 {
                     this.settings.soundboardaction="playstop";
                     this.settings.soundboardplayernumber="1";
+                    this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
                 }
                 this.settings.url="/_/"
                     + "SET/EXTSTATE/ultradeck/soundboardaction/"+encodeURIComponent(this.settings.soundboardaction)
                     + ";SET/EXTSTATE/ultradeck/soundboardplayernumber/"+encodeURIComponent(this.settings.soundboardplayernumber)
                     + ";_Ultraschall_StreamDeck";
-                this.settings.icon="action/images/Soundboard.svg";
-                
                 this.settings.mytitle=SoundboardTexts[this.settings.soundboardaction]+"\n"+this.settings.soundboardplayernumber;
-                
                 this.settings.customaction="";
                 break;    
         }

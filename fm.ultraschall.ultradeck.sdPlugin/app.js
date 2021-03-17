@@ -62,6 +62,7 @@ var ExtraDefaultColor={};
 ExtraDefaultColor['action/images/Edit_marker.svg'] = '#c81414'; // red
 ExtraDefaultColor['action/images/Delete_all_markers.svg'] = '#ff0000'; // very red
 ExtraDefaultColor['action/images/Timestamp_marker.svg'] = '#ffffff'; // white for timestamp marker
+ExtraDefaultColor['action/images/Soundboard.svg'] = '#fdcb00'; // yellow
 
 function LoadPNGIconsToArray(IconsURLArray){
     const aUrl = !Array.isArray(IconsURLArray) ? [IconsURLArray] : IconsURLArray;

@@ -50,13 +50,6 @@ const toggle = {
         }
     },
     
-    titleParametersDidChange: function(jsn){
-        // force redraw of icon to show correct title
-        $SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']);
-        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
-    },
-
     onKeyDown: function (jsn) {
         var context=jsn.context;
         var settings = jsn.payload.settings;
@@ -295,7 +288,10 @@ const toggle = {
         $SD.api.setTitle(jsn.context, this.settings.title);
         let found = this.cache[jsn.context];
         if (found) { found.refresh(this.settings); }
-        this.titleParametersDidChange(jsn);
+
+        //$SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']);
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+        $SD.api.setImage(jsn.context,image);
     },
 
     onSendToPlugin: function(jsn) {

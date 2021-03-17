@@ -67,7 +67,7 @@ const markers = {
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setImage(jsn.context,image);
         $SD.api.setTitle(jsn.context, this.settings.title);
-        //$SD.api.setSettings(jsn.context, this.settings);
+        $SD.api.setSettings(jsn.context, this.settings);
     },
 
     resetIconColor: function(jsn){
@@ -75,11 +75,6 @@ const markers = {
         if (ExtraDefaultColor[this.settings.icon]) {
             this.settings.markercolor=ExtraDefaultColor[this.settings.icon];
         }
-        this.setIconColor(jsn);
-    },
-
-    titleParametersDidChange: function(jsn){ //redraw image and title
-        $SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']); //dirty hack, clear icon and then set new icon
         this.setIconColor(jsn);
     },
     
@@ -221,7 +216,8 @@ const markers = {
         }
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
+        var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+        $SD.api.setImage(jsn.context, image);
         $SD.api.setTitle(jsn.context, this.settings.title);
-        this.titleParametersDidChange(jsn); //refresh icon and title
     }
 };
