@@ -14,8 +14,8 @@ const toggle = {
         if (!this.settings.hasOwnProperty('tracknumber')) { this.settings.tracknumber="1"; }
         if (!this.settings.hasOwnProperty('markercolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
         if (!this.settings.hasOwnProperty('markercolor2')) {this.settings.markercolor2=defaulticoncolorON;}
-        if (!this.settings.hasOwnProperty('resetcolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
-        if (!this.settings.hasOwnProperty('resetcolor2')) {this.settings.markercolor2=defaulticoncolorON;}
+        if (!this.settings.hasOwnProperty('resetcolor' )) {this.settings.resetcolor =defaulticoncolorOFF;}
+        if (!this.settings.hasOwnProperty('resetcolor2')) {this.settings.resetcolor2=defaulticoncolorON;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="not muted";}
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
@@ -56,7 +56,7 @@ const toggle = {
         
         if (settings.toggletype=="Toggle Studiolink Standalone Mute") {
             if (SLwebsocketerror==false) {
-                console.log("key down + SL connection");
+                //console.log("key down + SL connection");
                 ws=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
                 ws.onopen=function()
                 {
@@ -68,7 +68,7 @@ const toggle = {
                 
                 ws.onerror=function()
                 {
-                    console.log("SL ws error!!!!!");
+                    //console.log("SL ws error!!!!!");
                     var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
                     // add RedX:
                     image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
