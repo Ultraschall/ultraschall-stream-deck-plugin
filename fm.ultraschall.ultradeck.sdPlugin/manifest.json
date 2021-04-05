@@ -83,7 +83,7 @@
   "Name": "Ultraschall", 
   "Icon": "action/images/Ultraschall_logo", 
   "URL": "https://ultraschall.fm",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "OS": [
     {
         "Platform": "mac", 
