@@ -202,6 +202,73 @@ const toggle = {
                 this.settings.tracknumber="";
                 this.settings.url="/_/_Ultraschall_set_Matrix_Editing";
                 break;
+
+
+
+            case "Set custom routing 1" :
+                this.settings.title="routing 1";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Routing1.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Snapshot_1;SET/PROJEXTSTATE/snapshotsElgato/lastloaded/1";
+                break;
+            case "Set custom routing 2" :
+                this.settings.title="routing 2";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Routing2.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Snapshot_2;SET/PROJEXTSTATE/snapshotsElgato/lastloaded/2";
+                break;
+            case "Set custom routing 3" :
+                this.settings.title="routing 3";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Routing3.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Snapshot_3;SET/PROJEXTSTATE/snapshotsElgato/lastloaded/3";
+                break;
+            case "Set custom routing 4" :
+                this.settings.title="routing 4";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Routing4.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Snapshot_4;SET/PROJEXTSTATE/snapshotsElgato/lastloaded/4";
+                break;
             case "Toggle Studiolink OnAir" :
                 this.settings.title="OnAir";
                 if (togglechanged){
@@ -395,6 +462,10 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Set preshow routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Preshow",Icons['action/images/Preshow.svg'],Icons['action/images/Preshow.svg']);}
             if (toggletype==="Set recording routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Recording",Icons['action/images/Recording.svg'],Icons['action/images/Recording.svg']);}
             if (toggletype==="Set editing routing") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_set_Matrix_Editing",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
+            if (toggletype==="Set custom routing 1") {getSnapshotState("1","http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/PROJEXTSTATE/snapshotsElgato/lastloaded",Icons['action/images/Routing1.svg'],Icons['action/images/Routing1.svg']);}
+            if (toggletype==="Set custom routing 2") {getSnapshotState("2","http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/PROJEXTSTATE/snapshotsElgato/lastloaded",Icons['action/images/Routing2.svg'],Icons['action/images/Routing2.svg']);}
+            if (toggletype==="Set custom routing 3") {getSnapshotState("3","http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/PROJEXTSTATE/snapshotsElgato/lastloaded",Icons['action/images/Routing3.svg'],Icons['action/images/Routing3.svg']);}
+            if (toggletype==="Set custom routing 4") {getSnapshotState("4","http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/PROJEXTSTATE/snapshotsElgato/lastloaded",Icons['action/images/Routing4.svg'],Icons['action/images/Routing4.svg']);}
             if (toggletype==="Toggle Studiolink OnAir") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_OnAir",Icons['action/images/OnAir.svg'],Icons['action/images/OnAir.svg']);}
             if (toggletype==="Toggle Studiolink Standalone Mute") {getMuteStateSL();}
             if (toggletype==="Set record view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Record",Icons['action/images/RecordView.svg'],Icons['action/images/RecordView.svg']);}
@@ -419,8 +490,7 @@ function ToggleButtonClass(jsonObj) {
             {
                 window.clearInterval(counter);
                 counter = 0;
-            }
-            
+            }            
     }
 
     function refresh(jsn_refresh){
@@ -602,6 +672,41 @@ function ToggleButtonClass(jsonObj) {
         xhttp.send();
     }
 
+    function getSnapshotState(number,url,icon1,icon2){
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url , true);
+
+        xhttp.onload = function () {
+            if (xhttp.readyState === xhttp.DONE) {
+                if (xhttp.status === 200) {
+                    let resultText=xhttp.responseText;
+                    let resultArray = resultText.split('\t');
+                    let resultState = resultArray[3];
+                    resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
+                    if (resultState===number) {
+                        var image=icon1;
+                        var markercolor=settings.markercolor;
+                    }
+                    else {
+                        var image=icon2;
+                        var markercolor=settings.markercolor2;
+                    };
+                    var image=SetImageStyle(image, settings.iconstyle, markercolor);
+                    $SD.api.setImage(context,image);
+                    $SD.api.setSettings(context, settings);
+                }
+            }
+        };
+        xhttp.onerror=function()
+        {
+            var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+            // add RedX:
+            image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, settings.title);
+        };
+        xhttp.send();
+    }
     return {
         loop : loop,
         destroy : destroy,

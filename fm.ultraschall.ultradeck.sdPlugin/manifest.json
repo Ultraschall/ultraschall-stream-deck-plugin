@@ -8,8 +8,8 @@
           "Image": "action/images/muted"
         }
       ],
-      "Tooltip": "Push to toggle state)",
-      "SupportedInMultiActions": false,
+      "Tooltip": "Push to toggle state",
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.toggle"
     },
     {
@@ -21,7 +21,7 @@
         }
       ],
       "Tooltip": "Marker related actions",
-      "SupportedInMultiActions": false,
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.markers"
     },
     {
@@ -33,7 +33,7 @@
         }
       ],
       "Tooltip": "Push to mute/talk actions",
-      "SupportedInMultiActions": false,
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.pushto"
     },
     {
@@ -45,7 +45,7 @@
         }
       ],
       "Tooltip": "Set Levels",
-      "SupportedInMultiActions": false,
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.levels"
     },
     {
@@ -57,7 +57,7 @@
         }
       ],
       "Tooltip": "Transport actions",
-      "SupportedInMultiActions": false,
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.transport"
     },
     {
@@ -69,7 +69,7 @@
         }
       ],
       "Tooltip": "miscellaneous actions",
-      "SupportedInMultiActions": false,
+      "SupportedInMultiActions": true,
       "UUID": "fm.ultraschall.ultradeck.misc"
     }
   ], 
@@ -79,11 +79,11 @@
   "CategoryIcon": "action/images/category_PluginIcon",
   "CodePath": "index.html", 
   "PropertyInspectorPath": "propertyinspector/index.html", 
-  "Description": "Control Ultraschall",
+  "Description": "Control Ultraschall, the open source solution for podcast recording and editing. It's magic!",
   "Name": "Ultraschall", 
   "Icon": "action/images/Ultraschall_logo", 
   "URL": "https://ultraschall.fm",
-  "Version": "1.1.0",
+  "Version": "1.2.0",
   "OS": [
     {
         "Platform": "mac", 

@@ -53,7 +53,11 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Split_item.svg',
                      'action/images/Mouse_selection.svg',
                      'action/images/Mute_envelopes.svg',
-                     'action/images/Ripple_cut.svg'
+                     'action/images/Ripple_cut.svg',
+                     'action/images/Routing1.svg',
+                     'action/images/Routing2.svg',
+                     'action/images/Routing3.svg',
+                     'action/images/Routing4.svg'
 ]);
 
 var SoundboardTexts={};
