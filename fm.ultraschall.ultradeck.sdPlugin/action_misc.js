@@ -103,9 +103,25 @@ const misc = {
                     + ";_Ultraschall_StreamDeck";
                 this.settings.mytitle=SoundboardTexts[this.settings.soundboardaction]+"\n"+this.settings.soundboardplayernumber;
                 this.settings.customaction="";
+                break;
+            case "Split item at edit cursor" :
+                this.settings.icon="action/images/Split_item.svg";
+                this.settings.url="/_/40759";
+                this.settings.mytitle="split";
+                this.settings.customaction="";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
+                break;
+            case "Ripple cut" :
+                this.settings.icon="action/images/Ripple_cut.svg";
+                this.settings.url="/_/_Ultraschall_Ripple_Cut";
+                this.settings.mytitle="rpl. cut";
+                this.settings.customaction="";
+                this.settings.soundboardaction="";
+                this.settings.soundboardplayernumber="";
                 break;    
         }
-        
+
         // change color inside image SVG Data:
         $SD.api.setSettings(jsn.context, this.settings);
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
