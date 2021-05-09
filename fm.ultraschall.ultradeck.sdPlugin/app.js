@@ -47,7 +47,13 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Go_to_start_of_project.svg',
                      'action/images/Go_to_end_of_project.svg',
                      'action/images/Shuttle_Backward.svg',
-                     'action/images/Soundboard.svg'
+                     'action/images/Soundboard.svg',
+                     'action/images/Ripple_one.svg',
+                     'action/images/Ripple_all.svg',
+                     'action/images/Split_item.svg',
+                     'action/images/Mouse_selection.svg',
+                     'action/images/Mute_envelopes.svg',
+                     'action/images/Ripple_cut.svg'
 ]);
 
 var SoundboardTexts={};
@@ -127,7 +133,6 @@ function connected(jsn) {
     $SD.on('fm.ultraschall.ultradeck.toggle.keyDown', (jsonObj) => toggle.onKeyDown(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.toggle.didReceiveSettings', (jsonObj) => toggle.onDidReceiveSettings(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.toggle.sendToPlugin', (jsonObj) => toggle.onSendToPlugin(jsonObj));
-    $SD.on('fm.ultraschall.ultradeck.toggle.titleParametersDidChange', (jsonObj) => toggle.titleParametersDidChange(jsonObj));
 
     $SD.on('fm.ultraschall.ultradeck.markers.willAppear', (jsonObj) => markers.onWillAppear(jsonObj));
     $SD.on('fm.ultraschall.ultradeck.markers.keyDown', (jsonObj) => markers.onKeyDown(jsonObj));

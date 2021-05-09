@@ -14,8 +14,8 @@ const toggle = {
         if (!this.settings.hasOwnProperty('tracknumber')) { this.settings.tracknumber="1"; }
         if (!this.settings.hasOwnProperty('markercolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
         if (!this.settings.hasOwnProperty('markercolor2')) {this.settings.markercolor2=defaulticoncolorON;}
-        if (!this.settings.hasOwnProperty('resetcolor' )) {this.settings.markercolor =defaulticoncolorOFF;}
-        if (!this.settings.hasOwnProperty('resetcolor2')) {this.settings.markercolor2=defaulticoncolorON;}
+        if (!this.settings.hasOwnProperty('resetcolor' )) {this.settings.resetcolor =defaulticoncolorOFF;}
+        if (!this.settings.hasOwnProperty('resetcolor2')) {this.settings.resetcolor2=defaulticoncolorON;}
         if (!this.settings.hasOwnProperty('markercolortext')) {this.settings.markercolortext="not muted";}
         if (!this.settings.hasOwnProperty('markercolortext2')) {this.settings.markercolortext2="muted";}
         if (!this.settings.hasOwnProperty('icon')) {this.settings.icon="action/images/muted.svg";}
@@ -56,7 +56,7 @@ const toggle = {
         
         if (settings.toggletype=="Toggle Studiolink Standalone Mute") {
             if (SLwebsocketerror==false) {
-                console.log("key down + SL connection");
+                //console.log("key down + SL connection");
                 ws=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
                 ws.onopen=function()
                 {
@@ -68,7 +68,7 @@ const toggle = {
                 
                 ws.onerror=function()
                 {
-                    console.log("SL ws error!!!!!");
+                    //console.log("SL ws error!!!!!");
                     var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
                     // add RedX:
                     image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
@@ -234,6 +234,70 @@ const toggle = {
                 this.settings.tracknumber="";
                 this.settings.url="ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options";
                 break;
+            case "Toggle ripple editing per track" :
+                this.settings.title="ripple";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Ripple_one.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/41990";
+                break;
+            case "Toggle ripple editing all tracks" :
+                this.settings.title="ripple";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Ripple_all.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/41991";
+                break;
+            case "Toggle mouse selection mode" :
+                this.settings.title="mouse";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Mouse_selection.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Toggle_Mouse_Selection";
+                break;
+            case "Toggle view mute envelopes" :
+                this.settings.title="envel.";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="Set";
+                    this.settings.icon='action/images/Mute_envelopes.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="/_/_Ultraschall_Mute_Envelope";
+                break;
             case "Set record view" :
                 this.settings.title="record";
                 if (togglechanged){
@@ -336,6 +400,10 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Set record view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Record",Icons['action/images/RecordView.svg'],Icons['action/images/RecordView.svg']);}
             if (toggletype==="Set edit view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Edit",Icons['action/images/Editing.svg'],Icons['action/images/Editing.svg']);}
             if (toggletype==="Set storyboard view") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Set_View_Story",Icons['action/images/StoryboardView.svg'],Icons['action/images/StoryboardView.svg']);}
+            if (toggletype==="Toggle ripple editing per track") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/41990",Icons['action/images/Ripple_one.svg'],Icons['action/images/Ripple_one.svg']);}
+            if (toggletype==="Toggle ripple editing all tracks") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/41991",Icons['action/images/Ripple_all.svg'],Icons['action/images/Ripple_all.svg']);}
+            if (toggletype==="Toggle mouse selection mode") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Toggle_Mouse_Selection",Icons['action/images/Mouse_selection.svg'],Icons['action/images/Mouse_selection.svg']);}
+            if (toggletype==="Toggle view mute envelopes") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Mute_Envelope",Icons['action/images/Mute_envelopes.svg'],Icons['action/images/Mute_envelopes.svg']);}
         }
     }
 
@@ -509,7 +577,6 @@ function ToggleButtonClass(jsonObj) {
                     let resultArray = resultText.split('\t');
                     let resultState = resultArray[2];
                     resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
-                    
                     if (resultState==="1") {
                         var image=icon1;
                         var markercolor=settings.markercolor;
