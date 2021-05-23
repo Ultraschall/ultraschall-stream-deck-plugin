@@ -57,7 +57,8 @@ LoadSVGIconsToArray(['action/images/muted.svg',
                      'action/images/Routing1.svg',
                      'action/images/Routing2.svg',
                      'action/images/Routing3.svg',
-                     'action/images/Routing4.svg'
+                     'action/images/Routing4.svg',
+                     'action/images/Timecode.svg'
 ]);
 
 var SoundboardTexts={};

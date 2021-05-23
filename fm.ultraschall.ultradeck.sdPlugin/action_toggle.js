@@ -83,12 +83,14 @@ const toggle = {
                 }
             }
         } else {
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+settings.url , true);
-            xhttp.send();
+            if (settings.url!=="") {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+settings.url , true);
+                xhttp.send();
 
-            let found = this.cache[jsn.context];
-            if (found) { found.refresh(settings);}
+                let found = this.cache[jsn.context];
+                if (found) { found.refresh(settings);}
+            }
         }
     },
 
@@ -413,6 +415,22 @@ const toggle = {
                 this.settings.tracknumber="";
                 this.settings.url="/_/_Ultraschall_Set_View_Story";
                 break;
+            case "Timecode" :
+                this.settings.title="timecode";
+                if (togglechanged){
+                    this.settings.markercolortext="On";
+                    this.settings.markercolortext2="Off";
+                    this.settings.markercolor  = defaulticoncolorON;
+                    this.settings.markercolor2 = defaulticoncolorOFF;
+                    this.settings.resetcolor =this.settings.markercolor;
+                    this.settings.resetcolor2=this.settings.markercolor2;
+                    this.settings.toggletypetext="";
+                    this.settings.icon='action/images/Timecode.svg';
+                    this.settings.iconstyle='normal';
+                }
+                this.settings.tracknumber="";
+                this.settings.url="";
+                break;
         }
         
         $SD.api.setSettings(jsn.context, this.settings);
@@ -475,6 +493,7 @@ function ToggleButtonClass(jsonObj) {
             if (toggletype==="Toggle ripple editing all tracks") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/41991",Icons['action/images/Ripple_all.svg'],Icons['action/images/Ripple_all.svg']);}
             if (toggletype==="Toggle mouse selection mode") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Toggle_Mouse_Selection",Icons['action/images/Mouse_selection.svg'],Icons['action/images/Mouse_selection.svg']);}
             if (toggletype==="Toggle view mute envelopes") {getActionState("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/_Ultraschall_Mute_Envelope",Icons['action/images/Mute_envelopes.svg'],Icons['action/images/Mute_envelopes.svg']);}
+            if (toggletype==="Timecode") {getTimecode("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/TRANSPORT",Icons['action/images/Timecode.svg'],Icons['action/images/Timecode.svg']);}
         }
     }
 
@@ -645,11 +664,52 @@ function ToggleButtonClass(jsonObj) {
                 if (xhttp.status === 200) {
                     let resultText=xhttp.responseText;
                     let resultArray = resultText.split('\t');
+                    console.log("ACTIOSTATE result= ",resultArray );
                     let resultState = resultArray[2];
                     resultState=resultState.replace(/(\r\n|\n|\r)/gm, "");
                     if (resultState==="1") {
                         var image=icon1;
                         var markercolor=settings.markercolor;
+                    }
+                    else {
+                        var image=icon2;
+                        var markercolor=settings.markercolor2;
+                    };
+                    var image=SetImageStyle(image, settings.iconstyle, markercolor);
+                    $SD.api.setImage(context,image);
+                    $SD.api.setSettings(context, settings);
+                }
+            }
+        };
+        xhttp.onerror=function()
+        {
+            var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
+            // add RedX:
+            image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
+            $SD.api.setImage(jsn.context,image);
+            $SD.api.setTitle(jsn.context, settings.title);
+        };
+        xhttp.send();
+    }
+
+    function getTimecode(url,icon1,icon2){
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url , true);
+
+        xhttp.onload = function () {
+            if (xhttp.readyState === xhttp.DONE) {
+                if (xhttp.status === 200) {
+                    let resultText=xhttp.responseText;
+                    let resultArray = resultText.split('\t');
+                    let resultTimecode = resultArray[4];
+                    resultTimecode=resultTimecode.replace(/(\r\n|\n|\r)/gm, "");
+                    resultTimecode = resultTimecode.substring(0, resultTimecode.length - 4);
+                    // TODO: set Fonstsize depeding on Lenght
+                    // TODO: do something, when button is pressed (change color? show milliseconds?)
+                    if (resultTimecode.length < 100) { 
+                        var image=icon1;
+                        var markercolor=settings.markercolor;
+                        image=image.replace(/_TEXT_/g, resultTimecode);
                     }
                     else {
                         var image=icon2;
