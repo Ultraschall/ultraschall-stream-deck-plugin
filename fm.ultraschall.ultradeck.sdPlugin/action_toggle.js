@@ -704,16 +704,28 @@ function ToggleButtonClass(jsonObj) {
                     let resultTimecode = resultArray[4];
                     resultTimecode=resultTimecode.replace(/(\r\n|\n|\r)/gm, "");
                     resultTimecode = resultTimecode.substring(0, resultTimecode.length - 4);
-                    // TODO: set Fonstsize depeding on Lenght
+                    
                     // TODO: do something, when button is pressed (change color? show milliseconds?)
-                    if (resultTimecode.length < 100) { 
-                        var image=icon1;
-                        var markercolor=settings.markercolor;
+                    var image=icon1;
+                    var markercolor=settings.markercolor;
+                    if (resultTimecode.length == 4) { 
                         image=image.replace(/_TEXT_/g, resultTimecode);
                     }
-                    else {
-                        var image=icon2;
-                        var markercolor=settings.markercolor2;
+                    else if (resultTimecode.length == 5) { 
+                        image=image.replace(/13px/g, "7px"); // x
+                        image=image.replace(/_TEXT_/g, resultTimecode);
+                    }
+                    else if (resultTimecode.length == 7) { 
+                        image=image.replace(/13px/g, "10px"); // x
+                        image=image.replace(/45px/g, "42px"); // y
+                        image=image.replace(/22px/g, "15.5px"); // fontsize
+                        image=image.replace(/_TEXT_/g, resultTimecode);
+                    }
+                    else if (resultTimecode.length == 8) { 
+                        image=image.replace(/13px/g, "4px"); // x
+                        image=image.replace(/45px/g, "42px"); // y
+                        image=image.replace(/22px/g, "15.5px"); // fontsize
+                        image=image.replace(/_TEXT_/g, resultTimecode);
                     };
                     var image=SetImageStyle(image, settings.iconstyle, markercolor);
                     $SD.api.setImage(context,image);
