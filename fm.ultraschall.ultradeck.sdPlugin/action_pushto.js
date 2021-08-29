@@ -10,7 +10,7 @@ const pushto = {
         if (!this.settings.hasOwnProperty('pushtotype')) {this.settings.pushtotype="Push to mute";}
 
         if (!this.settings.hasOwnProperty('url_UP')) {
-            this.settings.url_UP="/_/"+
+            this.settings.url_UP="/_/"
             +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
             +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
@@ -18,7 +18,7 @@ const pushto = {
             +"_Ultraschall_StreamDeck";
         }
         if (!this.settings.hasOwnProperty('url_DOWN')) {
-            this.settings.url_DOWN="/_/"+
+            this.settings.url_DOWN="/_/"
             +"SET/EXTSTATE/ultradeck/mutetype/mute;"
             +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
             +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
@@ -38,10 +38,12 @@ const pushto = {
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         // refresh
-        self.onDidReceiveSettings(jsn);
+        //self.onDidReceiveSettings(jsn);
+        // TODO: do we need this?
 
         // set initial state
-        this.onKeyUp(jsn);
+        //this.onKeyUp(jsn);
+        // TODO: is this a good idea?
     },
 
     onKeyDown: function (jsn) {
@@ -58,7 +60,7 @@ const pushto = {
         console.log("KeyUp PushTo ", jsn);
         
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.settings.url_UP , true);
+        xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_UP , true);
         xhttp.send();
     },
 
@@ -106,14 +108,14 @@ const pushto = {
                 break;
             case "Push to talk" :
                 url_DOWN="/_/"
-                +"SET/EXTSTATE/ultradeck/mutetype/unmute;"
+                +"SET/EXTSTATE/ultradeck/mutetype/PTTunmute;"
                 +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
                 +"SET/EXTSTATE/ultradeck/down/1;"
                 +"_Ultraschall_StreamDeck";
 
                 url_UP="/_/"
-                +"SET/EXTSTATE/ultradeck/mutetype/mute;"
+                +"SET/EXTSTATE/ultradeck/mutetype/PTTmute;"
                 +"SET/EXTSTATE/ultradeck/cursor/Play cursor;"
                 +"SET/EXTSTATE/ultradeck/tracknumber/"+this.settings.tracknumber+";"
                 +"SET/EXTSTATE/ultradeck/down/0;"

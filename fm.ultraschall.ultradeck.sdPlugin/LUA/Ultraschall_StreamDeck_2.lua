@@ -25,6 +25,7 @@ soundboardaction=reaper.GetExtState("ultradeck", "soundboardaction")
 soundboardplayernumber=reaper.GetExtState("ultradeck", "soundboardplayernumber")
     if soundboardaction==nil then soundboardaction="" end
     if soundboardplayer==nil then soundboardplayer="" end
+    if soundboardplayernumber==""then soundboardplayernumber="0" end
     soundboardplayernumber=tonumber(soundboardplayernumber)
     if soundboardplayernumber==0 then soundboardplayernumber=1 end
 
@@ -83,29 +84,29 @@ end
 
 -- mute
 if (mutetype~="") and ((reaper.GetPlayState() &1) == 1) then -- only if playing/recording
-    ultraschall.ActivateMute(tracknumber, true)
+    ultraschall.ActivateMute(tracknumber, true) -- activate/show mute track
+    trackid = reaper.GetTrack(0,tracknumber-1) -- GetTrack count is zero based
     current_position=get_cursor_position_at_selected_cursor_type(cursor)
 
-    if down=="1" then
-        retval, TrackStateChunk = ultraschall.SetTrackAutomodeState(tracknumber, 3) -- set to touch mode 2
-    end
-    
+    if down=="1" then ultraschall.SetTrackAutomodeState(tracknumber, 3) end -- set to record mode 3
+
     if mutetype=="mute" then
-        ultraschall.ToggleMute(tracknumber, current_position, 0)
+        reaper.SetMediaTrackInfo_Value(trackid, 'B_MUTE', 1.0)
     elseif mutetype=="unmute" then
-        ultraschall.ToggleMute(tracknumber, current_position, 1)
-    elseif mutetype=="toggle_mute" then
-        envIDX, envVal, envPosition = ultraschall.GetPreviousMuteState(tracknumber, current_position)
-        if envVal==0 then 
-            ultraschall.ToggleMute(tracknumber, current_position, 1)
-        else
-            ultraschall.ToggleMute(tracknumber, current_position, 0)
+        if (reaper.GetPlayState() &4) == 4 then
+           ultraschall.SetTrackAutomodeState(tracknumber, 2) -- set to touch mode
+           reaper.SetMediaTrackInfo_Value(trackid, 'B_MUTE', 0.0)
         end
+    elseif mutetype=="PTTmute" then
+        if (reaper.GetPlayState() &4) == 4 then
+            ultraschall.SetTrackAutomodeState(tracknumber, 2) -- set to touch mode
+        end
+        reaper.SetMediaTrackInfo_Value(trackid, 'B_MUTE', 1.0)
+    elseif mutetype=="PTTunmute" then
+        reaper.SetMediaTrackInfo_Value(trackid, 'B_MUTE', 0.0)
     end
 
-    if down=="0" then
-        retval, TrackStateChunk = ultraschall.SetTrackAutomodeState(tracknumber, 0) -- set to normal trim/read mode
-    end
+    if down=="0" then ultraschall.SetTrackAutomodeState(tracknumber, 0) end -- set to normal trim/read mode
 
 --marker
 elseif (markertype~="") then
