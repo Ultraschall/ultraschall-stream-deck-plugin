@@ -24,7 +24,7 @@
 
 <div class='sdpi-item' id='markercolorcontainer'>
     <div type='color' class='sdpi-item'>
-    <div class='sdpi-item-label' id='markercolortext'>Color</div>
+        <div class='sdpi-item-label' id='markercolortext'>Color</div>
         <input type='color' class='sdpi-item-value' id='markercolor' value='#d8d8d8'>
         <button class="sdpi-item-value" onclick="resetcolor()" id='resetcolor'>Reset color</button>
     </div>
@@ -42,8 +42,17 @@
 </div>
 
 <div class='sdpi-item' id='soundboardcontainer2'>
-        <div class='sdpi-item-label'>Soundboard slot(1-24)</div>
-        <input class='sdpi-item-value' id='soundboardplayernumber' inputmode='numeric' type='number' min=1 max=24 name='soundboardplayernumber' value=1>
+    <div class='sdpi-item-label'>Soundboard slot(1-24)</div>
+    <input class='sdpi-item-value' id='soundboardplayernumber' inputmode='numeric' type='number' min=1 max=24
+        name='soundboardplayernumber' value=1>
+</div>
+
+<div class='sdpi-item' id='soundboardcontainer3'>
+    <div class='sdpi-item-label'>Soundboard marker</div>
+    <select class='sdpi-item-value select' id='soundboardmarker'>
+        <option value='soundboardnomarker'>no marker</option>
+        <option value='soundboardchaptermarker'>chapter marker</option>
+    </select>
 </div>
 
 <div class='sdpi-item' id='customactioncontainer'>
