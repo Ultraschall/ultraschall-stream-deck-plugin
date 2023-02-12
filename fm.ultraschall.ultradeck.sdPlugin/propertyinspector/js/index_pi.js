@@ -1,8 +1,8 @@
 var onchangeevt = 'onchange'; // oninput or onchange;
 let sdpiWrapper = document.querySelector('.sdpi-wrapper');
 let settings;
-var globalSettings={};
-var HTMLs={};
+var globalSettings = {};
+var HTMLs = {};
 let actionjsn;
 var uuid;
 var context;
@@ -13,19 +13,19 @@ document.addEventListener("saveGlobalSetup", saveGlobalSetup);
 // Function called on saving global Settings
 function saveGlobalSetup(inEvent) {
     if (globalSettings == null) {
-        globalSettings={};
+        globalSettings = {};
     };
     globalSettings["ipadress"] = inEvent.detail.ip;
     globalSettings["port"] = inEvent.detail.port;
     globalSettings["SLipadress"] = inEvent.detail.SLip;
     globalSettings["SLport"] = inEvent.detail.SLport;
-    $SD.api.setGlobalSettings(uuid, globalSettings);   
+    $SD.api.setGlobalSettings(uuid, globalSettings);
 };
 
 function readHTMLtoGlobal(filename) {
     var file = new XMLHttpRequest();
     file.open('GET', filename);
-    file.onload = function() {HTMLs[filename]=file.responseText;}
+    file.onload = function () { HTMLs[filename] = file.responseText; }
     file.send();
 }
 
@@ -36,68 +36,67 @@ readHTMLtoGlobal("levels.html");
 readHTMLtoGlobal("transport.html");
 readHTMLtoGlobal("misc.html");
 
-function wait(ms){
+function wait(ms) {
     var start = new Date().getTime();
     var end = start;
-    while(end < start + ms) {
-      end = new Date().getTime();
-   }
+    while (end < start + ms) {
+        end = new Date().getTime();
+    }
 }
 wait(200); // wait until all HTML files are loaded (this must optimized!!)
 
-function resetcolor(){}
-function resetcolor2(){}
+function resetcolor() { }
+function resetcolor2() { }
 
-function openGlobalSettings()
-{
-    console.log("PI open Global Settings",actionjsn, globalSettings);
+function openGlobalSettings() {
+    console.log("PI open Global Settings", actionjsn, globalSettings);
     window.open("../settings/index.html?context=" + actionjsn.actionInfo.context
-    +"&IP=" + globalSettings.ipadress
-    +"&PORT="+globalSettings.port
-    +"&SLIP="+globalSettings.SLipadress
-    +"&SLPORT="+globalSettings.SLport);
+        + "&IP=" + globalSettings.ipadress
+        + "&PORT=" + globalSettings.port
+        + "&SLIP=" + globalSettings.SLipadress
+        + "&SLPORT=" + globalSettings.SLport);
 }
 
 $SD.on('didReceiveGlobalSettings', (jsn) => {
-    globalSettings=jsn.payload.settings;
+    globalSettings = jsn.payload.settings;
 });
 
 $SD.on('connected', (jsn) => {
-    console.log("PI on connected: ",jsn);
-    uuid=jsn.uuid;
-    context=jsn.actionInfo.context;
+    console.log("PI on connected: ", jsn);
+    uuid = jsn.uuid;
+    context = jsn.actionInfo.context;
     $SD.api.getGlobalSettings(uuid);
     addDynamicStyles($SD.applicationInfo.colors, 'connectSocket');
-    actionjsn=jsn;
-    action=jsn.actionInfo.action;
+    actionjsn = jsn;
+    action = jsn.actionInfo.action;
     switch (action) {
-        case "fm.ultraschall.ultradeck.toggle" :
+        case "fm.ultraschall.ultradeck.toggle":
             document.getElementById('placeholder').innerHTML = HTMLs["toggle.html"]; break;
-        case "fm.ultraschall.ultradeck.markers" :
+        case "fm.ultraschall.ultradeck.markers":
             document.getElementById('placeholder').innerHTML = HTMLs["markers.html"]; break;
-        case "fm.ultraschall.ultradeck.pushto" :
+        case "fm.ultraschall.ultradeck.pushto":
             document.getElementById('placeholder').innerHTML = HTMLs["pushto.html"]; break;
-        case "fm.ultraschall.ultradeck.levels" :
+        case "fm.ultraschall.ultradeck.levels":
             document.getElementById('placeholder').innerHTML = HTMLs["levels.html"]; break;
-        case "fm.ultraschall.ultradeck.transport" :
+        case "fm.ultraschall.ultradeck.transport":
             document.getElementById('placeholder').innerHTML = HTMLs["transport.html"]; break;
-        case "fm.ultraschall.ultradeck.misc" :
+        case "fm.ultraschall.ultradeck.misc":
             document.getElementById('placeholder').innerHTML = HTMLs["misc.html"]; break;
     }
-    
+
     prepareDOMElements();
     settings = Utils.getProp(jsn, 'actionInfo.payload.settings', false);
-    
+
     if (settings) { updateUI(settings); }
 });
 
 $SD.on('sendToPropertyInspector', jsn => {
-    console.log("PI on Sendtopi: ",jsn);
+    console.log("PI on Sendtopi: ", jsn);
     const pl = jsn.payload;
     /**
      *  This is an example, how you could show an error to the user
      */
-     if (pl.hasOwnProperty('error')) {
+    if (pl.hasOwnProperty('error')) {
         sdpiWrapper.innerHTML = `<div class="sdpi-item">
             <details class="message caution">
             <summary class="${pl.hasOwnProperty('info') ? 'pointer' : ''}">${pl.error}</summary>
@@ -110,68 +109,71 @@ $SD.on('sendToPropertyInspector', jsn => {
     }
 
     settings = Utils.getProp(jsn, 'payload.settings', false);
-    if (settings) { updateUI(settings);}
+    if (settings) { updateUI(settings); }
 });
 
 const updateUI = (pl) => {
-    console.log("update UI",pl)
+    console.log("update UI", pl)
     // hide or show Values if settings exist:
-    var x=document.getElementById("sendnumbercontainer");
-    if (x) {if (settings.sendnumber==="") {x.style.display="none"; } else { x.style.display="";}}
+    var x = document.getElementById("sendnumbercontainer");
+    if (x) { if (settings.sendnumber === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("tracknumbercontainer");
-    if (x) {if (settings.tracknumber==="") {x.style.display="none"; } else { x.style.display="";}}
-    
-    x=document.getElementById("customactioncontainer");
-    if (x) {if (settings.customaction==="") {x.style.display="none"; } else { x.style.display="";}}
+    x = document.getElementById("tracknumbercontainer");
+    if (x) { if (settings.tracknumber === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("iconstylecontainer");
-    if (x) {if (settings.iconstyle==="") {x.style.display="none"; } else { x.style.display="";}}
+    x = document.getElementById("customactioncontainer");
+    if (x) { if (settings.customaction === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("markertextcontainer");
-    if (x) {if (settings.markertext==="") {x.style.display="none"; } else { x.style.display="";}}
+    x = document.getElementById("iconstylecontainer");
+    if (x) { if (settings.iconstyle === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("markeroffsetcontainer");
-    if (x) {if (settings.markeroffset==="") {x.style.display="none"; } else { x.style.display="";}}
-    
-    x=document.getElementById("cursorcontainer");
-    if (x) {if (settings.cursor==="") {x.style.display="none"; } else { x.style.display="";}}
-    
-    x=document.getElementById("soundboardcontainer1");
-    if (x) {if (settings.soundboardplayernumber==="" && settings.soundboardaction==="") {x.style.display="none"; } else { x.style.display="";}}
+    x = document.getElementById("markertextcontainer");
+    if (x) { if (settings.markertext === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("soundboardcontainer2");
-    if (x) {if (settings.soundboardplayernumber==="" && settings.soundboardaction==="") {x.style.display="none"; } else { x.style.display="";}}
+    x = document.getElementById("markeroffsetcontainer");
+    if (x) { if (settings.markeroffset === "") { x.style.display = "none"; } else { x.style.display = ""; } }
 
-    x=document.getElementById("markercolorcontainer");
+    x = document.getElementById("cursorcontainer");
+    if (x) { if (settings.cursor === "") { x.style.display = "none"; } else { x.style.display = ""; } }
+
+    x = document.getElementById("soundboardcontainer1");
+    if (x) { if (settings.soundboardplayernumber === "" && settings.soundboardaction === "") { x.style.display = "none"; } else { x.style.display = ""; } }
+
+    x = document.getElementById("soundboardcontainer2");
+    if (x) { if (settings.soundboardplayernumber === "" && settings.soundboardaction === "") { x.style.display = "none"; } else { x.style.display = ""; } }
+
+    x = document.getElementById("soundboardcontainer3");
+    if (x) { if (settings.soundboardplayernumber === "" && settings.soundboardaction === "") { x.style.display = "none"; } else { x.style.display = ""; } }
+
+    x = document.getElementById("markercolorcontainer");
     if (x) {
-        if (settings.markercolor==="") {
-            x.style.display="none";
+        if (settings.markercolor === "") {
+            x.style.display = "none";
         } else {
-            x.style.display="";
-            var y=document.getElementById("markercolortext");
-            if (settings.markercolortext!==undefined) {
-                y.innerHTML=settings.markercolortext;
+            x.style.display = "";
+            var y = document.getElementById("markercolortext");
+            if (settings.markercolortext !== undefined) {
+                y.innerHTML = settings.markercolortext;
             }
         }
     }
-    
-    x=document.getElementById("markercolorcontainer2");
+
+    x = document.getElementById("markercolorcontainer2");
     if (x) {
-        if (settings.markercolor==="") {
-            x.style.display="none";
+        if (settings.markercolor === "") {
+            x.style.display = "none";
         } else {
-            x.style.display="";
-            var y=document.getElementById("markercolortext2");
-            y.innerHTML=settings.markercolortext2;
+            x.style.display = "";
+            var y = document.getElementById("markercolortext2");
+            y.innerHTML = settings.markercolortext2;
         }
     }
-    
-    x=document.getElementById("toggletypetext");
+
+    x = document.getElementById("toggletypetext");
     if (x) {
-        x.innerHTML=settings.toggletypetext;
+        x.innerHTML = settings.toggletypetext;
     }
-    
+
 
     Object.keys(pl).map(e => {
         if (e && e != '') {
@@ -179,7 +181,7 @@ const updateUI = (pl) => {
             //console.log(`searching for: #${e}`, 'found:', foundElement);
             if (foundElement && foundElement.type !== 'file') {
                 //console.log("FOUND ELEMENT",pl,e,pl[e]);
-                foundElement.value = pl[e];            
+                foundElement.value = pl[e];
                 const maxl = foundElement.getAttribute('maxlength') || 50;
                 const labels = document.querySelectorAll(`[for='${foundElement.id}']`);
                 if (labels.length) {
@@ -189,7 +191,7 @@ const updateUI = (pl) => {
                 }
             }
         }
-   })
+    })
 }
 
 $SD.on('piDataChanged', (returnValue) => {
@@ -197,15 +199,15 @@ $SD.on('piDataChanged', (returnValue) => {
     if (returnValue.key === 'clickme') {
         postMessage = (w) => {
             w.postMessage(
-                Object.assign({}, $SD.applicationInfo.application, {action: $SD.actionInfo.action})
-                ,'*');
+                Object.assign({}, $SD.applicationInfo.application, { action: $SD.actionInfo.action })
+                , '*');
         }
 
         if (!window.xtWindow || window.xtWindow.closed) {
-            window.xtWindow  = window.open('../externalWindow.html', 'External Window');
+            window.xtWindow = window.open('../externalWindow.html', 'External Window');
             setTimeout(() => postMessage(window.xtWindow), 200);
         } else {
-           postMessage(window.xtWindow);
+            postMessage(window.xtWindow);
         }
 
     } else {
@@ -219,7 +221,7 @@ $SD.on('piDataChanged', (returnValue) => {
 });
 
 function saveSettings(sdpi_collection) {
-    console.log("PI savesettings ",sdpi_collection);
+    console.log("PI savesettings ", sdpi_collection);
     if (typeof sdpi_collection !== 'object') return;
 
     if (sdpi_collection.hasOwnProperty('key') && sdpi_collection.key != '') {
@@ -230,10 +232,10 @@ function saveSettings(sdpi_collection) {
             $SD.api.setSettings($SD.uuid, settings);
         }
     }
- }
+}
 
 function sendValueToPlugin(value, prop) {
-    console.log("PI on sendvaluetoplugin: ",value, prop);
+    console.log("PI on sendvaluetoplugin: ", value, prop);
     if ($SD.connection && $SD.connection.readyState === 1) {
         const json = {
             action: $SD.actionInfo['action'],
@@ -250,7 +252,7 @@ function sendValueToPlugin(value, prop) {
 }
 
 function prepareDOMElements(baseElement) {
-    console.log("PI prepare DOM elements ",baseElement);
+    console.log("PI prepare DOM elements ", baseElement);
     baseElement = baseElement || document;
     Array.from(baseElement.querySelectorAll('.sdpi-item-value')).forEach(
         (el, i) => {
@@ -272,7 +274,7 @@ function prepareDOMElements(baseElement) {
             if (inputGroup.length === 2) {
                 const offs = inputGroup[0].tagName === 'INPUT' ? 1 : 0;
                 inputGroup[offs].textContent = inputGroup[1 - offs].value;
-                inputGroup[1 - offs]['oninput'] = function() {
+                inputGroup[1 - offs]['oninput'] = function () {
                     inputGroup[offs].textContent = inputGroup[1 - offs].value;
                 };
             }
@@ -282,7 +284,7 @@ function prepareDOMElements(baseElement) {
              */
             Array.from(el.querySelectorAll('.clickable')).forEach(
                 (subel, subi) => {
-                    subel['onclick'] = function(e) {
+                    subel['onclick'] = function (e) {
                         handleSdpiItemChange(e.target, subi);
                     };
                 }
@@ -291,7 +293,7 @@ function prepareDOMElements(baseElement) {
              * we clone it, and call it in the callback, right before the freshly attached event
             */
             const cloneEvt = el[evt];
-            el[evt] = function(e) {
+            el[evt] = function (e) {
                 if (cloneEvt) cloneEvt();
                 handleSdpiItemChange(e.target, i);
             };
@@ -338,8 +340,8 @@ function prepareDOMElements(baseElement) {
 }
 
 function handleSdpiItemChange(e, idx) {
-    console.log('PI handleSdpiItemChange',e,idx);
-    console.log('PI handleSdpiItemChange tagname=',e.tagName);
+    console.log('PI handleSdpiItemChange', e, idx);
+    console.log('PI handleSdpiItemChange tagname=', e.tagName);
     /** Following items are containers, so we won't handle clicks on them */
 
     if (['OL', 'UL', 'TABLE'].includes(e.tagName)) {
@@ -358,9 +360,9 @@ function handleSdpiItemChange(e, idx) {
         // if there's no attribute set for the span, try to see, if there's a value in the textContent
         // and use it as value
         if (!e.hasAttribute('value')) {
-               tmpValue = Number(e.textContent);
+            tmpValue = Number(e.textContent);
             if (typeof tmpValue === 'number' && tmpValue !== null) {
-                e.setAttribute('value', 0+tmpValue); // this is ugly, but setting a value of 0 on a span doesn't do anything
+                e.setAttribute('value', 0 + tmpValue); // this is ugly, but setting a value of 0 on a span doesn't do anything
                 e.value = tmpValue;
             }
         } else {
@@ -390,7 +392,7 @@ function handleSdpiItemChange(e, idx) {
         }
     }
 
-    if (sdpiItemChildren.length && ['radio','checkbox'].includes(sdpiItemChildren[0].type)) {
+    if (sdpiItemChildren.length && ['radio', 'checkbox'].includes(sdpiItemChildren[0].type)) {
         e.setAttribute('_value', e.checked); //'_value' has priority over .value
     }
     if (sdpiItemGroup && !sdpiItemChildren.length) {
@@ -419,12 +421,12 @@ function handleSdpiItemChange(e, idx) {
         value: isList
             ? e.textContent
             : e.hasAttribute('_value')
-            ? e.getAttribute('_value')
-            : e.value
-            ? e.type === 'file'
-                ? decodeURIComponent(e.value.replace(/^C:\\fakepath\\/, ''))
+                ? e.getAttribute('_value')
                 : e.value
-            : e.getAttribute('value'),
+                    ? e.type === 'file'
+                        ? decodeURIComponent(e.value.replace(/^C:\\fakepath\\/, ''))
+                        : e.value
+                    : e.getAttribute('value'),
         group: sdpiItemGroup ? sdpiItemGroup.id : false,
         index: idx,
         selection: selectedElements,
@@ -439,11 +441,11 @@ function handleSdpiItemChange(e, idx) {
         const info = sdpiItem.querySelector('.sdpi-file-info');
         if (info) {
             const s = returnValue.value.split('/').pop();
-            info.textContent =                s.length > 28
-                    ? s.substr(0, 10)
-                      + '...'
-                      + s.substr(s.length - 10, s.length)
-                    : s;
+            info.textContent = s.length > 28
+                ? s.substr(0, 10)
+                + '...'
+                + s.substr(s.length - 10, s.length)
+                : s;
         }
     }
 
@@ -483,7 +485,7 @@ function localizeUI() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.add(navigator.userAgent.includes("Mac") ? 'mac' : 'win');
     prepareDOMElements();
     $SD.on('localizationLoaded', (language) => {
@@ -491,12 +493,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-window.addEventListener('beforeunload', function(e) {
+window.addEventListener('beforeunload', function (e) {
     e.preventDefault();
     sendValueToPlugin('propertyInspectorWillDisappear', 'property_inspector');
     // Don't set a returnValue to the event, otherwise Chromium with throw an error.  // e.returnValue = '';
 });
 
 function gotCallbackFromWindow(parameter) {
-    console.log('gotCallbackFromWindow',parameter);
+    console.log('gotCallbackFromWindow', parameter);
 }
