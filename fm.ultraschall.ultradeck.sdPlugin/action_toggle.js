@@ -26,7 +26,7 @@ const toggle = {
         }
 
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setSettings(jsn.context, this.settings);
         $SD.api.setTitle(jsn.context, this.settings.title);
 
@@ -56,7 +56,6 @@ const toggle = {
         
         if (settings.toggletype=="Toggle Studiolink Standalone Mute") {
             if (SLwebsocketerror==false) {
-                //console.log("key down + SL connection");
                 ws=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
                 ws.onopen=function()
                 {
@@ -68,19 +67,13 @@ const toggle = {
                 
                 ws.onerror=function()
                 {
-                    //console.log("SL ws error!!!!!");
                     var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
                     // add RedX:
                     image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-                    $SD.api.setImage(context, image);
+                    $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     $SD.api.setTitle(context, settings.title);
                     ws.close();
                 };
-                
-                ws.onclose= function()
-                {
-                    console.log("on key down closed")
-                }
             }
         } else {
             var xhttp = new XMLHttpRequest();
@@ -420,9 +413,8 @@ const toggle = {
         let found = this.cache[jsn.context];
         if (found) { found.refresh(this.settings); }
 
-        //$SD.api.setImage(jsn.context,Icons['action/images/empty@2x.png']);
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
     },
 
     onSendToPlugin: function(jsn) {
@@ -515,13 +507,11 @@ function ToggleButtonClass(jsonObj) {
 
     function getMuteStateSL()
     {
-        console.log("readystate usw. ",ws3);
         if (ws3=="") {
             createsocketandgetstate();
         }
 
         if (ws3.readyState==3) {
-            console.log("ws is ws state 3");
             ws3="";
         }
 
@@ -535,13 +525,11 @@ function ToggleButtonClass(jsonObj) {
         {
             if (globalSettings.hasOwnProperty('SLipadress') && globalSettings.hasOwnProperty('SLport') )
             {
-                //console.log("create new websocket");
                 ws3=new WebSocket("ws://"+globalSettings.SLipadress+":"+globalSettings.SLport+"/ws_options");
                    
                 ws3.addEventListener('message', function (event) { 
                     result=event.data;
                     SLwebsocketerror=false;
-                    //console.log("SL Data: ", result);
 
                     if (result.search('"mute":"false"') >-1 )
                     {
@@ -555,28 +543,24 @@ function ToggleButtonClass(jsonObj) {
                         settings.state=true;
                     } else
                     {
-                        console.log("nix gefunden");
                         var image=Icons['action/images/unmuted.svg'];
                         var markercolor=settings.markercolor;
                         settings.state=false;
                     }
                     image=SetImageStyle(image, settings.iconstyle, markercolor);
-                    $SD.api.setImage(context,image);
+                    $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     $SD.api.setSettings(context, settings);
                 });
 
                 ws3.onerror=function()
                 {
-                    console.log("SL erroro3!!!!!");
                     SLwebsocketerror=true;
                     var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
                     // add RedX:
                     image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-                    $SD.api.setImage(context, image);
+                    $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     $SD.api.setTitle(context, settings.title);
                 };
-
-                ws3.onclose=function(){console.log("ws onclose");}
             }
         };
     }
@@ -584,7 +568,6 @@ function ToggleButtonClass(jsonObj) {
     function getMuteState() {
         var xhttp = new XMLHttpRequest();
         var url="http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/GET/TRACK/"+track+"/B_MUTE";
-        //console.log("hhmmmm ",url);
     
         xhttp.open("GET", url , true);
 
@@ -592,7 +575,6 @@ function ToggleButtonClass(jsonObj) {
             if (xhttp.readyState === xhttp.DONE) {
                 if (xhttp.status === 200) {
                     let resultText=xhttp.responseText;
-                    //console.log("hhmmmm 2",resultText);
                     oldsettings=settings;
                     if (!resultText=="") 
                     {
@@ -609,7 +591,7 @@ function ToggleButtonClass(jsonObj) {
                             var markercolor=settings.markercolor2;
                         };
                         var image=SetImageStyle(image, settings.iconstyle, markercolor);
-                        $SD.api.setImage(context,image);
+                        $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     }
                     else 
                     {
@@ -617,7 +599,7 @@ function ToggleButtonClass(jsonObj) {
                         var image=SetImageStyle(image, settings.iconstyle, markercolor);
                         // add RedX:
                         image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-                        $SD.api.setImage(context,image);
+                        $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     }
                 }
             }
@@ -628,7 +610,7 @@ function ToggleButtonClass(jsonObj) {
             var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
             // add RedX:
             image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-            $SD.api.setImage(jsn.context,image);
+            $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
             $SD.api.setTitle(jsn.context, settings.title);
         };
 
@@ -656,7 +638,7 @@ function ToggleButtonClass(jsonObj) {
                         var markercolor=settings.markercolor2;
                     };
                     var image=SetImageStyle(image, settings.iconstyle, markercolor);
-                    $SD.api.setImage(context,image);
+                    $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     $SD.api.setSettings(context, settings);
                 }
             }
@@ -666,7 +648,7 @@ function ToggleButtonClass(jsonObj) {
             var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
             // add RedX:
             image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-            $SD.api.setImage(jsn.context,image);
+            $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             $SD.api.setTitle(jsn.context, settings.title);
         };
         xhttp.send();
@@ -692,7 +674,7 @@ function ToggleButtonClass(jsonObj) {
                         var markercolor=settings.markercolor2;
                     };
                     var image=SetImageStyle(image, settings.iconstyle, markercolor);
-                    $SD.api.setImage(context,image);
+                    $SD.api.setImage(context, 'data:image/svg+xml;base64,'+btoa(image));
                     $SD.api.setSettings(context, settings);
                 }
             }
@@ -702,7 +684,7 @@ function ToggleButtonClass(jsonObj) {
             var image=SetImageStyle(Icons[settings.icon], settings.iconstyle, settings.markercolor);
             // add RedX:
             image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-            $SD.api.setImage(jsn.context,image);
+            $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             $SD.api.setTitle(jsn.context, settings.title);
         };
         xhttp.send();

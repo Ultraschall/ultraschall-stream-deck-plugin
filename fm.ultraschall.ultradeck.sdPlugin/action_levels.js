@@ -14,7 +14,7 @@ const levels = {
         if (!this.settings.hasOwnProperty('mytitle')) {this.settings.mytitle="vol + 1";}
 
         $SD.api.setSettings(jsn.context, this.settings); 
-        $SD.api.setImage(jsn.context,Icons[this.settings.icon]);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(Icons[this.settings.icon]));
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         // refresh
@@ -23,20 +23,12 @@ const levels = {
 
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyDown Levels", jsn);
-        
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_DOWN , true);
         xhttp.send();
     },
 
     onKeyUp: function (jsn) {
-        // this.settings = jsn.payload.settings;
-        // console.log("KeyUp Levels", jsn);
-        
-        // var xhttp = new XMLHttpRequest();
-        // xhttp.open("GET", this.settings.url_UP , true);
-        // xhttp.send();
     },
 
     onDidReceiveSettings: function(jsn) {
@@ -50,13 +42,10 @@ const levels = {
         var sendnumber=this.settings.sendnumber;
         if (sendnumber==="") {sendnumber="1";}
 
-        console.log("levelstype=",levelstype);
-        
         switch(levelstype) {
             case "Increase track level" :
                 url_DOWN="/_/SET/TRACK/"+tracknumber+"/VOL/+1";
                 icon="action/images/Volume_up.svg";
-                console.log("ICON=",icon);
                 title="vol + "+tracknumber;
                 sendnumber="";
                 break;
@@ -69,13 +58,11 @@ const levels = {
             case "Increase send level" :
                 url_DOWN="/_/SET/TRACK/"+tracknumber+"/SEND/"+sendnumber+"/VOL/+1";
                 icon="action/images/Volume_up.svg";
-                console.log("ICON=",icon);
                 title="+ send "+sendnumber+"\ntrack "+tracknumber+"\nlevel";
                 break;
             case "Decrease send level" :
                 url_DOWN="/_/SET/TRACK/"+tracknumber+"/SEND/"+sendnumber+"/VOL/-1";
                 icon="action/images/Volume_down.svg";
-                console.log("ICON=",icon);
                 title="+ send "+sendnumber+"\ntrack "+tracknumber+"\nlevel";
                 break;
         }
@@ -86,7 +73,9 @@ const levels = {
         this.settings.sendnumber=sendnumber;
 
         $SD.api.setSettings(jsn.context, this.settings); //save settings
-        $SD.api.setImage(jsn.context,Icons[icon]);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(Icons[icon]));
+        
+        
         $SD.api.setTitle(jsn.context, title);
         
         // set initial state

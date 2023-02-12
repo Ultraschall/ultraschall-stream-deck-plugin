@@ -20,7 +20,7 @@ const transport = {
         }
 
         $SD.api.setSettings(jsn.context, this.settings);
-        $SD.api.setImage(jsn.context,Icons[this.settings.icon_playstate[0]]);
+        $SD.api.setImage(context,'data:image/svg+xml;base64,'+btoa(Icons[this.settings.icon_playstate[0]]));
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         // create button and start background loop function
@@ -35,7 +35,6 @@ const transport = {
     },
 
     onWillDisappear: function (jsn) {
-        //console.log("onWillDisappear", jsn);
         let found = this.cache[jsn.context];
         if (found) {
             // remove the button from the cache
@@ -47,13 +46,12 @@ const transport = {
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
         var xhttp = new XMLHttpRequest();
-        console.log("http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+this.settings.url_DOWN);
         xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+"/_/"+this.settings.url_DOWN , true);
         xhttp.send();
     },
 
     onDidReceiveSettings: function(jsn) {
-        //console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_transport.js]onDidReceiveSettings:', jsn);
+        console.log('%c%s', 'color: white; background: red; font-size: 15px;', '[action_transport.js]onDidReceiveSettings:', jsn);
         this.settings = jsn.payload.settings;
         $SD.api.setSettings(jsn.context, this.settings);
         var url_DOWN="";
@@ -142,7 +140,6 @@ const transport = {
         
         // find background loop object and call refresh
         let found = this.cache[jsn.context];
-        //console.log("FOUND BACKGROUND:",found);
         if (found) {
             // send new track to background loop
             found.refresh(this.settings);
@@ -159,7 +156,6 @@ function TransportButtonClass(jsonObj) {
     var playstate_last="";
     var isRepeatOn_last="";
     
-
     function loop(){
         if (counter === 0) {
             getTransportState();
@@ -209,10 +205,10 @@ function TransportButtonClass(jsonObj) {
                         
                         if (playstate_last!==playstate || isRepeatOn_last!==isRepeatOn) { // update icon if playstate or repeat has changed
                             if (isRepeatOn==="1" &&  Icons[settings.icon_playstate["R"]]!==undefined) {
-                                $SD.api.setImage(context,Icons[settings.icon_playstate["R"]]);
+                                $SD.api.setImage(context,'data:image/svg+xml;base64,'+btoa(Icons[settings.icon_playstate["R"]]));
                             }
                             else{
-                                $SD.api.setImage(context,Icons[settings.icon_playstate[playstate]]);
+                                $SD.api.setImage(context,'data:image/svg+xml;base64,'+btoa(Icons[settings.icon_playstate[playstate]]));
                             }
                         }
                         playstate_last=playstate;

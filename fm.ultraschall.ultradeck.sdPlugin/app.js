@@ -90,7 +90,7 @@ function loadSVG(filename) {
     file.onload = function() {
         let image=file.responseText.match(/<svg.*/gi);
         image=image[0];
-        Icons[filename]='data:image/svg+xml;charset=utf8,'+image;
+        Icons[filename]=image; //'data:image/svg+xml;charset=utf8,'
     }
     file.send();
 }
@@ -104,7 +104,6 @@ function LoadSVGIconsToArray(IconsURLArray){
 
 function SetImageStyle(image, style, color)
 {
-    //console.log("image= ",image)
     image=image.replace(/svg width="100%" height="100%"/g,'svg width="200%" height="200%"'); //hack for iphone app to get less pixelation
     if (style==="inverted")
     {
@@ -120,7 +119,6 @@ function SetImageStyle(image, style, color)
 
 function connected(jsn) {
     uuid=jsn.uuid;
-    //console.log('%c%s','color: white; background: blue; font-size: 15px;','[app.js] connected:',jsn)
     $SD.api.getGlobalSettings(jsn.uuid);
     $SD.on('didReceiveGlobalSettings', (jsn) => {
         console.log("APP received GLOBAL Settings!!!!!",jsn);

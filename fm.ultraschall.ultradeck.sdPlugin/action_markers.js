@@ -30,7 +30,6 @@ const markers = {
         this.settings = jsn.payload.settings;
         var xhttp = new XMLHttpRequest();
         var request_url="http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url;
-        console.log("Request= ",request_url);
         xhttp.open("GET", request_url , true);
         
         xhttp.onerror=function()
@@ -39,7 +38,7 @@ const markers = {
             var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
             // add RedX:
             image=image.replace(/\<\/svg\>/g, `${redX}</svg>`);
-            $SD.api.setImage(jsn.context,image);
+            $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             $SD.api.setTitle(jsn.context, this.settings.title);
         };
 
@@ -47,7 +46,7 @@ const markers = {
         {
             this.settings=jsn.payload.settings;
             var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-            $SD.api.setImage(jsn.context,image);
+            $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             $SD.api.setTitle(jsn.context, this.settings.title);
         };
         
@@ -55,7 +54,6 @@ const markers = {
     },
 
     onSendToPlugin: function(jsn) {
-        console.log("onSendToPlugin",jsn);
         if (jsn.payload.hasOwnProperty('sdpi_collection')) {
             if (jsn.payload.sdpi_collection.key==="resetcolor") {
                 this.resetIconColor(jsn);
@@ -65,7 +63,7 @@ const markers = {
 
     setIconColor: function(jsn){
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setTitle(jsn.context, this.settings.title);
         $SD.api.setSettings(jsn.context, this.settings);
     },
@@ -97,8 +95,6 @@ const markers = {
             this.settings.iconstyle="normal"
         }
 
-        console.log("markerchanged",markerchanged);
-
         switch(this.settings.markertype) {
             case "Insert chapter marker" :
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
@@ -117,7 +113,6 @@ const markers = {
                 this.settings.title="named";
                 break;
             case "Insert marker with time stamp (ISO 8601)" :
-                console.log("HUHU TIMESTAMP", this.settings);
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
                 this.settings.markercolortext="Marker color";
                 if (this.settings.cursor==="") {this.settings.cursor="Automatic depending on followmode"};
@@ -185,7 +180,6 @@ const markers = {
                 if (this.settings.markeroffset==="") {this.settings.markeroffset="0"};
                 this.settings.markercolortext="Marker color";
                 if (this.settings.cursor==="") {this.settings.cursor="Play cursor"};
-                console.log("CURSOR=",this.settings.cursor);
                 this.settings.url="/_/SET/EXTSTATE/ultradeck/markertext/"+encodeURIComponent(this.settings.markertext)
                     +";SET/EXTSTATE/ultradeck/markercolor/"+encodeURIComponent(this.settings.markercolor)
                     +";SET/EXTSTATE/ultradeck/markertype/custom"
@@ -217,7 +211,7 @@ const markers = {
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context, image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setTitle(jsn.context, this.settings.title);
     }
 };

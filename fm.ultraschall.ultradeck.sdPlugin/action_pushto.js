@@ -34,7 +34,7 @@ const pushto = {
         // set icon color
         var image=SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setSettings(jsn.context, this.settings); 
-        $SD.api.setImage(jsn.context,image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         // refresh
@@ -48,8 +48,6 @@ const pushto = {
 
     onKeyDown: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyDown PushTo ", jsn);
-        
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_DOWN , true);
         xhttp.send();
@@ -57,8 +55,6 @@ const pushto = {
 
     onKeyUp: function (jsn) {
         this.settings = jsn.payload.settings;
-        console.log("KeyUp PushTo ", jsn);
-        
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "http://"+globalSettings.ipadress+":"+globalSettings.port+this.settings.url_UP , true);
         xhttp.send();
@@ -71,7 +67,7 @@ const pushto = {
                 $SD.api.setSettings(jsn.context, this.settings);
                 var image=Icons[this.settings.icon];
                 image=image.replace('#d8d8d8', this.settings.markercolor);
-                $SD.api.setImage(jsn.context,image);
+                $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             }
         }
     },
@@ -131,7 +127,7 @@ const pushto = {
         
         $SD.api.setSettings(jsn.context, this.settings); //save settings
         var image=SetImageStyle(Icons[icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context,image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setTitle(jsn.context, title);
         
         // set initial state

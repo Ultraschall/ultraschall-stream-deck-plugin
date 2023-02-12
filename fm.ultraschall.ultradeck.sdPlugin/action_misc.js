@@ -18,7 +18,12 @@ const misc = {
 
         var image = SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
         $SD.api.setSettings(jsn.context, this.settings);
-        $SD.api.setImage(jsn.context, image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
+        
+        this.settings.icon = "action/images/Soundboard.svg";
+        image = SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
+
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
 
         //refresh
@@ -39,7 +44,7 @@ const misc = {
                 if (ExtraDefaultColor[this.settings.icon]) { this.settings.markercolor = ExtraDefaultColor[this.settings.icon]; }
                 $SD.api.setSettings(jsn.context, this.settings);
                 var image = SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-                $SD.api.setImage(jsn.context, image);
+                $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
             }
         }
     },
@@ -91,7 +96,6 @@ const misc = {
                 this.settings.soundboardaction = "";
                 this.settings.soundboardplayernumber = "";
                 this.settings.soundboardmarker = "soundboardnomarker";
-                console.log("SL Toggle Mute", this.settings);
                 break;
             case "Soundboard":
                 this.settings.icon = "action/images/Soundboard.svg";
@@ -102,7 +106,10 @@ const misc = {
                     this.settings.markercolor = ExtraDefaultColor[this.settings.icon];
                 }
                 if (this.settings.soundboardmarker == "soundboardchaptermarker") {
-                    marker = ";_Ultraschall_Set_Marker";
+                    marker = ";_Ultraschall_Set_Marker_Play";
+                }
+                else if (this.settings.soundboardmarker == "soundboardeditmarker") {
+                    marker = ";_Ultraschall_Set_Edit_Play";
                 }
                 else {
                     marker = "";
@@ -137,7 +144,7 @@ const misc = {
         // change color inside image SVG Data:
         $SD.api.setSettings(jsn.context, this.settings);
         var image = SetImageStyle(Icons[this.settings.icon], this.settings.iconstyle, this.settings.markercolor);
-        $SD.api.setImage(jsn.context, image);
+        $SD.api.setImage(jsn.context, 'data:image/svg+xml;base64,'+btoa(image));
         $SD.api.setTitle(jsn.context, this.settings.mytitle);
     }
 };
