@@ -29,7 +29,7 @@ soundboardplayernumber=reaper.GetExtState("ultradeck", "soundboardplayernumber")
     soundboardplayernumber=tonumber(soundboardplayernumber)
     if soundboardplayernumber==0 then soundboardplayernumber=1 end
 
-function debug(dbg)
+function debugStreamdeckPlugin(dbg)
     if dbg then
         print("------------------")
         print("Mutetype= "..mutetype)
@@ -46,7 +46,7 @@ function debug(dbg)
     end
 end
 
-debug(false)
+debugStreamdeckPlugin(false)
 
 function convert_color_hex2rgb(inputcolor)
     if string.len(inputcolor)==7 then
