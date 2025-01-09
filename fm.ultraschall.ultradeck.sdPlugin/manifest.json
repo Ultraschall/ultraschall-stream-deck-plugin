@@ -1,4 +1,9 @@
 {
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "fm.ultraschall.ultradeck",
+  "Name": "Ultraschall",
+  "Version": "1.2.4.1",
+  "Author": "Ultraschall",
   "Actions": [
     {
       "Icon": "action/images/ToggleState_ActionIcon", 
@@ -73,17 +78,16 @@
       "UUID": "fm.ultraschall.ultradeck.misc"
     }
   ], 
-  "SDKVersion": 2,
-  "Author": "Ultraschall",
   "Category": "Ultraschall",
   "CategoryIcon": "action/images/category_PluginIcon",
   "CodePath": "index.html", 
-  "PropertyInspectorPath": "propertyinspector/index.html", 
   "Description": "Control Ultraschall, the open source solution for podcast recording and editing. It's magic!",
-  "Name": "Ultraschall", 
   "Icon": "action/images/Ultraschall_logo", 
-  "URL": "https://ultraschall.fm",
-  "Version": "1.2.3",
+  "SDKVersion": 2,
+  "Software":
+    {
+        "MinimumVersion" : "6.4"
+    },
   "OS": [
     {
         "Platform": "mac", 
@@ -94,8 +98,6 @@
         "MinimumVersion" : "10"
     }
   ],
-  "Software": 
-    {
-        "MinimumVersion" : "4.1"
-  }
+  "PropertyInspectorPath": "propertyinspector/index.html",
+  "URL": "https://ultraschall.fm"
 }
